@@ -34,8 +34,8 @@
             --iecc-brown: #8B5A2B;
             --shram-teal: #006D77;
             --danger-red: #d32f2f;
-            --warning-orange: #f57c00;
-            --caution-yellow: #fbc02d;
+            --warning-orange: #e65100;
+            --caution-yellow: #c79100;
             --gray-light: #f5f5f5;
             --gray-medium: #e0e0e0;
             --gray-dark: #333;
@@ -410,6 +410,10 @@
                 visibility: visible;
                 opacity: 1;
             }
+            /* Hoverable stat boxes - show zone-tooltip on tap */
+            .stat-box.hoverable.tooltip-active .zone-tooltip {
+                display: block;
+            }
         }
 
         .calculate-btn {
@@ -459,8 +463,8 @@
             font-size: 0.9rem;
         }
 
-        .zone-4-badge { background: #fffde7; border-color: #fbc02d; }
-        .zone-5-badge { background: #fff3e0; border-color: #f57c00; }
+        .zone-4-badge { background: #fffde7; border-color: #c79100; }
+        .zone-5-badge { background: #fff3e0; border-color: #e65100; }
         .zone-6-badge { background: #ffebee; border-color: #d32f2f; }
         .zone-badge strong { display: block; margin-bottom: 0.25rem; }
 
@@ -980,6 +984,11 @@
                 min-height: auto;
             }
 
+            /* Hide India dot map on mobile - takes too much space */
+            .header::before {
+                display: none;
+            }
+
             /* Mobile SHRAM logo - centered */
             .logo-container {
                 position: relative;
@@ -991,7 +1000,7 @@
                 margin-bottom: 0.5rem;
             }
             .logo-container img {
-                height: 120px;
+                height: 100px;
                 width: auto;
             }
 
@@ -1301,6 +1310,57 @@
                 font-size: 0.7rem !important;
                 padding: 2px 5px !important;
                 margin-left: 0 !important;
+            }
+
+            /* About EHI-N* section - reduce padding on mobile */
+            #about-tab .section {
+                padding-left: 0.75rem !important;
+                padding-right: 0.75rem !important;
+            }
+
+            /* Summer 2025 Animation iframe - mobile height */
+            #animation-tab iframe,
+            .section iframe[src*="ehi-webapp"] {
+                height: 450px !important;
+                min-height: 400px !important;
+            }
+
+            /* Live map iframe - mobile height */
+            #livemap-tab iframe {
+                height: calc(100vh - 180px) !important;
+                min-height: 400px !important;
+            }
+
+            /* EHI dropdown - auto width based on content */
+            .met-select-green {
+                min-width: auto !important;
+                width: auto !important;
+            }
+
+            /* Forecast map - smaller on mobile */
+            #forecast-map {
+                height: 280px !important;
+            }
+
+            /* Forecast map controls - smaller and better positioned */
+            .leaflet-control-zoom {
+                margin-top: 10px !important;
+                margin-left: 10px !important;
+            }
+            .leaflet-control-zoom a {
+                width: 28px !important;
+                height: 28px !important;
+                line-height: 28px !important;
+                font-size: 14px !important;
+            }
+
+            /* Home button for forecast map - mobile positioning */
+            #forecast-map + button,
+            button[onclick="resetForecastMap()"] {
+                top: 95px !important;
+                width: 28px !important;
+                height: 28px !important;
+                font-size: 12px !important;
             }
         }
 
@@ -1803,13 +1863,13 @@
                         <div style="display: flex; align-items: center;">
                             <span style="font-size: 2.5rem; font-weight: 700; color: #666;">EHI-</span>
                             <span style="font-size: 2.5rem; font-weight: 700; color: var(--iecc-brown);">N</span>
-                            <span style="font-size: 2.5rem; font-weight: 700; color: #f57c00;">*</span>
+                            <span style="font-size: 2.5rem; font-weight: 700; color: #e65100;">*</span>
                         </div>
 
                         <!-- Right side: * explanation -->
-                        <div style="color: #f57c00; font-size: 1.2rem; margin-left: 0.5rem;">&#8592;</div>
+                        <div style="color: #e65100; font-size: 1.2rem; margin-left: 0.5rem;">&#8592;</div>
                         <div style="display: flex; flex-direction: column; align-items: flex-start; padding-left: 0.5rem;">
-                            <div style="font-size: 0.75rem; color: #f57c00; font-weight: 600;"><i class="fas fa-sun" style="font-size: 0.6rem;"></i> Sun Exposure</div>
+                            <div style="font-size: 0.75rem; color: #e65100; font-weight: 600;"><i class="fas fa-sun" style="font-size: 0.6rem;"></i> Sun Exposure</div>
                             <div style="font-size: 0.65rem; color: #888;">Direct sunlight included</div>
                         </div>
                     </div>
@@ -1821,7 +1881,7 @@
                             <span><strong>EHI-6</strong> = Heavy work, shaded</span>
                         </div>
                         <div style="display: flex; align-items: center; gap: 0.5rem;">
-                            <i class="fas fa-sun" style="color: #f57c00;"></i>
+                            <i class="fas fa-sun" style="color: #e65100;"></i>
                             <span><strong>EHI-6*</strong> = Heavy work, full sun</span>
                         </div>
                     </div>
@@ -1951,7 +2011,7 @@
                             <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
                                 <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; padding: 0.5rem 0.75rem; border: 2px solid var(--gray-medium); border-radius: 6px; background: white;">
                                     <input type="checkbox" id="alert-met-3" value="3" style="width: 18px; height: 18px; cursor: pointer;">
-                                    <span>EHI-3 (Light)</span>
+                                    <span>EHI-3</span>
                                 </label>
                                 <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; padding: 0.5rem 0.75rem; border: 2px solid var(--gray-medium); border-radius: 6px; background: white;">
                                     <input type="checkbox" id="alert-met-4" value="4" style="width: 18px; height: 18px; cursor: pointer;">
@@ -1979,7 +2039,7 @@
                                 </label>
                                 <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; padding: 0.5rem 0.75rem; border: 2px solid var(--warning-orange); border-radius: 6px; background: #fff3e0;">
                                     <input type="checkbox" id="alert-zone-5" value="zone-5" style="width: 18px; height: 18px; cursor: pointer;">
-                                    <span style="font-weight: 600; color: #ef6c00;">Zone 5</span>
+                                    <span style="font-weight: 600; color: #d84315;">Zone 5</span>
                                     <span style="font-size: 0.85rem;">(High Risk)</span>
                                 </label>
                                 <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; padding: 0.5rem 0.75rem; border: 2px solid var(--danger-red); border-radius: 6px; background: #ffebee;">
@@ -2148,7 +2208,8 @@ print(hazardous[['DISTRICT', 'STATE', 'EHI_350 (in shade °C)']])</code></pre>
                             boxHeight: small ? 8 : (mobile ? 10 : 12),
                             padding: small ? 4 : (mobile ? 6 : 10),
                             font: { size: small ? 8 : (mobile ? 10 : 12) },
-                            usePointStyle: false
+                            usePointStyle: true,
+                            pointStyle: 'circle'
                         }
                     }
                 },
@@ -2327,6 +2388,23 @@ print(hazardous[['DISTRICT', 'STATE', 'EHI_350 (in shade °C)']])</code></pre>
                             return;
                         }
                         // If already active, allow the click through (navigate to forecast)
+                        return;
+                    }
+
+                    // Handle hoverable stat-boxes (Zone 5/6 stats with tooltips)
+                    const hoverableBox = e.target.closest('.stat-box.hoverable');
+                    if (hoverableBox) {
+                        if (!hoverableBox.classList.contains('tooltip-active')) {
+                            // Remove active class from all tooltips
+                            document.querySelectorAll('.tooltip-active').forEach(t => {
+                                t.classList.remove('tooltip-active');
+                            });
+                            hoverableBox.classList.add('tooltip-active');
+                            e.preventDefault();
+                            e.stopPropagation();
+                            return;
+                        }
+                        // If already active, allow the click through (second tap navigates)
                         return;
                     }
 
@@ -2605,8 +2683,8 @@ print(hazardous[['DISTRICT', 'STATE', 'EHI_350 (in shade °C)']])</code></pre>
                 1: "#2196f3",
                 2: "#4caf50",
                 3: "#4caf50",
-                4: "#fbc02d",
-                5: "#f57c00",
+                4: "#c79100",
+                5: "#e65100",
                 6: "#d32f2f"
             };
 
@@ -3324,11 +3402,11 @@ print(hazardous[['DISTRICT', 'STATE', 'EHI_350 (in shade °C)']])</code></pre>
                         <span class="learn-more-link"><i class="fas fa-info-circle"></i> Click to learn more about EHI zones</span>
                     </div>
                 </div>
-                <div class="stat-box hoverable" style="background: linear-gradient(135deg, #f57c00 0%, #ef6c00 100%); padding: 1rem; cursor: pointer; border-color: #f57c00;" onclick="switchTab(event, 'about')">
+                <div class="stat-box hoverable" style="background: linear-gradient(135deg, #e65100 0%, #d84315 100%); padding: 1rem; cursor: pointer; border-color: #e65100;" onclick="switchTab(event, 'about')">
                     <div class="stat-number" style="font-size: 1.8rem;">${zone5Count}</div>
                     <div class="stat-label" style="font-size: 0.85rem;">Zone 5 (High)</div>
-                    <div class="zone-tooltip" style="border-color: #f57c00;">
-                        <h4 style="color: #f57c00;"><i class="fas fa-heartbeat"></i> Zone 5: Very Hot (Cardiovascular Stress)</h4>
+                    <div class="zone-tooltip" style="border-color: #e65100;">
+                        <h4 style="color: #e65100;"><i class="fas fa-heartbeat"></i> Zone 5: Very Hot (Cardiovascular Stress)</h4>
                         <p><strong>Action Required:</strong> Limit heavy work. Increase rest periods. Ensure continuous hydration and access to shade.</p>
                         ${zone5DistrictsList}
                         <span class="learn-more-link"><i class="fas fa-info-circle"></i> Click to learn more about EHI zones</span>
@@ -3412,11 +3490,11 @@ print(hazardous[['DISTRICT', 'STATE', 'EHI_350 (in shade °C)']])</code></pre>
                             <span class="learn-more-link"><i class="fas fa-info-circle"></i> Click to learn more about EHI zones</span>
                         </div>
                     </div>
-                    <div class="stat-box hoverable" style="background: linear-gradient(135deg, #f57c00 0%, #ef6c00 100%); padding: 1rem; cursor: pointer; border-color: #f57c00;" onclick="switchTab(event, 'about')">
+                    <div class="stat-box hoverable" style="background: linear-gradient(135deg, #e65100 0%, #d84315 100%); padding: 1rem; cursor: pointer; border-color: #e65100;" onclick="switchTab(event, 'about')">
                         <div class="stat-number" style="font-size: 1.8rem;">${zone5.length}</div>
                         <div class="stat-label" style="font-size: 0.85rem;">Zone 5 (High Risk)</div>
-                        <div class="zone-tooltip" style="border-color: #f57c00;">
-                            <h4 style="color: #f57c00;"><i class="fas fa-heartbeat"></i> Zone 5: High Risk (Cardiovascular Stress)</h4>
+                        <div class="zone-tooltip" style="border-color: #e65100;">
+                            <h4 style="color: #e65100;"><i class="fas fa-heartbeat"></i> Zone 5: High Risk (Cardiovascular Stress)</h4>
                             <p><strong>Action Required:</strong> Limit heavy work. Increase rest periods. Ensure continuous hydration and access to shade.</p>
                             ${zone5DistrictsList}
                             <span class="learn-more-link"><i class="fas fa-info-circle"></i> Click to learn more about EHI zones</span>
@@ -3594,8 +3672,8 @@ print(hazardous[['DISTRICT', 'STATE', 'EHI_350 (in shade °C)']])</code></pre>
         function getZoneColor(zone) {
             const colors = {
                 6: '#d32f2f', // Hazardous - red
-                5: '#f57c00', // High risk - orange
-                4: '#fbc02d', // Caution - yellow
+                5: '#e65100', // High risk - orange
+                4: '#c79100', // Caution - yellow
                 3: '#4caf50', // Comfortable - green
                 2: '#4caf50', // Comfortable - green
                 1: '#2196f3'  // Cold stress - blue
@@ -3842,9 +3920,11 @@ print(hazardous[['DISTRICT', 'STATE', 'EHI_350 (in shade °C)']])</code></pre>
                     // Display Zone 2/3 together since they can't be distinguished
                     const zoneLabel = (peakZone === 2 || peakZone === 3) ? 'Zone 2/3' : `Zone ${peakZone}`;
 
+                    // Use dark text for Zone 4 (yellow) for better contrast
+                    const textColor = peakZone === 4 ? '#333' : 'white';
                     html += `<p style="margin: 0.5rem 0;">
                         <strong>${dateStr}:</strong> ${minTemp.toFixed(0)}°C - ${maxTemp.toFixed(0)}°C, ${avgHumidity}% RH
-                        <span style="background: ${peakColor}; color: white; padding: 2px 8px; border-radius: 4px; margin-left: 0.5rem; font-size: 0.85rem;">Peak: ${zoneLabel}</span>
+                        <span style="background: ${peakColor}; color: ${textColor}; padding: 2px 8px; border-radius: 4px; margin-left: 0.5rem; font-size: 0.85rem;">Peak: ${zoneLabel}</span>
                     </p>`;
                 });
 
@@ -3915,8 +3995,8 @@ print(hazardous[['DISTRICT', 'STATE', 'EHI_350 (in shade °C)']])</code></pre>
                                 grid: {
                                     color: function(context) {
                                         if (context.tick.value === 1) return 'rgba(33, 150, 243, 0.4)';
-                                        if (context.tick.value === 3) return 'rgba(251, 192, 45, 0.4)';
-                                        if (context.tick.value === 4) return 'rgba(245, 124, 0, 0.4)';
+                                        if (context.tick.value === 3) return 'rgba(199, 145, 0, 0.4)';
+                                        if (context.tick.value === 4) return 'rgba(230, 81, 0, 0.4)';
                                         if (context.tick.value === 5) return 'rgba(211, 47, 47, 0.4)';
                                         return 'rgba(0, 0, 0, 0.1)';
                                     }
@@ -3983,7 +4063,7 @@ print(hazardous[['DISTRICT', 'STATE', 'EHI_350 (in shade °C)']])</code></pre>
             } catch (error) {
                 console.error('Error loading forecast:', error);
                 forecastContent.innerHTML = `<p style="color: #666; text-align: center;">
-                    <i class="fas fa-exclamation-triangle" style="color: #f57c00;"></i>
+                    <i class="fas fa-exclamation-triangle" style="color: #e65100;"></i>
                     Unable to load forecast data.<br>
                     <small>${error.message || 'Please try again later.'}</small>
                 </p>`;
@@ -4089,8 +4169,8 @@ print(hazardous[['DISTRICT', 'STATE', 'EHI_350 (in shade °C)']])</code></pre>
                         labels: labels,
                         datasets: [
                             { label: 'Zone 6', data: zone6Data, borderColor: '#d32f2f', backgroundColor: 'rgba(211, 47, 47, 0.1)', fill: true },
-                            { label: 'Zone 5', data: zone5Data, borderColor: '#f57c00', backgroundColor: 'rgba(245, 124, 0, 0.1)', fill: true },
-                            { label: 'Zone 4', data: zone4Data, borderColor: '#fbc02d', backgroundColor: 'rgba(251, 192, 45, 0.1)', fill: true },
+                            { label: 'Zone 5', data: zone5Data, borderColor: '#e65100', backgroundColor: 'rgba(230, 81, 0, 0.1)', fill: true },
+                            { label: 'Zone 4', data: zone4Data, borderColor: '#c79100', backgroundColor: 'rgba(199, 145, 0, 0.1)', fill: true },
                             { label: 'Zone 2-3', data: zone23Data, borderColor: '#4caf50', backgroundColor: 'rgba(76, 175, 80, 0.1)', fill: true },
                             { label: 'Zone 1', data: zone1Data, borderColor: '#03a9f4', backgroundColor: 'rgba(3, 169, 244, 0.1)', fill: true }
                         ]
@@ -4137,8 +4217,8 @@ print(hazardous[['DISTRICT', 'STATE', 'EHI_350 (in shade °C)']])</code></pre>
                     labels: hours,
                     datasets: [
                         { label: 'Zone 6', data: sampleZone6, borderColor: '#d32f2f', backgroundColor: 'rgba(211, 47, 47, 0.1)', fill: true },
-                        { label: 'Zone 5', data: sampleZone5, borderColor: '#f57c00', backgroundColor: 'rgba(245, 124, 0, 0.1)', fill: true },
-                        { label: 'Zone 4', data: sampleZone4, borderColor: '#fbc02d', backgroundColor: 'rgba(251, 192, 45, 0.1)', fill: true },
+                        { label: 'Zone 5', data: sampleZone5, borderColor: '#e65100', backgroundColor: 'rgba(230, 81, 0, 0.1)', fill: true },
+                        { label: 'Zone 4', data: sampleZone4, borderColor: '#c79100', backgroundColor: 'rgba(199, 145, 0, 0.1)', fill: true },
                         { label: 'Zone 3', data: sampleZone3, borderColor: '#4caf50', backgroundColor: 'rgba(76, 175, 80, 0.1)', fill: true },
                         { label: 'Zone 2', data: sampleZone2, borderColor: '#8bc34a', backgroundColor: 'rgba(139, 195, 74, 0.1)', fill: true },
                         { label: 'Zone 1', data: sampleZone1, borderColor: '#03a9f4', backgroundColor: 'rgba(3, 169, 244, 0.1)', fill: true }
@@ -4232,11 +4312,11 @@ print(hazardous[['DISTRICT', 'STATE', 'EHI_350 (in shade °C)']])</code></pre>
                                 <span class="learn-more-link"><i class="fas fa-info-circle"></i> Click to learn more about EHI zones</span>
                             </div>
                         </div>
-                        <div class="stat-box hoverable" style="background: linear-gradient(135deg, #f57c00 0%, #ef6c00 100%); cursor: pointer; border-color: #f57c00;" onclick="switchTab(event, 'about')">
+                        <div class="stat-box hoverable" style="background: linear-gradient(135deg, #e65100 0%, #d84315 100%); cursor: pointer; border-color: #e65100;" onclick="switchTab(event, 'about')">
                             <div class="stat-number">${data.zone_5_events.toLocaleString()}</div>
                             <div class="stat-label">Zone 5 Hours</div>
-                            <div class="zone-tooltip" style="border-color: #f57c00;">
-                                <h4 style="color: #f57c00;"><i class="fas fa-heartbeat"></i> Zone 5 Summer Statistics</h4>
+                            <div class="zone-tooltip" style="border-color: #e65100;">
+                                <h4 style="color: #e65100;"><i class="fas fa-heartbeat"></i> Zone 5 Summer Statistics</h4>
                                 <p><strong>Top State:</strong> ${zone5TopState.replace(/_/g, ' ')}</p>
                                 <p><strong>Most Common Time:</strong> ${zone5CommonTime}</p>
                                 <span class="learn-more-link"><i class="fas fa-info-circle"></i> Click to learn more about EHI zones</span>

@@ -29,8 +29,8 @@
         :root {
             --iecc-blue: #2d637f;
             --iecc-green: #9DAD33;
-            --zone4-color: #fbc02d;
-            --zone5-color: #f57c00;
+            --zone4-color: #c79100;
+            --zone5-color: #e65100;
             --zone6-color: #d32f2f;
         }
 
@@ -160,63 +160,111 @@
         }
 
         @media (max-width: 768px) {
-            /* Mobile map controls - stack vertically */
+            /* Mobile map controls - compact horizontal strip at top */
             .map-controls {
-                left: 10px;
-                right: 10px;
+                left: 5px;
+                right: 5px;
+                top: 5px;
                 transform: none;
-                flex-direction: column;
-                gap: 8px;
-                padding: 8px 12px;
+                flex-direction: row;
+                flex-wrap: wrap;
+                gap: 6px;
+                padding: 6px 8px;
+                font-size: 10px;
             }
             .map-controls .control-group {
-                width: 100%;
+                flex: 0 0 auto;
                 justify-content: center;
+            }
+            .map-controls .control-group label {
+                display: none; /* Hide labels on mobile, use icons/compact buttons */
+            }
+            .map-controls .control-group select {
+                font-size: 11px;
+                padding: 4px 6px;
+                min-width: 60px;
             }
             .map-controls .btn-group {
-                flex-wrap: wrap;
-                justify-content: center;
+                flex-wrap: nowrap;
+                gap: 3px;
+            }
+            .map-controls .btn-group button {
+                font-size: 10px;
+                padding: 4px 8px;
             }
 
-            /* Zone legend - move below controls, prevent overlap */
+            /* Zone legend - bottom right, very compact */
             .map-legend {
                 top: auto;
-                bottom: 10px;
-                left: 10px;
-                right: auto;
-                padding: 8px 12px;
-                font-size: 11px;
+                bottom: 5px;
+                right: 5px;
+                left: auto;
+                padding: 6px 8px;
+                font-size: 9px;
+                max-width: 100px;
+                background: rgba(255,255,255,0.92);
             }
             .map-legend h3 {
-                font-size: 12px;
-                margin-bottom: 6px;
+                font-size: 10px;
+                margin-bottom: 4px;
             }
             .legend-item {
-                font-size: 10px;
-                gap: 4px;
-                margin-bottom: 2px;
+                font-size: 9px;
+                gap: 3px;
+                margin-bottom: 1px;
             }
             .legend-color {
-                width: 14px;
-                height: 14px;
+                width: 10px;
+                height: 10px;
+            }
+            .map-legend .source-text {
+                font-size: 7px;
             }
 
             /* Sidebar - compact on mobile */
             .sidebar {
-                padding: 1rem;
-                max-height: 40vh;
+                padding: 0.75rem;
+                max-height: 35vh;
             }
             .sidebar h2 {
-                font-size: 1rem;
+                font-size: 0.9rem;
             }
             .stat-box {
-                padding: 0.5rem;
+                padding: 0.4rem;
             }
             .stat-number {
-                font-size: 1.2rem;
+                font-size: 1rem;
             }
             .stat-label {
-                font-size: 0.65rem;
+                font-size: 0.6rem;
+            }
+        }
+
+        /* Extra small phones */
+        @media (max-width: 420px) {
+            .map-controls {
+                padding: 4px 6px;
+                gap: 4px;
+            }
+            .map-controls .control-group select {
+                font-size: 10px;
+                padding: 3px 4px;
+                min-width: 50px;
+            }
+            .map-controls .btn-group button {
+                font-size: 9px;
+                padding: 3px 6px;
+            }
+            .map-legend {
+                padding: 4px 6px;
+                max-width: 80px;
+            }
+            .legend-item {
+                font-size: 8px;
+            }
+            .legend-color {
+                width: 8px;
+                height: 8px;
             }
         }
 
@@ -653,11 +701,11 @@
                     <span>Zone 2/3: Comfortable</span>
                 </div>
                 <div class="legend-item">
-                    <div class="legend-color" style="background: #fbc02d;"></div>
+                    <div class="legend-color" style="background: #c79100;"></div>
                     <span>Zone 4: Caution</span>
                 </div>
                 <div class="legend-item">
-                    <div class="legend-color" style="background: #f57c00;"></div>
+                    <div class="legend-color" style="background: #e65100;"></div>
                     <span>Zone 5: High Risk</span>
                 </div>
                 <div class="legend-item">
