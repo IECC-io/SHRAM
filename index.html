@@ -94,15 +94,15 @@
             content: '';
             position: absolute;
             top: 0;
-            left: 2rem;
+            left: 15rem;
             bottom: 0;
-            width: 300px;
+            width: 500px;
             background-image: url('shram-map-dot.svg');
             background-repeat: no-repeat;
             background-position: left center;
-            background-size: auto 100%;
-            opacity: 0.5;
-            filter: brightness(2) saturate(0.3);
+            background-size: auto 125%;
+            opacity: 0.3;
+            filter: brightness(2.5) saturate(0.2);
             pointer-events: none;
         }
 
@@ -1593,11 +1593,14 @@
                     </h2>
 
                     <!-- Interactive Map for State/District Selection -->
-                    <div style="margin-bottom: 1.5rem;">
+                    <div style="margin-bottom: 1.5rem; position: relative;">
                         <p id="map-instruction" style="font-weight: 600; color: var(--shram-teal); margin-bottom: 0.5rem;">
                             <i class="fas fa-hand-pointer"></i> Click on a state to select it:
                         </p>
                         <div id="forecast-map" style="height: 350px; border-radius: 8px; border: 2px solid var(--shram-teal);"></div>
+                        <button onclick="resetForecastMap()" title="Reset map view" style="position: absolute; top: 119px; left: 12px; width: 34px; height: 34px; background: white; border: 2px solid rgba(0,0,0,0.2); border-radius: 4px; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; z-index: 1000; box-sizing: border-box;">
+                            <i class="fas fa-home" style="color: #333;"></i>
+                        </button>
                         <div style="margin-top: 0.5rem;">
                             <p id="selected-location-label" style="font-weight: 600; color: var(--shram-teal); margin: 0;"></p>
                         </div>
@@ -2820,6 +2823,18 @@ print(hazardous[['DISTRICT', 'STATE', 'EHI_350 (in shade °C)']])</code></pre>
                 'Puducherry': 'puducherry'
             };
             return mapping[stateName] || stateName.toLowerCase();
+        }
+
+        // Reset forecast map to default view (all of India)
+        function resetForecastMap() {
+            if (forecastMap) {
+                forecastMap.setView([22.5, 82], 3.5);
+                // Reset state selection
+                document.getElementById('forecast-state-select').value = 'all';
+                document.getElementById('selected-location-label').textContent = '';
+                // Reload states layer
+                loadAllStates();
+            }
         }
 
         // Initialize the forecast map with all states
