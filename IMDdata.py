@@ -260,7 +260,7 @@ def fetch_and_log():
 
             html_body = f"""
                 <html>
-                <body style='font-family: sans-serif;'>
+                <body style='font-family: Montserrat, sans-serif;'>
                     <p><strong>Automated alert triggered at {timestamp} IST</strong></p>
                     {ehi_info}
                     {zone_descriptions_html}
