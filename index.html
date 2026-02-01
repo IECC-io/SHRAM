@@ -2828,7 +2828,7 @@ print(hazardous[['DISTRICT', 'STATE', 'EHI_350 (in shade °C)']])</code></pre>
         // Reset forecast map to default view (all of India)
         function resetForecastMap() {
             if (forecastMap) {
-                forecastMap.setView([22.5, 82], 3.5);
+                forecastMap.setView([23, 82], 3.4);
                 // Reset state selection
                 document.getElementById('forecast-state-select').value = 'all';
                 document.getElementById('selected-location-label').textContent = '';
@@ -2846,7 +2846,7 @@ print(hazardous[['DISTRICT', 'STATE', 'EHI_350 (in shade °C)']])</code></pre>
             forecastMap = L.map('forecast-map', {
                 zoomControl: true,
                 attributionControl: false
-            }).setView([22.5, 82], 4);
+            }).setView([23, 82], 3.4);
 
             L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
                 maxZoom: 19
