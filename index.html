@@ -1832,16 +1832,16 @@
             </button>
 
             <div class="tabs">
-                <button class="tab active" onclick="switchTab(event, 'dashboard')" data-intro="The Dashboard shows real-time heat stress conditions across India. You can filter by state and district, and see zone statistics at a glance." data-title="Dashboard" data-step="1">
+                <button class="tab active" onclick="switchTab(event, 'dashboard')">
                     <i class="fas fa-dashboard"></i> Dashboard
                 </button>
-                <button class="tab" onclick="switchTab(event, 'livemap')" data-intro="View an interactive 3D map showing current heat stress zones for all monitoring stations across India." data-title="Live Zone Map" data-step="2">
+                <button class="tab" onclick="switchTab(event, 'livemap')">
                     <i class="fas fa-map-marked-alt"></i> Live Zone Map
                 </button>
-                <button class="tab" onclick="switchTab(event, 'calculator')" data-intro="Calculate heat stress for any temperature, humidity, and work intensity. Great for planning outdoor activities." data-title="EHI-N* Calculator" data-step="3">
+                <button class="tab" onclick="switchTab(event, 'calculator')">
                     <i class="fas fa-calculator"></i> EHI-N* Calculator
                 </button>
-                <button class="tab" onclick="switchTab(event, 'about')" data-intro="Learn about the science behind EHI-N* and how the heat stress zones are determined." data-title="About EHI-N*" data-step="4">
+                <button class="tab" onclick="switchTab(event, 'about')">
                     <i class="fas fa-info-circle"></i> About EHI-N*
                 </button>
             </div>
@@ -1884,7 +1884,7 @@
 
     <div class="container">
         <!-- Zone 6 Hazardous Alert Banner -->
-        <div id="zone6-banner" class="zone6-alert-banner minimized" onclick="expandBannerIfMinimized(event)" data-intro="When Zone 6 (hazardous) conditions are detected, this alert banner appears. Click to expand and see which states are affected. You can click on a state name to jump to its forecast." data-title="Zone 6 Alert Banner" data-step="7">
+        <div id="zone6-banner" class="zone6-alert-banner minimized" onclick="expandBannerIfMinimized(event)">
             <button class="close-btn" onclick="toggleBanner(event)" id="banner-toggle-btn"><i class="fas fa-plus"></i></button>
             <div id="zone6-banner-content"></div>
         </div>
@@ -1894,7 +1894,7 @@
             <!-- Two-column layout: Current Status (left) | Forecast (right) -->
             <div class="dashboard-grid">
                 <!-- LEFT: Current Status -->
-                <div class="section" data-intro="This panel shows real-time heat stress conditions. Use the EHI dropdown to select work intensity (MET level), and toggle between Shade/Sun exposure. Filter by state and district to see local conditions." data-title="Current Heat Status" data-step="5">
+                <div class="section">
                     <h2><i class="fas fa-chart-line"></i> Current Heat Status for
                         <select id="met-select-current" onchange="selectMetCurrent(this.value)" class="met-select-green">
                             <option value="3">EHI-3</option>
@@ -1938,14 +1938,14 @@
                         <div id="live-status-summary">
                             <p style="text-align: center; color: #666;"><i class="fas fa-spinner fa-spin"></i> Loading current status...</p>
                         </div>
-                        <div class="status-grid" id="status-grid" data-intro="These tiles show how many monitoring stations are in each heat stress zone. Hover (or tap on mobile) to see details. Click to learn more about what each zone means." data-title="Zone Statistics" data-step="8"></div>
+                        <div class="status-grid" id="status-grid"></div>
                     </div>
 
                     <p style="text-align: center; font-size: 0.85rem; color: #999; margin-top: 1.5rem; font-style: italic;">Data source: India Meteorological Department (IMD)</p>
                 </div>
 
                 <!-- RIGHT: Forecast -->
-                <div class="section" data-intro="View 7-day heat forecasts. Click on the map to select a state, then choose a district. The chart shows predicted daily max zones, and hovering over dates shows peak conditions." data-title="Heat Forecast" data-step="6">
+                <div class="section">
                     <h2><i class="fas fa-calendar-alt"></i> Heat Forecast for
                         <select id="met-select-forecast" onchange="selectMetForecast(this.value)" class="met-select-green">
                             <option value="3">EHI-3</option>
