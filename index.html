@@ -180,7 +180,7 @@
             left: 0;
             right: 0;
             height: 10px;
-            background: var(--iecc-brown);
+            background: var(--shram-teal);
         }
 
         .container { max-width: 1400px; margin: 0 auto; padding: 2rem; box-sizing: border-box; }
@@ -291,7 +291,7 @@
 
         .input-group input:focus,
         .input-wrapper select:focus {
-            outline: 2px solid var(--iecc-brown);
+            outline: 2px solid var(--shram-teal);
         }
 
         .met-selector {
@@ -313,19 +313,28 @@
 
         .met-option:hover {
             background: rgba(255, 255, 255, 0.2);
-            border-color: var(--iecc-brown);
+            border-color: white;
         }
 
         .met-option.active {
             background: white;
             color: var(--shram-teal);
-            border-color: var(--iecc-brown);
+            border-color: white;
             box-shadow: 0 4px 12px rgba(0,0,0,0.15);
         }
 
         .met-option i { font-size: 2rem; margin-bottom: 0.5rem; display: block; }
         .met-option .met-label { font-weight: 600; font-size: 0.95rem; }
         .met-option .met-desc { font-size: 0.8rem; opacity: 0.8; margin-top: 0.25rem; }
+
+        .solar-option:hover {
+            background: rgba(255, 255, 255, 0.2) !important;
+            border-color: white !important;
+        }
+        .solar-option.active:hover {
+            background: white !important;
+            border-color: white !important;
+        }
 
         /* Blue MET dropdown for dashboard sections */
         .met-select-green {
@@ -421,9 +430,9 @@
         }
 
         .calculate-btn {
-            background: var(--iecc-brown);
-            color: white;
-            border: none;
+            background: white;
+            color: var(--shram-teal);
+            border: 2px solid var(--shram-teal);
             padding: 1rem 3rem;
             font-size: 1.1rem;
             font-weight: 600;
@@ -435,9 +444,11 @@
         }
 
         .calculate-btn:hover {
-            background: #7a4a1b;
+            background: var(--shram-dark-orange);
+            color: white;
+            border-color: var(--shram-dark-orange);
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(139, 90, 43, 0.4);
+            box-shadow: 0 4px 12px rgba(197, 75, 38, 0.4);
         }
 
         .result-display {
@@ -876,7 +887,7 @@
 
         .method-badge {
             display: inline-block;
-            background: var(--iecc-brown);
+            background: var(--shram-teal);
             color: white;
             padding: 0.25rem 0.75rem;
             border-radius: 4px;
@@ -915,7 +926,7 @@
 
         .success-box {
             background: #e8f5e9;
-            border-left: 4px solid var(--iecc-brown);
+            border-left: 4px solid var(--shram-teal);
             padding: 1.5rem;
             border-radius: 8px;
             margin: 1.5rem 0;
@@ -942,7 +953,7 @@
             margin-top: 3rem;
         }
 
-        .footer a { color: var(--iecc-brown); text-decoration: none; }
+        .footer a { color: var(--shram-teal); text-decoration: none; }
         .footer a:hover { text-decoration: underline; }
 
         /* Intro.js Custom Styling - SHRAM Branding */
@@ -1810,7 +1821,7 @@
             <div class="dashboard-grid">
                 <!-- LEFT: Current Status -->
                 <div class="section">
-                    <h2><i class="fas fa-chart-line"></i> Current Heat Status for
+                    <h2>Current Heat Status for
                         <select id="met-select-current" onchange="selectMetCurrent(this.value)" class="met-select-green">
                             <option value="3">EHI-3</option>
                             <option value="4">EHI-4</option>
@@ -1861,7 +1872,7 @@
 
                 <!-- RIGHT: Forecast -->
                 <div class="section">
-                    <h2><i class="fas fa-calendar-alt"></i> Heat Forecast for
+                    <h2>Heat Forecast for
                         <select id="met-select-forecast" onchange="selectMetForecast(this.value)" class="met-select-green">
                             <option value="3">EHI-3</option>
                             <option value="4">EHI-4</option>
@@ -1921,7 +1932,7 @@
 
             <!-- Last 24 Hours (full width) -->
             <div class="section">
-                <h2><i class="fas fa-clock"></i> Last 24 Hours for
+                <h2>Last 24 Hours for
                     <select id="met-select-last24h" onchange="selectMetLast24h(this.value)" class="met-select-green">
                         <option value="3">EHI-3</option>
                         <option value="4">EHI-4</option>
@@ -1972,7 +1983,7 @@
 
             <!-- Summer 2025 Zones Animation -->
             <div class="section">
-                <h2><i class="fas fa-play-circle"></i> Summer 2025 Zones</h2>
+                <h2>Summer 2025 Zones</h2>
                 <p style="margin-bottom: 1rem; color: #666;">Hourly heat stress zones across India from May-June 2025. Use the controls to change MET level, sun/shade conditions, and scrub through time.</p>
                 <iframe
                     src="https://ekilic-coder.github.io/ehi-webapp-frontend/"
@@ -1994,7 +2005,7 @@
         <div id="calculator-tab" class="tab-content">
             <div class="calculator-container">
                 <h2 style="color: white; border-bottom-color: rgba(255,255,255,0.3);">
-                    <i class="fas fa-calculator"></i> Calculate EHI-N*
+                    Calculate EHI-N*
                 </h2>
 
                 <div class="calculator-grid">
@@ -2017,11 +2028,11 @@
                     <div class="input-group">
                         <label style="display: block; margin-bottom: 0.5rem;"><i class="fas fa-sun"></i> Solar Exposure</label>
                         <div style="display: flex; gap: 0.5rem;">
-                            <button type="button" class="solar-option active" data-solar="0" onclick="selectSolar(0)" style="flex: 1; padding: 0.75rem; border: 2px solid var(--iecc-brown); border-radius: 8px; background: white; color: var(--shram-teal); cursor: pointer; font-size: 0.9rem; font-weight: 600; transition: all 0.3s ease; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
-                                <i class="fas fa-tree" style="display: block; font-size: 1.5rem; margin-bottom: 0.25rem;"></i>
+                            <button type="button" class="solar-option active" data-solar="0" onclick="selectSolar(0)" style="flex: 1; padding: 0.75rem; border: 2px solid white; border-radius: 8px; background: white; color: var(--shram-teal); cursor: pointer; font-size: 0.9rem; font-weight: 600; transition: all 0.3s ease; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
+                                <i class="fas fa-cloud" style="display: block; font-size: 1.5rem; margin-bottom: 0.25rem;"></i>
                                 Shaded
                             </button>
-                            <button type="button" class="solar-option" data-solar="1" onclick="selectSolar(1)" style="flex: 1; padding: 0.75rem; border: 2px solid rgba(255,255,255,0.3); border-radius: 8px; background: rgba(255,255,255,0.1); color: white; cursor: pointer; font-size: 0.9rem; font-weight: 600; transition: all 0.3s ease;">
+                            <button type="button" class="solar-option" data-solar="1" onclick="selectSolar(1)" style="flex: 1; padding: 0.75rem; border: 2px solid rgba(255,255,255,0.5); border-radius: 8px; background: transparent; color: white; cursor: pointer; font-size: 0.9rem; font-weight: 600; transition: all 0.3s ease;">
                                 <i class="fas fa-sun" style="display: block; font-size: 1.5rem; margin-bottom: 0.25rem;"></i>
                                 Full Sun
                             </button>
@@ -2042,19 +2053,19 @@
                         <div class="met-desc">Moderate Work</div>
                     </div>
                     <div class="met-option" data-met="5">
-                        <i class="fas fa-person-digging"></i>
+                        <i class="fas fa-person-carry-box"></i>
                         <div class="met-label">5 METs</div>
                         <div class="met-desc">Heavy Work</div>
                     </div>
                     <div class="met-option active" data-met="6">
-                        <i class="fas fa-weight-hanging"></i>
+                        <i class="fas fa-person-digging"></i>
                         <div class="met-label">6 METs</div>
                         <div class="met-desc">Very Heavy</div>
                     </div>
                 </div>
 
                 <button class="calculate-btn" onclick="calculateEHI()">
-                    <i class="fas fa-calculator"></i> Calculate
+                    Calculate
                 </button>
 
                 <div class="result-display" id="result-display">
@@ -2068,21 +2079,21 @@
         <!-- TAB 3: ABOUT EHI-N -->
         <div id="about-tab" class="tab-content">
             <div class="section" style="padding-left: 2.5rem;">
-                <h2><i class="fas fa-book"></i> About EHI-N*</h2>
+                <h2>About EHI-N*</h2>
 
-                <p style="padding-left: 0.5rem;">The <strong>Extended Heat Index for Working Populations (EHI-N*)</strong> is a physiologically-based heat stress metric designed to assess thermal strain in labor-intensive occupations.</p>
+                <p>The <strong>Extended Heat Index for Working Populations (EHI-N*)</strong> is a physiologically-based heat stress metric designed to assess thermal strain in labor-intensive occupations.</p>
 
-                <h3><i class="fas fa-tag"></i> Nomenclature</h3>
+                <h3>Nomenclature</h3>
                 <div style="display: flex; flex-direction: column; align-items: center; margin: 1.5rem 0; gap: 1rem;">
                     <!-- N explanation above with curved arrow pointing to N -->
                     <div style="display: flex; align-items: flex-start; position: relative; margin-left: -17rem;">
                         <div style="display: flex; flex-direction: column; align-items: flex-end; padding-right: 4px;">
-                            <div style="font-size: 0.75rem; color: var(--iecc-brown); font-weight: 600; text-align: right;">Metabolic Rate</div>
+                            <div style="font-size: 0.75rem; color: var(--shram-teal); font-weight: 600; text-align: right;">Metabolic Rate</div>
                             <div style="font-size: 0.65rem; color: #888; text-align: right;">Work intensity (3-6 METs)</div>
                         </div>
                         <svg width="50" height="45" style="margin-top: -2px;">
-                            <path d="M5 5 Q 45 5, 45 35" stroke="var(--iecc-brown)" stroke-width="2" fill="none"/>
-                            <polygon points="40,32 45,42 50,32" fill="var(--iecc-brown)"/>
+                            <path d="M5 5 Q 45 5, 45 35" stroke="var(--shram-teal)" stroke-width="2" fill="none"/>
+                            <polygon points="40,32 45,42 50,32" fill="var(--shram-teal)"/>
                         </svg>
                     </div>
 
@@ -2091,7 +2102,7 @@
                         <!-- Center: EHI-N* -->
                         <div style="display: flex; align-items: center;">
                             <span style="font-size: 2.5rem; font-weight: 700; color: #666;">EHI-</span>
-                            <span style="font-size: 2.5rem; font-weight: 700; color: var(--iecc-brown);">N</span>
+                            <span style="font-size: 2.5rem; font-weight: 700; color: var(--shram-teal);">N</span>
                             <span style="font-size: 2.5rem; font-weight: 700; color: #e65100;">*</span>
                         </div>
 
@@ -2116,12 +2127,12 @@
                     </div>
                 </div>
 
-                <h3><i class="fas fa-flask"></i> Scientific Foundation</h3>
+                <h3>Scientific Foundation</h3>
                 <p style="padding-left: 0.5rem;"><em>Technical brief coming soon...</em></p>
             </div>
 
             <div class="section">
-                <h2><i class="fas fa-layer-group"></i> Heat Stress Zones</h2>
+                <h2>Heat Stress Zones</h2>
                 <p>EHI-N* classifies heat stress into zones based on physiological strain:</p>
 
                 <div style="margin: 1.5rem 0;">
@@ -2140,14 +2151,14 @@
                         <p><strong>Characteristics:</strong> The body can maintain thermal equilibrium through minimal adjustments to skin blood flow and clothing.</p>
                     </div>
 
-                    <div id="zone-content-2" class="zone-content" style="display: none; background: var(--gray-light); padding: 1.5rem; border-radius: 8px; border-left: 4px solid var(--iecc-brown);">
-                        <h3 style="color: var(--iecc-brown); margin-bottom: 1rem;"><i class="fas fa-check-circle"></i> Zone 2: Comfortable (Thermoneutral)</h3>
+                    <div id="zone-content-2" class="zone-content" style="display: none; background: var(--gray-light); padding: 1.5rem; border-radius: 8px; border-left: 4px solid var(--shram-teal);">
+                        <h3 style="color: var(--shram-teal); margin-bottom: 1rem;"><i class="fas fa-check-circle"></i> Zone 2: Comfortable (Thermoneutral)</h3>
                         <p><strong>Physiological State:</strong> Clothing adjustment in warm conditions.</p>
                         <p><strong>Characteristics:</strong> Increased skin blood flow while maintaining comfortable clothing levels.</p>
                     </div>
 
-                    <div id="zone-content-3" class="zone-content" style="display: none; background: var(--gray-light); padding: 1.5rem; border-radius: 8px; border-left: 4px solid var(--iecc-brown);">
-                        <h3 style="color: var(--iecc-brown); margin-bottom: 1rem;"><i class="fas fa-sun"></i> Zone 3: Warm (Manageable Heat)</h3>
+                    <div id="zone-content-3" class="zone-content" style="display: none; background: var(--gray-light); padding: 1.5rem; border-radius: 8px; border-left: 4px solid var(--shram-teal);">
+                        <h3 style="color: var(--shram-teal); margin-bottom: 1rem;"><i class="fas fa-sun"></i> Zone 3: Warm (Manageable Heat)</h3>
                         <p><strong>Physiological State:</strong> Minimal clothing for enhanced evaporative cooling.</p>
                         <p><strong>Characteristics:</strong> Maximum skin blood flow with minimal clothing to maximize heat dissipation.</p>
                     </div>
@@ -2156,28 +2167,28 @@
                         <h3 style="color: var(--caution-yellow); margin-bottom: 1rem;"><i class="fas fa-thermometer-half"></i> Zone 4: Hot (Elevated Risk)</h3>
                         <p><strong>Physiological State:</strong> Cutaneous blood flow becomes limiting.</p>
                         <p><strong>Characteristics:</strong> Skin blood flow reaches maximum capacity. The body relies primarily on sweating for heat dissipation.</p>
-                        <p><strong>⚠️ Recommendations:</strong> Frequent breaks and hydration needed. Monitor workers closely.</p>
+                        <p><strong>Recommendations:</strong> Frequent breaks and hydration needed. Monitor workers closely.</p>
                     </div>
 
                     <div id="zone-content-5" class="zone-content" style="display: none; background: #fff3e0; padding: 1.5rem; border-radius: 8px; border-left: 4px solid var(--warning-orange);">
                         <h3 style="color: var(--warning-orange); margin-bottom: 1rem;"><i class="fas fa-heartbeat"></i> Zone 5: Very Hot (Cardiovascular Stress)</h3>
                         <p><strong>Physiological State:</strong> Skin saturated with sweat - dripping occurs.</p>
                         <p><strong>Characteristics:</strong> Maximum sweating rate achieved. Sweat drips off skin without evaporating, reducing cooling efficiency.</p>
-                        <p><strong>⚠️ Recommendations:</strong> Limit heavy work. Increase rest periods. Ensure continuous hydration and access to shade.</p>
+                        <p><strong>Recommendations:</strong> Limit heavy work. Increase rest periods. Ensure continuous hydration and access to shade.</p>
                     </div>
 
                     <div id="zone-content-6" class="zone-content" style="background: #ffebee; padding: 1.5rem; border-radius: 8px; border-left: 4px solid var(--danger-red); border: 2px solid var(--danger-red);">
                         <h3 style="color: var(--danger-red); margin-bottom: 1rem;"><i class="fas fa-exclamation-triangle"></i> Zone 6: Hyperthermia (Severe Heat Stress)</h3>
                         <p><strong>Physiological State:</strong> Core temperature rising - Heat production exceeds dissipation capacity.</p>
                         <p><strong>Characteristics:</strong> All thermoregulatory mechanisms exhausted. Core body temperature is actively increasing, leading to heat illness.</p>
-                        <p style="background: white; padding: 1rem; border-radius: 6px; border-left: 4px solid var(--danger-red); margin-top: 1rem;"><strong>🚨 HAZARDOUS - IMMEDIATE ACTION REQUIRED:</strong> Cease work immediately. Move to cool environment. Seek medical attention. Risk of heat stroke and organ damage.</p>
+                        <p style="background: white; padding: 1rem; border-radius: 6px; border-left: 4px solid var(--danger-red); margin-top: 1rem;"><strong>HAZARDOUS - IMMEDIATE ACTION REQUIRED:</strong> Cease work immediately. Move to cool environment. Seek medical attention. Risk of heat stroke and organ damage.</p>
                     </div>
                 </div>
 
             </div>
 
             <div class="section">
-                <h2><i class="fas fa-bell"></i> Subscribe to Heat Stress Alerts</h2>
+                <h2>Subscribe to Heat Stress Alerts</h2>
 
                 <p>Get notified when hazardous heat stress conditions are detected in your location. Free service for workers, employers, and community organizers.</p>
 
@@ -2222,7 +2233,7 @@
 
                         <div class="input-group">
                             <label for="subscriber-district" style="font-weight: 600; margin-bottom: 0.5rem; display: block; color: var(--gray-dark);">Districts *</label>
-                            <select id="subscriber-district" required multiple style="width: 100%; padding: 0.75rem; border: 2px solid var(--iecc-brown); border-radius: 6px; font-size: 1rem; background: white; min-height: 150px;">
+                            <select id="subscriber-district" required multiple style="width: 100%; padding: 0.75rem; border: 2px solid var(--shram-teal); border-radius: 6px; font-size: 1rem; background: white; min-height: 150px;">
                             </select>
                             <small style="color: #666; font-size: 0.85rem; margin-top: 0.5rem; display: block;">Hold Ctrl/Cmd to select multiple districts</small>
                         </div>
@@ -2263,7 +2274,7 @@
                             <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
                                 <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; padding: 0.5rem 0.75rem; border: 2px solid var(--caution-yellow); border-radius: 6px; background: #fffde7;">
                                     <input type="checkbox" id="alert-zone-4" value="zone-4" style="width: 18px; height: 18px; cursor: pointer;">
-                                    <span style="font-weight: 600; color: #f9a825;">Zone 4</span>
+                                    <span style="font-weight: 600; color: #b8860b;">Zone 4</span>
                                     <span style="font-size: 0.85rem;">(Caution)</span>
                                 </label>
                                 <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; padding: 0.5rem 0.75rem; border: 2px solid var(--warning-orange); border-radius: 6px; background: #fff3e0;">
@@ -2290,7 +2301,7 @@
             </div>
 
             <div class="section">
-                <h2><i class="fas fa-envelope"></i> Contact</h2>
+                <h2>Contact</h2>
 
                 <p>
                 India Energy & Climate Center (IECC)<br>
@@ -2665,7 +2676,7 @@ print(hazardous[['DISTRICT', 'STATE', 'EHI_350 (in shade °C)']])</code></pre>
                 button.style.background = '#4caf50';
                 setTimeout(() => {
                     button.innerHTML = originalText;
-                    button.style.background = 'var(--iecc-brown)';
+                    button.style.background = 'var(--shram-teal)';
                 }, 2000);
             }).catch(err => {
                 console.error('Failed to copy:', err);
@@ -2716,14 +2727,14 @@ print(hazardous[['DISTRICT', 'STATE', 'EHI_350 (in shade °C)']])</code></pre>
             // Update button styles to match MET option styling
             document.querySelectorAll('.solar-option').forEach(btn => {
                 if (parseFloat(btn.dataset.solar) === value) {
-                    btn.style.border = '2px solid var(--iecc-brown)';
+                    btn.style.border = '2px solid white';
                     btn.style.background = 'white';
                     btn.style.color = 'var(--shram-teal)';
                     btn.style.boxShadow = '0 4px 12px rgba(0,0,0,0.15)';
                     btn.classList.add('active');
                 } else {
-                    btn.style.border = '2px solid rgba(255,255,255,0.3)';
-                    btn.style.background = 'rgba(255,255,255,0.1)';
+                    btn.style.border = '2px solid rgba(255,255,255,0.5)';
+                    btn.style.background = 'transparent';
                     btn.style.color = 'white';
                     btn.style.boxShadow = 'none';
                     btn.classList.remove('active');
@@ -3781,7 +3792,7 @@ print(hazardous[['DISTRICT', 'STATE', 'EHI_350 (in shade °C)']])</code></pre>
                         <div class="banner-states-list">
                             ${statesList}
                         </div>
-                        <span class="banner-static-text">⚠️ ZONE 6 DETECTED</span>
+                        <span class="banner-static-text">ZONE 6 DETECTED</span>
                         <div class="banner-marquee-container">
                             <marquee behavior="scroll" direction="left" scrollamount="5" style="font-size: 1rem;">
                                 ${marqueeItems} | ${marqueeItems}
@@ -4598,7 +4609,7 @@ print(hazardous[['DISTRICT', 'STATE', 'EHI_350 (in shade °C)']])</code></pre>
                         btn.style.color = 'var(--shram-teal)';
                     } else if (i === 2 || i === 3) {
                         btn.style.background = 'white';
-                        btn.style.color = 'var(--iecc-brown)';
+                        btn.style.color = 'var(--shram-teal)';
                     } else if (i === 4) {
                         btn.style.background = 'white';
                         btn.style.color = 'var(--caution-yellow)';
@@ -4621,7 +4632,7 @@ print(hazardous[['DISTRICT', 'STATE', 'EHI_350 (in shade °C)']])</code></pre>
                     selectedBtn.style.background = 'var(--shram-teal)';
                     selectedBtn.style.color = 'white';
                 } else if (zoneNum === 2 || zoneNum === 3) {
-                    selectedBtn.style.background = 'var(--iecc-brown)';
+                    selectedBtn.style.background = 'var(--shram-teal)';
                     selectedBtn.style.color = 'white';
                 } else if (zoneNum === 4) {
                     selectedBtn.style.background = 'var(--caution-yellow)';
