@@ -946,31 +946,59 @@
         .footer a:hover { text-decoration: underline; }
 
         /* Intro.js Custom Styling - SHRAM Branding */
-        /* Force high z-index to ensure tooltip appears above all elements */
+        /* Main overlay - covers entire screen */
+        .introjs-overlay {
+            position: fixed !important;
+            top: 0 !important;
+            left: 0 !important;
+            right: 0 !important;
+            bottom: 0 !important;
+            z-index: 999999 !important;
+            background-color: rgba(0,0,0,0.8) !important;
+        }
+        /* Helper layer - creates the spotlight cutout around highlighted element */
         .introjs-helperLayer {
-            z-index: 99999998 !important;
-            border-radius: 8px;
-            box-shadow: rgba(0,0,0,0.5) 0 0 0 5000px !important;
+            position: absolute !important;
+            z-index: 9999999 !important;
+            border-radius: 4px !important;
+            /* Large shadow creates the dark overlay with a hole for the element */
+            box-shadow: 0 0 0 9999px rgba(0,0,0,0.8) !important;
+            background: transparent !important;
+            /* NO border - just the spotlight effect */
+            border: none !important;
         }
         .introjs-tooltipReferenceLayer {
-            z-index: 99999999 !important;
+            position: absolute !important;
+            z-index: 10000000 !important;
         }
         .introjs-tooltip {
-            z-index: 100000000 !important;
+            position: absolute !important;
+            z-index: 10000001 !important;
             background: white !important;
-            border-radius: 12px;
-            box-shadow: 0 8px 30px rgba(0,0,0,0.3) !important;
-            max-width: 360px;
-            min-width: 280px;
-            font-family: 'Montserrat', sans-serif;
+            border-radius: 12px !important;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.4) !important;
+            max-width: 360px !important;
+            min-width: 280px !important;
+            font-family: 'Montserrat', sans-serif !important;
             opacity: 1 !important;
             visibility: visible !important;
-        }
-        .introjs-overlay {
-            z-index: 99999990 !important;
+            display: block !important;
+            transform: none !important;
+            border: none !important;
         }
         .introjs-fixedTooltip {
             position: fixed !important;
+        }
+        /* Ensure tooltip content is visible */
+        .introjs-tooltip * {
+            opacity: 1 !important;
+            visibility: visible !important;
+        }
+        /* Remove any highlight borders */
+        .introjs-helperLayer,
+        .shram-highlight {
+            border: none !important;
+            outline: none !important;
         }
         .introjs-tooltip-header {
             padding: 15px 20px 0 20px;
@@ -1072,50 +1100,47 @@
             }
         }
 
-        /* Take Tour button */
+        /* Tabs wrapper - positions tour button above About tab */
+        .tabs-wrapper {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+        }
+
+        /* Guide button - subtle, above About tab */
         .take-tour-btn {
             background: transparent;
-            border: 2px solid rgba(255,255,255,0.5);
-            color: white;
-            padding: 6px 12px;
-            border-radius: 6px;
-            font-size: 0.8rem;
-            font-weight: 600;
+            border: 1px solid rgba(255,255,255,0.25);
+            color: rgba(255,255,255,0.6);
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 0.6rem;
+            font-weight: 500;
             cursor: pointer;
             transition: all 0.2s ease;
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 4px;
+            margin-bottom: 4px;
+            margin-right: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .take-tour-btn i {
+            font-size: 0.55rem;
         }
         .take-tour-btn:hover {
             background: rgba(255,255,255,0.1);
-            border-color: white;
+            border-color: rgba(255,255,255,0.5);
+            color: white;
         }
 
-        /* Mobile hamburger menu button - hidden on desktop */
-        .mobile-menu-btn {
-            display: none;
-            background: transparent;
-            border: 2px solid rgba(255,255,255,0.5);
-            color: white;
-            padding: 8px 12px;
-            border-radius: 6px;
-            font-size: 1.2rem;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-        .mobile-menu-btn:hover {
-            background: rgba(255,255,255,0.1);
-            border-color: white;
-        }
 
         @media (max-width: 768px) {
+            /* Hide tour button on mobile - keep tabs */
             .take-tour-btn {
-                padding: 4px 8px;
-                font-size: 0.7rem;
-            }
-            .take-tour-btn i {
-                font-size: 0.8rem;
+                display: none;
             }
         }
 
@@ -1155,144 +1180,66 @@
         }
 
         @media (max-width: 768px) {
-            .header { padding: 0.5rem; }
+            .header {
+                padding: 0.5rem 0.5rem 0;
+            }
             .header-content {
-                flex-direction: row;
-                align-items: center;
-                justify-content: space-between;
+                flex-direction: column;
+                align-items: stretch;
                 min-height: auto;
-                padding: 0 0.5rem;
+                padding: 0;
+                gap: 0.5rem;
             }
 
-            /* Hide India dot map on mobile - takes too much space */
+            /* Hide India dot map on mobile */
             .header::before {
                 display: none;
             }
 
-            /* Mobile SHRAM logo - left aligned, smaller */
+            /* Mobile SHRAM logo - centered, smaller */
             .logo-container {
                 position: relative;
                 left: 0;
                 bottom: 0;
                 height: auto;
-                width: auto;
-                text-align: left;
+                width: 100%;
+                text-align: center;
                 margin-bottom: 0;
             }
             .logo-container img {
-                height: 50px;
+                height: 40px;
                 width: auto;
             }
 
-            /* Hide desktop tabs on mobile */
-            .tabs {
-                display: none;
+            /* Mobile tabs - compact row, flush with bottom edge */
+            .tabs-wrapper {
+                flex-direction: column;
+                align-items: stretch;
+                width: 100%;
             }
-
-            /* Hide desktop Tour button on mobile */
             .take-tour-btn {
-                display: none;
+                display: none !important;
             }
-
-            /* Show hamburger menu on mobile */
-            .mobile-menu-btn {
+            .tabs {
                 display: flex !important;
-            }
-
-            /* Mobile menu overlay */
-            .mobile-menu {
-                display: none;
-                position: fixed;
-                top: 0;
-                left: 0;
-                right: 0;
-                bottom: 0;
-                background: rgba(0,0,0,0.5);
-                z-index: 9999;
-            }
-            .mobile-menu.active {
-                display: block;
-            }
-            .mobile-menu-content {
-                position: absolute;
-                top: 0;
-                right: 0;
-                width: 280px;
-                max-width: 85vw;
-                height: 100%;
-                background: white;
-                box-shadow: -4px 0 20px rgba(0,0,0,0.2);
-                padding: 1rem;
-                overflow-y: auto;
-                transform: translateX(100%);
-                transition: transform 0.3s ease;
-            }
-            .mobile-menu.active .mobile-menu-content {
-                transform: translateX(0);
-            }
-            .mobile-menu-header {
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                margin-bottom: 1.5rem;
-                padding-bottom: 1rem;
-                border-bottom: 2px solid var(--gray-light);
-            }
-            .mobile-menu-header h3 {
-                color: var(--shram-teal);
-                font-size: 1.1rem;
+                flex-direction: row;
+                gap: 2px;
+                width: 100%;
                 margin: 0;
             }
-            .mobile-menu-close {
-                background: none;
-                border: none;
-                font-size: 1.5rem;
-                color: #666;
-                cursor: pointer;
-                padding: 0.25rem;
-            }
-            .mobile-menu-item {
-                display: block;
-                width: 100%;
-                padding: 1rem;
-                margin-bottom: 0.5rem;
-                background: var(--gray-light);
-                border: none;
-                border-radius: 8px;
-                text-align: left;
-                font-size: 1rem;
-                font-weight: 600;
-                color: var(--gray-dark);
-                cursor: pointer;
-                transition: all 0.2s ease;
-            }
-            .mobile-menu-item:hover,
-            .mobile-menu-item.active {
-                background: var(--shram-teal);
-                color: white;
-            }
-            .mobile-menu-item i {
-                margin-right: 0.75rem;
-                width: 20px;
+            .tab {
+                flex: 1;
+                padding: 6px 4px;
+                font-size: 0.6rem;
+                border-radius: 6px 6px 0 0;
+                white-space: nowrap;
                 text-align: center;
             }
-            .mobile-menu-tour {
-                margin-top: 1.5rem;
-                padding-top: 1rem;
-                border-top: 2px solid var(--gray-light);
+            .tab i {
+                display: block;
+                margin-bottom: 2px;
+                font-size: 0.75rem;
             }
-            .mobile-menu-tour button {
-                width: 100%;
-                padding: 0.75rem;
-                background: var(--shram-dark-orange);
-                color: white;
-                border: none;
-                border-radius: 8px;
-                font-size: 0.95rem;
-                font-weight: 600;
-                cursor: pointer;
-            }
-
             /* Remove brown bar from active tab on mobile */
             .tab.active::after {
                 display: none;
@@ -1827,58 +1774,26 @@
                 <img src="shram_logo.svg" alt="SHRAM: System for Heat Risk Assessment for Manual labor">
             </div>
 
-            <button class="take-tour-btn" onclick="startTour()" title="Take a guided tour of SHRAM">
-                <i class="fas fa-route"></i> <span>Tour</span>
-            </button>
-
-            <div class="tabs">
-                <button class="tab active" onclick="switchTab(event, 'dashboard')">
-                    <i class="fas fa-dashboard"></i> Dashboard
+            <div class="tabs-wrapper">
+                <button class="take-tour-btn" onclick="startTour()" title="Learn how to use SHRAM">
+                    <i class="fas fa-question-circle"></i> Help
                 </button>
-                <button class="tab" onclick="switchTab(event, 'livemap')">
-                    <i class="fas fa-map-marked-alt"></i> Live Zone Map
-                </button>
-                <button class="tab" onclick="switchTab(event, 'calculator')">
-                    <i class="fas fa-calculator"></i> EHI-N* Calculator
-                </button>
-                <button class="tab" onclick="switchTab(event, 'about')">
-                    <i class="fas fa-info-circle"></i> About EHI-N*
-                </button>
+                <div class="tabs">
+                    <button class="tab active" onclick="switchTab(event, 'dashboard')">
+                        <i class="fas fa-dashboard"></i> Dashboard
+                    </button>
+                    <button class="tab" onclick="switchTab(event, 'livemap')">
+                        <i class="fas fa-map-marked-alt"></i> Live Zone Map
+                    </button>
+                    <button class="tab" onclick="switchTab(event, 'calculator')">
+                        <i class="fas fa-calculator"></i> EHI-N* Calculator
+                    </button>
+                    <button class="tab" onclick="switchTab(event, 'about')">
+                        <i class="fas fa-info-circle"></i> About EHI-N*
+                    </button>
+                </div>
             </div>
 
-            <!-- Mobile hamburger menu button -->
-            <button class="mobile-menu-btn" onclick="toggleMobileMenu()">
-                <i class="fas fa-bars"></i>
-            </button>
-        </div>
-    </div>
-
-    <!-- Mobile slide-out menu -->
-    <div id="mobile-menu" class="mobile-menu" onclick="closeMobileMenuOnOverlay(event)">
-        <div class="mobile-menu-content">
-            <div class="mobile-menu-header">
-                <h3>Menu</h3>
-                <button class="mobile-menu-close" onclick="toggleMobileMenu()">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            <button class="mobile-menu-item active" onclick="mobileNavTo('dashboard')">
-                <i class="fas fa-dashboard"></i> Dashboard
-            </button>
-            <button class="mobile-menu-item" onclick="mobileNavTo('livemap')">
-                <i class="fas fa-map-marked-alt"></i> Live Zone Map
-            </button>
-            <button class="mobile-menu-item" onclick="mobileNavTo('calculator')">
-                <i class="fas fa-calculator"></i> EHI-N* Calculator
-            </button>
-            <button class="mobile-menu-item" onclick="mobileNavTo('about')">
-                <i class="fas fa-info-circle"></i> About EHI-N*
-            </button>
-            <div class="mobile-menu-tour">
-                <button onclick="startTourMobile()">
-                    <i class="fas fa-route"></i> Take a Tour
-                </button>
-            </div>
         </div>
     </div>
 
@@ -1902,7 +1817,7 @@
                             <option value="5">EHI-5</option>
                             <option value="6" selected>EHI-6</option>
                         </select>
-                        <span style="margin-left: 0.5rem;">
+                        <span id="sun-shade-toggle" style="margin-left: 0.5rem;">
                             <button id="current-shade-btn" onclick="setShade('current', true)" style="background: var(--shram-teal); color: white; border: 2px solid var(--shram-teal); padding: 0.5rem 0.75rem; border-radius: 6px 0 0 6px; font-weight: 700; cursor: pointer; font-size: 1rem;">
                                 <i class="fas fa-cloud"></i> Shade
                             </button><button id="current-sun-btn" onclick="setShade('current', false)" style="background: white; color: var(--shram-teal); border: 2px solid var(--shram-teal); border-left: none; padding: 0.5rem 0.75rem; border-radius: 0 6px 6px 0; font-weight: 700; cursor: pointer; font-size: 1rem;">
@@ -2586,60 +2501,6 @@ print(hazardous[['DISTRICT', 'STATE', 'EHI_350 (in shade °C)']])</code></pre>
                     page_path: '/' + tabName
                 });
             }
-        }
-
-        // Mobile menu functions
-        function toggleMobileMenu() {
-            const menu = document.getElementById('mobile-menu');
-            menu.classList.toggle('active');
-            // Prevent body scroll when menu is open
-            document.body.style.overflow = menu.classList.contains('active') ? 'hidden' : '';
-        }
-
-        function closeMobileMenuOnOverlay(event) {
-            // Close menu only if clicking on the overlay (not the content)
-            if (event.target.id === 'mobile-menu') {
-                toggleMobileMenu();
-            }
-        }
-
-        function mobileNavTo(tabName) {
-            // Update mobile menu active state
-            document.querySelectorAll('.mobile-menu-item').forEach(item => {
-                item.classList.remove('active');
-                if (item.textContent.toLowerCase().includes(tabName.replace('livemap', 'live'))) {
-                    item.classList.add('active');
-                }
-            });
-
-            // Switch tab
-            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-            document.getElementById(tabName + '-tab').classList.add('active');
-
-            // Update desktop tabs too
-            document.querySelectorAll('.tab').forEach(t => {
-                t.classList.remove('active');
-                if (t.textContent.toLowerCase().includes(tabName.replace('livemap', 'live'))) {
-                    t.classList.add('active');
-                }
-            });
-
-            // Close mobile menu
-            toggleMobileMenu();
-
-            // Track in GA
-            if (typeof gtag === 'function') {
-                gtag('event', 'page_view', {
-                    page_title: tabName.charAt(0).toUpperCase() + tabName.slice(1) + ' - SHRAM',
-                    page_location: window.location.origin + '/' + tabName,
-                    page_path: '/' + tabName
-                });
-            }
-        }
-
-        function startTourMobile() {
-            toggleMobileMenu();
-            setTimeout(startTour, 300); // Wait for menu to close
         }
 
         function toggleBanner(event) {
@@ -4990,79 +4851,143 @@ print(hazardous[['DISTRICT', 'STATE', 'EHI_350 (in shade °C)']])</code></pre>
         });
 
         // =============================================
-        // SHRAM Onboarding Tour (Intro.js)
+        // SHRAM Onboarding Guide (Intro.js)
         // =============================================
         function startTour() {
-            const isMobile = window.innerWidth <= 768;
-
-            introJs().setOptions({
-                steps: [
-                    {
-                        title: 'Welcome to SHRAM!',
-                        intro: 'SHRAM monitors heat stress for manual laborers across India. Let\'s explore the key features.'
-                    },
-                    {
-                        element: isMobile ? null : document.querySelector('.tabs'),
-                        title: 'Navigation',
-                        intro: 'Switch between Dashboard, Live Map, Calculator, and About sections.',
-                        position: 'bottom'
-                    },
-                    {
-                        element: document.querySelector('#met-select-current'),
-                        title: 'Work Intensity (MET)',
-                        intro: '<b>EHI-3:</b> Light work<br><b>EHI-4:</b> Moderate<br><b>EHI-5:</b> Heavy<br><b>EHI-6:</b> Very heavy',
-                        position: 'right'
-                    },
-                    {
-                        element: document.querySelector('#current-shade-btn'),
-                        title: 'Sun Exposure',
-                        intro: 'Toggle <b>Shade</b> or <b>Sun</b> to see how sunlight affects risk.',
-                        position: 'bottom'
-                    },
-                    {
-                        element: document.querySelector('#current-state-select'),
-                        title: 'Location Filter',
-                        intro: 'Filter by state and district.',
-                        position: 'right'
-                    },
-                    {
-                        element: document.querySelector('#status-grid'),
-                        title: 'Zone Statistics',
-                        intro: 'See how many stations are in each zone. Click tiles to learn more.',
-                        position: 'top'
-                    },
-                    {
-                        element: document.querySelector('#forecast-map'),
-                        title: 'Forecast Map',
-                        intro: 'Click a state for its 7-day forecast.',
-                        position: 'top'
-                    },
-                    {
-                        title: 'Stay Safe!',
-                        intro: 'Scroll down to <b>Subscribe</b> for alerts. Check forecasts before outdoor work!'
+            // Helper to switch tabs during tour
+            function goToTab(tabName) {
+                document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                document.getElementById(tabName + '-tab').classList.add('active');
+                document.querySelectorAll('.tab').forEach(t => {
+                    t.classList.remove('active');
+                });
+                // Find and activate the correct tab button
+                const tabMap = {
+                    'dashboard': 'Dashboard',
+                    'livemap': 'Live Zone Map',
+                    'calculator': 'Calculator',
+                    'about': 'About'
+                };
+                document.querySelectorAll('.tab').forEach(t => {
+                    if (t.textContent.includes(tabMap[tabName])) {
+                        t.classList.add('active');
                     }
-                ].filter(step => step.element !== null || !step.element),
+                });
+            }
+
+            // Ensure we start on dashboard
+            goToTab('dashboard');
+
+            const tour = introJs();
+
+            // Define steps with tab info
+            const steps = [
+                // Welcome
+                {
+                    title: 'Welcome to SHRAM!',
+                    intro: 'SHRAM monitors heat stress for outdoor workers across India. Let\'s explore the key features.',
+                    tab: 'dashboard'
+                },
+                // Dashboard tab features
+                {
+                    element: document.querySelector('.tabs'),
+                    title: 'Navigation Tabs',
+                    intro: 'Use these tabs to navigate between different sections. Let\'s start with the <b>Dashboard</b>.',
+                    position: 'bottom',
+                    tab: 'dashboard'
+                },
+                {
+                    element: document.querySelector('#met-select-current'),
+                    title: 'Work Intensity',
+                    intro: 'Select work intensity:<br><b>EHI-3:</b> Light (office)<br><b>EHI-4:</b> Moderate (walking)<br><b>EHI-5:</b> Heavy (construction)<br><b>EHI-6:</b> Very heavy (digging)',
+                    position: 'bottom',
+                    tab: 'dashboard'
+                },
+                {
+                    element: document.querySelector('#sun-shade-toggle'),
+                    title: 'Sun Exposure',
+                    intro: 'Toggle between <b>Shade</b> and <b>Sun</b> to see how direct sunlight increases heat risk during the day.',
+                    position: 'bottom',
+                    tab: 'dashboard'
+                },
+                {
+                    element: document.querySelector('#status-grid'),
+                    title: 'Zone Statistics',
+                    intro: 'See how many weather stations are in each zone. <b>Click any tile</b> to learn what each zone means.',
+                    position: 'top',
+                    tab: 'dashboard'
+                },
+                {
+                    element: document.querySelector('#forecast-map'),
+                    title: '7-Day Forecast',
+                    intro: '<b>Click any state</b> on the map to see its heat forecast for the next 7 days.',
+                    position: 'left',
+                    tab: 'dashboard'
+                },
+                // Live Map tab
+                {
+                    title: 'Live Zone Map',
+                    intro: 'Now let\'s check out the <b>Live Zone Map</b> - an interactive 3D view of current conditions across India.',
+                    tab: 'livemap'
+                },
+                // Calculator tab
+                {
+                    title: 'EHI-N* Calculator',
+                    intro: 'The <b>Calculator</b> lets you compute heat stress for any temperature, humidity, and work intensity. Great for planning outdoor work!',
+                    tab: 'calculator'
+                },
+                // About tab
+                {
+                    title: 'About EHI-N*',
+                    intro: 'The <b>About</b> section explains the science behind EHI-N* and how heat stress zones are determined.',
+                    tab: 'about'
+                },
+                // Finish - Subscribe section on About page
+                {
+                    title: 'Stay Safe!',
+                    intro: 'Scroll down to <b>Subscribe</b> for heat alerts. Check forecasts before outdoor work!<br><br>Thanks for taking the tour!',
+                    tab: 'about'
+                }
+            ];
+
+            tour.setOptions({
+                steps: steps.filter(step => !step.element || step.element !== null),
                 showProgress: true,
                 showBullets: false,
                 exitOnOverlayClick: true,
                 showStepNumbers: false,
                 keyboardNavigation: true,
                 scrollToElement: true,
-                scrollPadding: 50,
-                doneLabel: 'Done',
-                nextLabel: 'Next',
-                prevLabel: 'Back',
-                skipLabel: 'Skip',
-                overlayOpacity: 0.6,
+                scrollPadding: 80,
+                doneLabel: 'Got it!',
+                nextLabel: 'Next →',
+                prevLabel: '← Back',
+                skipLabel: '✕',
                 disableInteraction: true
-            }).oncomplete(function() {
-                localStorage.setItem('shram-tour-completed', 'true');
-            }).onexit(function() {
-                localStorage.setItem('shram-tour-completed', 'true');
-            }).start();
+            });
+
+            // Switch tabs as we navigate through the tour
+            tour.onbeforechange(function(targetElement) {
+                const stepIndex = this._currentStep;
+                const stepData = steps[stepIndex];
+                if (stepData && stepData.tab) {
+                    goToTab(stepData.tab);
+                }
+            });
+
+            tour.oncomplete(function() {
+                localStorage.setItem('shram-guide-completed', 'true');
+                goToTab('dashboard');
+            });
+
+            tour.onexit(function() {
+                localStorage.setItem('shram-guide-completed', 'true');
+            });
+
+            tour.start();
         }
 
-        // No auto-start - user clicks Tour button
+        // No auto-start - user clicks Help button
     </script>
 </body>
 </html>
