@@ -349,6 +349,9 @@ def fetch_and_log():
         if os.path.exists(history_file):
             with open(history_file, 'r') as f:
                 history = json.load(f)
+            # Handle old format with "hourly_alerts" key
+            if "hourly_alerts" in history and "hourly_data" not in history:
+                history["hourly_data"] = history.pop("hourly_alerts")
         else:
             history = {"hourly_data": []}
 
