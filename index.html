@@ -2432,12 +2432,11 @@ print(hazardous[['DISTRICT', 'STATE', 'EHI_350 (in shade °C)']])</code></pre>
                     legend: {
                         position: 'top',
                         labels: {
-                            boxWidth: small ? 20 : (mobile ? 25 : 30),
-                            boxHeight: small ? 3 : (mobile ? 4 : 5),
+                            boxWidth: small ? 25 : (mobile ? 30 : 40),
+                            boxHeight: small ? 4 : (mobile ? 5 : 6),
                             padding: small ? 4 : (mobile ? 6 : 10),
                             font: { size: small ? 8 : (mobile ? 10 : 12) },
-                            usePointStyle: true,
-                            pointStyle: 'line'
+                            usePointStyle: false
                         }
                     }
                 },
