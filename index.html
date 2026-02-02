@@ -213,10 +213,10 @@
             font-size: 1.3rem;
         }
 
-        /* Two-column Dashboard Layout */
+        /* Stacked Dashboard Layout - Current Status first, then Forecast */
         .dashboard-grid {
-            display: grid;
-            grid-template-columns: 500px 1fr;
+            display: flex;
+            flex-direction: column;
             gap: 2rem;
             margin-bottom: 2rem;
             width: 100%;
@@ -226,14 +226,7 @@
 
         .dashboard-grid > .section {
             margin-bottom: 0;
-            width: auto;
-            min-width: 0;
-        }
-
-        @media (max-width: 968px) {
-            .dashboard-grid {
-                grid-template-columns: 1fr;
-            }
+            width: 100%;
         }
 
         /* Calculator */
@@ -486,16 +479,16 @@
         .status-overview { margin-bottom: 2rem; }
 
         .status-grid {
-            display: flex;
-            flex-direction: column;
-            gap: 0.75rem;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
             margin-top: 1.5rem;
         }
 
         .stat-box {
             background: var(--shram-teal);
             color: white;
-            padding: 1.5rem;
+            padding: 1rem;
             border-radius: 10px;
             text-align: center;
             box-shadow: 0 4px 10px rgba(45, 99, 127, 0.2);
@@ -1491,6 +1484,11 @@
                 grid-template-columns: 1fr 1fr !important;
                 gap: 0.5rem !important;
             }
+
+            /* Forecast grid - stack on mobile */
+            .forecast-grid {
+                grid-template-columns: 1fr !important;
+            }
             .status-grid .stat-box {
                 padding: 0.5rem !important;
             }
@@ -1892,20 +1890,6 @@
                         </span>
                     </h2>
 
-                    <!-- Interactive Map for State/District Selection -->
-                    <div style="margin-bottom: 1.5rem; position: relative;">
-                        <p id="map-instruction" style="font-weight: 600; color: var(--shram-teal); margin-bottom: 0.5rem;">
-                            <i class="fas fa-hand-pointer"></i> Click on a state to select it:
-                        </p>
-                        <div id="forecast-map" style="height: 350px; border-radius: 8px; border: 2px solid var(--shram-teal);"></div>
-                        <button onclick="resetForecastMap()" title="Reset map view" style="position: absolute; top: 119px; left: 12px; width: 34px; height: 34px; background: white; border: 2px solid rgba(0,0,0,0.2); border-radius: 4px; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; z-index: 1000; box-sizing: border-box;">
-                            <i class="fas fa-home" style="color: #333;"></i>
-                        </button>
-                        <div style="margin-top: 0.5rem;">
-                            <p id="selected-location-label" style="font-weight: 600; color: var(--shram-teal); margin: 0;"></p>
-                        </div>
-                    </div>
-
                     <!-- Hidden selects for compatibility -->
                     <select id="forecast-state-select" style="display: none;">
                         <option value="all">-- Select a State --</option>
@@ -1914,16 +1898,37 @@
                         <option value="all">All Districts</option>
                     </select>
 
-                    <div style="margin-bottom: 1.5rem;">
-                        <button id="forecast-1day-btn" onclick="setForecastDays(1)" class="calculate-btn" style="margin-right: 1rem; padding: 0.5rem 1.5rem; font-size: 0.9rem; background: white; color: var(--shram-teal); border: 2px solid var(--shram-teal);">1-Day</button>
-                        <button id="forecast-3day-btn" onclick="setForecastDays(3)" class="calculate-btn" style="padding: 0.5rem 1.5rem; font-size: 0.9rem; background: var(--shram-teal); color: white; border: 2px solid var(--shram-teal);">3-Day</button>
-                    </div>
+                    <!-- Two-column layout: Map (left) | Chart (right) -->
+                    <div class="forecast-grid" style="display: grid; grid-template-columns: 400px 1fr; gap: 2rem; align-items: start;">
+                        <!-- LEFT: Map and controls -->
+                        <div>
+                            <p id="map-instruction" style="font-weight: 600; color: var(--shram-teal); margin-bottom: 0.5rem;">
+                                <i class="fas fa-hand-pointer"></i> Click on a state to select it:
+                            </p>
+                            <div style="position: relative;">
+                                <div id="forecast-map" style="height: 350px; border-radius: 8px; border: 2px solid var(--shram-teal);"></div>
+                                <button onclick="resetForecastMap()" title="Reset map view" style="position: absolute; top: 70px; left: 12px; width: 34px; height: 34px; background: white; border: 2px solid rgba(0,0,0,0.2); border-radius: 4px; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; z-index: 1000; box-sizing: border-box;">
+                                    <i class="fas fa-home" style="color: #333;"></i>
+                                </button>
+                            </div>
+                            <div style="margin-top: 0.5rem;">
+                                <p id="selected-location-label" style="font-weight: 600; color: var(--shram-teal); margin: 0;"></p>
+                            </div>
+                            <div style="margin-top: 1rem;">
+                                <button id="forecast-1day-btn" onclick="setForecastDays(1)" class="calculate-btn" style="margin-right: 0.5rem; padding: 0.5rem 1.5rem; font-size: 0.9rem; background: white; color: var(--shram-teal); border: 2px solid var(--shram-teal);">1-Day</button>
+                                <button id="forecast-3day-btn" onclick="setForecastDays(3)" class="calculate-btn" style="padding: 0.5rem 1.5rem; font-size: 0.9rem; background: var(--shram-teal); color: white; border: 2px solid var(--shram-teal);">3-Day</button>
+                            </div>
+                        </div>
 
-                    <div id="forecast-content">
-                        <p style="text-align: center; color: #666;">Loading forecast...</p>
-                    </div>
-                    <div style="margin-top: 1.5rem;">
-                        <canvas id="forecast-chart" style="height: 400px; min-height: 350px;"></canvas>
+                        <!-- RIGHT: Forecast content and chart -->
+                        <div>
+                            <div id="forecast-content">
+                                <p style="text-align: center; color: #666;">Loading forecast...</p>
+                            </div>
+                            <div style="margin-top: 1.5rem;">
+                                <canvas id="forecast-chart" style="height: 400px; min-height: 350px;"></canvas>
+                            </div>
+                        </div>
                     </div>
 
                     <p style="text-align: center; font-size: 0.85rem; color: #999; margin-top: 1.5rem; font-style: italic;">Data source: WeatherAPI.com</p>
