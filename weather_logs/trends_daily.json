@@ -1,157 +1,9 @@
 {
-  "generated": "2026-02-05T04:27:57.755910+05:30",
+  "generated": "2026-02-05T05:27:02.774471+05:30",
   "period": "daily",
-  "start_date": "2026-01-29T04:27:47.464030+05:30",
-  "end_date": "2026-02-05T04:27:47.464030+05:30",
+  "start_date": "2026-01-29T05:26:51.441253+05:30",
+  "end_date": "2026-02-05T05:26:51.441253+05:30",
   "data": [
-    {
-      "timestamp": "2026-01-29T04:00:00",
-      "total_stations": 1532,
-      "met3_shade": {
-        "zone1": 0,
-        "zone2": 620,
-        "zone3": 596,
-        "zone4": 70,
-        "zone5": 6,
-        "zone6": 0
-      },
-      "met3_sun": {
-        "zone1": 0,
-        "zone2": 610,
-        "zone3": 290,
-        "zone4": 358,
-        "zone5": 32,
-        "zone6": 2
-      },
-      "met4_shade": {
-        "zone1": 0,
-        "zone2": 126,
-        "zone3": 892,
-        "zone4": 256,
-        "zone5": 16,
-        "zone6": 2
-      },
-      "met4_sun": {
-        "zone1": 0,
-        "zone2": 188,
-        "zone3": 324,
-        "zone4": 686,
-        "zone5": 92,
-        "zone6": 2
-      },
-      "met5_shade": {
-        "zone1": 0,
-        "zone2": 34,
-        "zone3": 642,
-        "zone4": 542,
-        "zone5": 72,
-        "zone6": 2
-      },
-      "met5_sun": {
-        "zone1": 0,
-        "zone2": 70,
-        "zone3": 154,
-        "zone4": 826,
-        "zone5": 240,
-        "zone6": 2
-      },
-      "met6_shade": {
-        "zone1": 0,
-        "zone2": 8,
-        "zone3": 280,
-        "zone4": 818,
-        "zone5": 184,
-        "zone6": 2
-      },
-      "met6_sun": {
-        "zone1": 0,
-        "zone2": 30,
-        "zone3": 64,
-        "zone4": 792,
-        "zone5": 400,
-        "zone6": 6
-      },
-      "avg_temp": 14.5,
-      "min_temp": -15.1,
-      "max_temp": 39.4,
-      "avg_rh": 87.4,
-      "min_rh": 6.0,
-      "max_rh": 100.0
-    },
-    {
-      "timestamp": "2026-01-29T05:00:00",
-      "total_stations": 1546,
-      "met3_shade": {
-        "zone1": 0,
-        "zone2": 650,
-        "zone3": 591,
-        "zone4": 61,
-        "zone5": 6,
-        "zone6": 0
-      },
-      "met3_sun": {
-        "zone1": 0,
-        "zone2": 634,
-        "zone3": 296,
-        "zone4": 350,
-        "zone5": 26,
-        "zone6": 2
-      },
-      "met4_shade": {
-        "zone1": 0,
-        "zone2": 128,
-        "zone3": 904,
-        "zone4": 260,
-        "zone5": 16,
-        "zone6": 0
-      },
-      "met4_sun": {
-        "zone1": 0,
-        "zone2": 189,
-        "zone3": 333,
-        "zone4": 688,
-        "zone5": 96,
-        "zone6": 2
-      },
-      "met5_shade": {
-        "zone1": 0,
-        "zone2": 34,
-        "zone3": 664,
-        "zone4": 548,
-        "zone5": 60,
-        "zone6": 2
-      },
-      "met5_sun": {
-        "zone1": 0,
-        "zone2": 78,
-        "zone3": 146,
-        "zone4": 834,
-        "zone5": 246,
-        "zone6": 4
-      },
-      "met6_shade": {
-        "zone1": 0,
-        "zone2": 8,
-        "zone3": 276,
-        "zone4": 837,
-        "zone5": 185,
-        "zone6": 2
-      },
-      "met6_sun": {
-        "zone1": 0,
-        "zone2": 30,
-        "zone3": 72,
-        "zone4": 802,
-        "zone5": 398,
-        "zone6": 6
-      },
-      "avg_temp": 14.4,
-      "min_temp": -17.0,
-      "max_temp": 39.0,
-      "avg_rh": 88.0,
-      "min_rh": 6.0,
-      "max_rh": 100.0
-    },
     {
       "timestamp": "2026-01-29T10:00:00",
       "total_stations": 1592,
@@ -5699,6 +5551,80 @@
       "min_temp": -13.0,
       "max_temp": 36.3,
       "avg_rh": 86.0,
+      "min_rh": 6.0,
+      "max_rh": 100.0
+    },
+    {
+      "timestamp": "2026-02-05T05:00:00",
+      "total_stations": 1554,
+      "met3_shade": {
+        "zone1": 0,
+        "zone2": 620,
+        "zone3": 626,
+        "zone4": 58,
+        "zone5": 2,
+        "zone6": 2
+      },
+      "met3_sun": {
+        "zone1": 0,
+        "zone2": 606,
+        "zone3": 276,
+        "zone4": 402,
+        "zone5": 22,
+        "zone6": 2
+      },
+      "met4_shade": {
+        "zone1": 0,
+        "zone2": 98,
+        "zone3": 914,
+        "zone4": 288,
+        "zone5": 6,
+        "zone6": 2
+      },
+      "met4_sun": {
+        "zone1": 0,
+        "zone2": 186,
+        "zone3": 318,
+        "zone4": 720,
+        "zone5": 80,
+        "zone6": 4
+      },
+      "met5_shade": {
+        "zone1": 0,
+        "zone2": 26,
+        "zone3": 654,
+        "zone4": 580,
+        "zone5": 46,
+        "zone6": 2
+      },
+      "met5_sun": {
+        "zone1": 0,
+        "zone2": 50,
+        "zone3": 174,
+        "zone4": 844,
+        "zone5": 236,
+        "zone6": 4
+      },
+      "met6_shade": {
+        "zone1": 0,
+        "zone2": 8,
+        "zone3": 288,
+        "zone4": 832,
+        "zone5": 176,
+        "zone6": 4
+      },
+      "met6_sun": {
+        "zone1": 0,
+        "zone2": 22,
+        "zone3": 50,
+        "zone4": 814,
+        "zone5": 418,
+        "zone6": 4
+      },
+      "avg_temp": 14.7,
+      "min_temp": -13.3,
+      "max_temp": 35.9,
+      "avg_rh": 86.8,
       "min_rh": 6.0,
       "max_rh": 100.0
     }
