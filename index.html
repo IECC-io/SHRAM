@@ -1858,28 +1858,30 @@
                 font-size: 0.875rem !important; /* 14px UI element */
             }
 
-            /* Line 3: State + District - force them to stay on same row */
+            /* Line 3: State + District - force a line break before state */
+            /* Create an invisible full-width element before state to force line break */
             .section h2 > span:has(#current-state-select) {
-                display: inline !important;
-                margin-top: 0.4rem;
-                margin-right: 0.15rem;
+                order: 10 !important; /* Push state later in flex order */
             }
             .section h2 > span:has(#current-district-select) {
-                display: inline !important;
-                margin-top: 0.4rem;
+                order: 11 !important; /* District right after state */
             }
             /* Hide STATE/DISTRICT labels on phones */
-            .section h2 > span:has(#current-state-select) > span,
-            .section h2 > span:has(#current-district-select) > span {
+            .section h2 > span:has(#current-state-select) > span:first-child,
+            .section h2 > span:has(#current-district-select) > span:first-child {
                 display: none !important;
             }
             #current-state-select, #current-district-select {
-                width: 42% !important;
+                width: 130px !important;
                 max-width: 140px !important;
-                font-size: 0.875rem !important; /* 14px UI element */
+                font-size: 0.8rem !important;
                 padding: 0 0.3rem !important;
                 height: 32px !important;
-                display: inline-block !important;
+            }
+            /* Force state+district to their own line by making them wide enough */
+            .section h2 > span:has(#current-state-select),
+            .section h2 > span:has(#current-district-select) {
+                margin-top: 0.5rem !important;
             }
 
             /* Hide FORECAST day buttons from header on mobile - they'll show after map */
