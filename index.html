@@ -2650,30 +2650,7 @@
                 <p>The <strong>Extended Heat Index for Laboring Populations (EHI-N*)</strong> is a physiologically-based heat stress metric designed to assess thermal stress in labor-intensive occupations.</p>
 
                 <div style="display: flex; flex-direction: column; align-items: center; margin: 1.5rem 0;">
-                    <svg viewBox="0 0 400 160" style="max-width: 400px; width: 100%; height: auto;">
-                        <!-- Metabolic Rate label and arrow (shifted left) -->
-                        <text x="70" y="18" font-size="11" fill="#006D77" font-weight="600" text-anchor="end">Metabolic Rate</text>
-                        <text x="70" y="30" font-size="9" fill="#888" text-anchor="end">(3-6+ METs)</text>
-                        <!-- Curved arrow pointing to N -->
-                        <path d="M75 15 Q 115 15, 115 50" stroke="#006D77" stroke-width="2" fill="none"/>
-                        <polygon points="110,47 115,57 120,47" fill="#006D77"/>
-
-                        <!-- Main EHI-N* text -->
-                        <text x="95" y="85" font-size="36" font-weight="700" fill="#666">EHI-</text>
-                        <text x="185" y="85" font-size="36" font-weight="700" fill="#006D77">N</text>
-                        <text x="215" y="85" font-size="36" font-weight="700" fill="#e65100">*</text>
-
-                        <!-- Sun Exposure arrow and label (shifted up) -->
-                        <text x="240" y="60" font-size="18" fill="#e65100">←</text>
-                        <text x="260" y="55" font-size="11" fill="#e65100" font-weight="600">☀ Sun Exposure</text>
-                        <text x="260" y="67" font-size="9" fill="#888">Direct sunlight included</text>
-
-                        <!-- Examples -->
-                        <text x="115" y="120" font-size="12" fill="#78909c">☁</text>
-                        <text x="130" y="120" font-size="11" fill="#666"><tspan font-weight="700">EHI-6</tspan> = Heavy work, shaded</text>
-                        <text x="115" y="140" font-size="12" fill="#e65100">☀</text>
-                        <text x="130" y="140" font-size="11" fill="#666"><tspan font-weight="700">EHI-6*</tspan> = Heavy work, full sun</text>
-                    </svg>
+                    <img src="ehi-n-nomenclature.svg" alt="EHI-N* Nomenclature: N indicates metabolic rate (3-6+ METs), * indicates sun exposure" style="max-width: 500px; width: 100%; height: auto;">
                 </div>
 
                 <h3 onclick="toggleScientificFoundation()" style="cursor: pointer; display: flex; align-items: center; gap: 0.5rem;">
@@ -3567,6 +3544,21 @@ print(hazardous[['DISTRICT', 'STATE', 'EHI_350 (in shade °C)']])</code></pre>
                 currentMet = parseInt(this.dataset.met);
             });
         });
+
+        // Toggle Peak Conditions visibility
+        function togglePeakConditions() {
+            const content = document.getElementById('peak-conditions-content');
+            const chevron = document.getElementById('peak-conditions-chevron');
+            if (content && chevron) {
+                if (content.style.display === 'none') {
+                    content.style.display = 'block';
+                    chevron.style.transform = 'rotate(0deg)';
+                } else {
+                    content.style.display = 'none';
+                    chevron.style.transform = 'rotate(180deg)';
+                }
+            }
+        }
 
         function setForecastDays(days) {
             forecastDays = days;
@@ -5517,9 +5509,13 @@ print(hazardous[['DISTRICT', 'STATE', 'EHI_350 (in shade °C)']])</code></pre>
                     ${data.metadata && data.metadata.generated_at_ist ? `<span style="font-size: 0.85rem; color: #666; font-weight: 600;"><i class="fas fa-clock"></i> Forecast generated: ${data.metadata.generated_at_ist}</span>` : ''}
                 </p>`;
 
-                // Add peak conditions summary
-                html += `<div style="padding: 1rem; background: var(--gray-light); border-radius: 8px;">
-                    <h4 style="margin-bottom: 0.5rem; color: var(--shram-teal);"><i class="fas fa-sun"></i> Peak Conditions</h4>`;
+                // Add peak conditions summary (collapsible)
+                html += `<div id="peak-conditions-panel" style="padding: 1rem; background: var(--gray-light); border-radius: 8px;">
+                    <h4 style="margin-bottom: 0.5rem; color: var(--shram-teal); cursor: pointer; display: flex; justify-content: space-between; align-items: center;" onclick="togglePeakConditions()">
+                        <span><i class="fas fa-sun"></i> Peak Conditions</span>
+                        <i id="peak-conditions-chevron" class="fas fa-chevron-up" style="font-size: 0.9rem; transition: transform 0.3s;"></i>
+                    </h4>
+                    <div id="peak-conditions-content">`;
 
                 forecast.forEach(day => {
                     const dateStr = new Date(day.date).toLocaleDateString('en-IN', {
@@ -5553,7 +5549,7 @@ print(hazardous[['DISTRICT', 'STATE', 'EHI_350 (in shade °C)']])</code></pre>
                     </p>`;
                 });
 
-                html += '</div>';
+                html += '</div></div>';
 
                 forecastContent.innerHTML = html;
 
