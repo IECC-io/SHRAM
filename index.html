@@ -1859,6 +1859,13 @@
             }
 
             /* Line 3: State + District - force a line break before state */
+            /* Flex break element - forces new line in flex container */
+            .flex-break-mobile {
+                display: block !important;
+                flex-basis: 100% !important;
+                width: 100% !important;
+                height: 0 !important;
+            }
             /* Hide STATE/DISTRICT labels on phones */
             .section h2 > span:has(#current-state-select) > span:first-child,
             .section h2 > span:has(#current-district-select) > span:first-child {
@@ -1871,33 +1878,10 @@
                 padding: 0 0.3rem !important;
                 height: 32px !important;
             }
-            /* Force sun/shade toggle to take remaining width and push state to next line */
-            .section h2 #sun-shade-toggle::after {
-                content: "" !important;
-                flex-basis: 100% !important;
-                width: 0 !important;
-                height: 0 !important;
-            }
-            /* Make the h2 have a wrapper-like behavior */
-            .section h2 > span:has(#current-state-select) {
-                flex-basis: calc(50% - 0.25rem) !important;
-                margin-top: 0.5rem !important;
-                order: 100 !important;
-            }
+            /* State and District side by side after the break */
+            .section h2 > span:has(#current-state-select),
             .section h2 > span:has(#current-district-select) {
-                flex-basis: calc(50% - 0.25rem) !important;
-                margin-top: 0.5rem !important;
-                order: 101 !important;
-            }
-            /* Add a flex break after CONDITIONS */
-            .section h2 #sun-shade-toggle {
-                margin-right: auto !important;
-            }
-            /* Info tooltip last */
-            .section h2 > .info-tooltip {
-                order: 200 !important;
-                flex-basis: 100% !important;
-                margin-top: 0.5rem !important;
+                margin-top: 0.25rem !important;
             }
 
             /* Hide FORECAST day buttons from header on mobile - they'll show after map */
@@ -2225,6 +2209,7 @@
                                 </button>
                             </span>
                         </span>
+                        <span class="flex-break-mobile" style="display: none;"></span>
                         <span style="display: inline-flex; flex-direction: column; align-items: center;">
                             <span style="font-size: 0.7rem; color: #78909c; font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.25rem;">STATE</span>
                             <select id="current-state-select" onchange="updateCurrentDistricts(); filterCurrentStatus();" style="padding: 0 0.75rem; border-radius: 6px; border: 2px solid var(--shram-teal); background: white; color: var(--shram-teal); font-weight: 600; font-size: 1rem; width: 200px; height: 42px;">
