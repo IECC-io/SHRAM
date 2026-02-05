@@ -1323,7 +1323,7 @@
 
             /* Mobile dropdown menu */
             .mobile-menu {
-                display: none;
+                display: none !important;
                 position: absolute;
                 top: 100%;
                 left: 0;
@@ -1333,7 +1333,7 @@
                 box-shadow: 0 4px 10px rgba(0,0,0,0.2);
             }
             .mobile-menu.open {
-                display: block;
+                display: block !important;
             }
             .mobile-menu-item {
                 display: block;
@@ -2124,7 +2124,7 @@
 
     <div class="header">
         <!-- Mobile hamburger menu button -->
-        <button class="hamburger-btn" onclick="toggleMobileMenu()" aria-label="Toggle menu">
+        <button class="hamburger-btn" onclick="toggleMobileMenu(event)" aria-label="Toggle menu">
             <span></span>
             <span></span>
             <span></span>
@@ -3020,11 +3020,13 @@ print(hazardous[['DISTRICT', 'STATE', 'EHI_350 (in shade °C)']])</code></pre>
         }
 
         // Mobile hamburger menu functions
-        function toggleMobileMenu() {
+        function toggleMobileMenu(event) {
+            if (event) event.stopPropagation();
             const menu = document.getElementById('mobile-menu');
             const hamburger = document.querySelector('.hamburger-btn');
             menu.classList.toggle('open');
             hamburger.classList.toggle('open');
+            console.log('Menu toggled, open:', menu.classList.contains('open'));
         }
 
         function mobileMenuSelect(event, tabName) {
