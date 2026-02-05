@@ -2874,7 +2874,8 @@ print(hazardous[['DISTRICT', 'STATE', 'EHI_350 (in shade °C)']])</code></pre>
                 6: mobile ? '6' : 'Zone 6 (Hazardous)',
                 5: mobile ? '5' : 'Zone 5 (High Risk)',
                 4: mobile ? '4' : 'Zone 4 (Elevated)',
-                23: mobile ? '2-3' : 'Zone 2-3 (Comfortable)',
+                3: mobile ? '3' : 'Zone 3 (Moderate)',
+                2: mobile ? '2' : 'Zone 2 (Comfortable)',
                 1: mobile ? '1' : 'Zone 1 (Cold)'
             };
             return labels[zone] || `Zone ${zone}`;
@@ -3526,7 +3527,7 @@ print(hazardous[['DISTRICT', 'STATE', 'EHI_350 (in shade °C)']])</code></pre>
                 const selectedDistrict = document.getElementById('charts-district-select').value;
 
                 const labels = [];
-                const zone6Data = [], zone5Data = [], zone4Data = [], zone23Data = [], zone1Data = [];
+                const zone6Data = [], zone5Data = [], zone4Data = [], zone3Data = [], zone2Data = [], zone1Data = [];
 
                 data.data.forEach(entry => {
                     // All periods now use timestamp format (hourly data)
@@ -3558,7 +3559,8 @@ print(hazardous[['DISTRICT', 'STATE', 'EHI_350 (in shade °C)']])</code></pre>
                         zone6Data.push(zoneCounts.zone6);
                         zone5Data.push(zoneCounts.zone5);
                         zone4Data.push(zoneCounts.zone4);
-                        zone23Data.push(zoneCounts.zone2 + zoneCounts.zone3);
+                        zone3Data.push(zoneCounts.zone3);
+                        zone2Data.push(zoneCounts.zone2);
                         zone1Data.push(zoneCounts.zone1);
                     } else {
                         // Use national totals
@@ -3566,7 +3568,8 @@ print(hazardous[['DISTRICT', 'STATE', 'EHI_350 (in shade °C)']])</code></pre>
                         zone6Data.push(zones.zone6 || 0);
                         zone5Data.push(zones.zone5 || 0);
                         zone4Data.push(zones.zone4 || 0);
-                        zone23Data.push((zones.zone2 || 0) + (zones.zone3 || 0));
+                        zone3Data.push(zones.zone3 || 0);
+                        zone2Data.push(zones.zone2 || 0);
                         zone1Data.push(zones.zone1 || 0);
                     }
                 });
@@ -3608,10 +3611,26 @@ print(hazardous[['DISTRICT', 'STATE', 'EHI_350 (in shade °C)']])</code></pre>
                                 ...lineProps
                             },
                             {
-                                label: getZoneLabel(23),
-                                data: zone23Data,
+                                label: getZoneLabel(3),
+                                data: zone3Data,
+                                borderColor: '#F9A825',
+                                backgroundColor: 'rgba(249, 168, 37, 0.1)',
+                                fill: true,
+                                ...lineProps
+                            },
+                            {
+                                label: getZoneLabel(2),
+                                data: zone2Data,
                                 borderColor: '#2E7D32',
                                 backgroundColor: 'rgba(46, 125, 50, 0.1)',
+                                fill: true,
+                                ...lineProps
+                            },
+                            {
+                                label: getZoneLabel(1),
+                                data: zone1Data,
+                                borderColor: '#1976D2',
+                                backgroundColor: 'rgba(25, 118, 210, 0.1)',
                                 fill: true,
                                 ...lineProps
                             }
