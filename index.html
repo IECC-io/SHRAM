@@ -1859,13 +1859,6 @@
             }
 
             /* Line 3: State + District - force a line break before state */
-            /* Create an invisible full-width element before state to force line break */
-            .section h2 > span:has(#current-state-select) {
-                order: 10 !important; /* Push state later in flex order */
-            }
-            .section h2 > span:has(#current-district-select) {
-                order: 11 !important; /* District right after state */
-            }
             /* Hide STATE/DISTRICT labels on phones */
             .section h2 > span:has(#current-state-select) > span:first-child,
             .section h2 > span:has(#current-district-select) > span:first-child {
@@ -1878,9 +1871,20 @@
                 padding: 0 0.3rem !important;
                 height: 32px !important;
             }
-            /* Force state+district to their own line by making them wide enough */
-            .section h2 > span:has(#current-state-select),
+            /* Force line break before state by making the sun/shade toggle take remaining width */
+            .section h2 #sun-shade-toggle {
+                flex-grow: 1 !important;
+                justify-content: flex-end !important;
+            }
+            /* State and District on their own row */
+            .section h2 > span:has(#current-state-select) {
+                flex-basis: 50% !important;
+                justify-content: flex-end !important;
+                margin-top: 0.5rem !important;
+            }
             .section h2 > span:has(#current-district-select) {
+                flex-basis: 50% !important;
+                justify-content: flex-start !important;
                 margin-top: 0.5rem !important;
             }
 
