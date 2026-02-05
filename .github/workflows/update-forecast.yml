@@ -26,10 +26,10 @@ jobs:
         run: |
           pip install requests pytz
 
-      - name: Run generate_forecast.py
+      - name: Run generate_forecast_openmeteo.py
         run: |
           cd ${{ github.workspace }}
-          python generate_forecast.py
+          python generate_forecast_openmeteo.py
 
       - name: Commit and push data
         run: |

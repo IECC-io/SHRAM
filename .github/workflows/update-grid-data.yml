@@ -36,10 +36,10 @@ jobs:
             echo "No existing grid_data.json found"
           fi
 
-      - name: Run generate_grid_data.py
+      - name: Run generate_grid_data_openmeteo.py
         run: |
           cd ${{ github.workspace }}
-          python generate_grid_data.py
+          python generate_grid_data_openmeteo.py
 
       - name: Commit and push data
         run: |
