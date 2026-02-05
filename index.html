@@ -1155,6 +1155,15 @@
             display: none;
         }
 
+        /* Mobile hamburger menu button - hidden on desktop */
+        .hamburger-btn {
+            display: none;
+        }
+
+        /* Mobile menu container - hidden on desktop */
+        .mobile-menu {
+            display: none;
+        }
 
         @media (max-width: 768px) {
             /* Hide tour button on mobile - keep tabs */
@@ -1261,61 +1270,104 @@
             .take-tour-btn.desktop-tour-btn {
                 display: none !important;
             }
-            /* Mobile tour button - top right of orange banner */
-            .take-tour-btn.mobile-tour-btn {
+            /* Mobile hamburger button - top right of orange banner */
+            .hamburger-btn {
                 display: flex !important;
                 position: absolute;
                 top: 8px;
                 right: 8px;
                 padding: 0.5rem;
-                font-size: 1.25rem;
+                font-size: 1.5rem;
+                background: transparent;
+                border: none;
+                color: rgba(255,255,255,0.9);
+                cursor: pointer;
+                z-index: 20;
+                flex-direction: column;
+                gap: 4px;
+            }
+            .hamburger-btn span {
+                display: block;
+                width: 22px;
+                height: 2px;
+                background: white;
+                transition: all 0.3s ease;
+            }
+            .hamburger-btn.open span:nth-child(1) {
+                transform: rotate(45deg) translate(4px, 4px);
+            }
+            .hamburger-btn.open span:nth-child(2) {
+                opacity: 0;
+            }
+            .hamburger-btn.open span:nth-child(3) {
+                transform: rotate(-45deg) translate(4px, -4px);
+            }
+
+            /* Mobile tour button - below hamburger */
+            .take-tour-btn.mobile-tour-btn {
+                display: flex !important;
+                position: absolute;
+                top: 44px;
+                right: 8px;
+                padding: 0.5rem;
+                font-size: 1.1rem;
                 background: transparent;
                 border: none;
                 color: rgba(255,255,255,0.8);
                 cursor: pointer;
-                z-index: 10;
+                z-index: 20;
             }
             .take-tour-btn.mobile-tour-btn:hover {
                 color: white;
             }
-            .tabs {
-                display: flex !important;
-                flex-direction: row;
-                gap: 2px;
-                width: 100%;
-                margin: 0;
-            }
-            .tab {
-                flex: 1;
-                padding: 8px 4px;
-                font-size: 0.75rem;
-                border-radius: 6px 6px 0 0;
-                white-space: nowrap;
-                text-align: center;
-                overflow: hidden;
-            }
-            .tab i {
+
+            /* Mobile dropdown menu */
+            .mobile-menu {
                 display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: var(--shram-dark-orange);
+                z-index: 100;
+                box-shadow: 0 4px 10px rgba(0,0,0,0.2);
             }
-            /* Shorter tab labels on mobile - white text for inactive */
-            #livemap-tab-btn { font-size: 0; color: white; }
-            #livemap-tab-btn::after { content: "Live Map"; font-size: 0.75rem; color: rgba(255,255,255,0.9); }
-            .tab[onclick*="calculator"] { font-size: 0; color: white; }
-            .tab[onclick*="calculator"]::after { content: "Calculator"; font-size: 0.75rem; color: rgba(255,255,255,0.9); }
-            #about-tab-btn { font-size: 0; color: white; }
-            #about-tab-btn::after { content: "About"; font-size: 0.75rem; color: rgba(255,255,255,0.9); }
-            /* Active tab styling on mobile - teal text on white background */
-            .tab.active {
-                background: white !important;
-                color: var(--shram-teal) !important;
+            .mobile-menu.open {
+                display: block;
             }
-            .tab.active::after {
-                color: var(--shram-teal) !important;
+            .mobile-menu-item {
+                display: block;
+                width: 100%;
+                padding: 1rem 1.5rem;
+                background: transparent;
+                border: none;
+                border-bottom: 1px solid rgba(255,255,255,0.1);
+                color: rgba(255,255,255,0.9);
+                font-size: 1rem;
+                font-family: inherit;
+                font-weight: 500;
+                text-align: left;
+                cursor: pointer;
+                transition: background 0.2s ease;
             }
-            /* Active state for renamed tabs - teal text */
-            #livemap-tab-btn.active::after { content: "Live Map"; font-size: 0.75rem; color: var(--shram-teal) !important; }
-            .tab[onclick*="calculator"].active::after { content: "Calculator"; font-size: 0.75rem; color: var(--shram-teal) !important; }
-            #about-tab-btn.active::after { content: "About"; font-size: 0.75rem; color: var(--shram-teal) !important; }
+            .mobile-menu-item:hover {
+                background: rgba(255,255,255,0.1);
+            }
+            .mobile-menu-item.active {
+                background: rgba(255,255,255,0.15);
+                color: white;
+                font-weight: 600;
+            }
+            .mobile-menu-item i {
+                margin-right: 0.75rem;
+                width: 20px;
+                text-align: center;
+            }
+
+            /* Hide desktop tabs on mobile */
+            .tabs-wrapper {
+                display: none !important;
+            }
 
             .container { padding: 0.5rem; overflow-x: hidden; }
 
@@ -2071,10 +2123,31 @@
     </div>
 
     <div class="header">
-        <!-- Mobile tour button - positioned in header for mobile -->
+        <!-- Mobile hamburger menu button -->
+        <button class="hamburger-btn" onclick="toggleMobileMenu()" aria-label="Toggle menu">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+        <!-- Mobile tour button - below hamburger -->
         <button class="take-tour-btn mobile-tour-btn" onclick="startTour()" title="Learn how to use SHRAM">
             <i class="fas fa-question-circle"></i>
         </button>
+        <!-- Mobile dropdown menu -->
+        <div class="mobile-menu" id="mobile-menu">
+            <button class="mobile-menu-item active" onclick="mobileMenuSelect(event, 'dashboard')">
+                <i class="fas fa-dashboard"></i> Dashboard
+            </button>
+            <button class="mobile-menu-item" onclick="mobileMenuSelect(event, 'livemap')">
+                <i class="fas fa-map-marked-alt"></i> Live Zone Map
+            </button>
+            <button class="mobile-menu-item" onclick="mobileMenuSelect(event, 'calculator')">
+                <i class="fas fa-calculator"></i> EHI-N* Calculator
+            </button>
+            <button class="mobile-menu-item" onclick="mobileMenuSelect(event, 'about')">
+                <i class="fas fa-info-circle"></i> About EHI-N*
+            </button>
+        </div>
         <div class="header-content">
             <div class="logo-container">
                 <img src="shram_logo.svg" alt="SHRAM: System for Heat Risk Assessment for Manual labor">
@@ -2945,6 +3018,39 @@ print(hazardous[['DISTRICT', 'STATE', 'EHI_350 (in shade °C)']])</code></pre>
                 setTimeout(() => forecastMap.invalidateSize(), 100);
             }
         }
+
+        // Mobile hamburger menu functions
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            const hamburger = document.querySelector('.hamburger-btn');
+            menu.classList.toggle('open');
+            hamburger.classList.toggle('open');
+        }
+
+        function mobileMenuSelect(event, tabName) {
+            // Close menu
+            const menu = document.getElementById('mobile-menu');
+            const hamburger = document.querySelector('.hamburger-btn');
+            menu.classList.remove('open');
+            hamburger.classList.remove('open');
+
+            // Update mobile menu active state
+            document.querySelectorAll('.mobile-menu-item').forEach(item => item.classList.remove('active'));
+            event.currentTarget.classList.add('active');
+
+            // Switch tab
+            switchTab(event, tabName);
+        }
+
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', function(e) {
+            const menu = document.getElementById('mobile-menu');
+            const hamburger = document.querySelector('.hamburger-btn');
+            if (menu && hamburger && !menu.contains(e.target) && !hamburger.contains(e.target)) {
+                menu.classList.remove('open');
+                hamburger.classList.remove('open');
+            }
+        });
 
         function toggleBanner(event) {
             if (event) event.stopPropagation();
