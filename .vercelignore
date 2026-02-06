@@ -1,33 +1,34 @@
-# Large data files - exclude from serverless functions
+# Large data files
 grid_data.json
 grid_data_prev.json
-forecast_*.json
+forecast_1day.json
+forecast_3day.json
+forecast_7day.json
 india_districts.json
 ehi_lookup.json
 
-# GeoJSON files
-geojson/
+# Directories with large files
+geojson
+weather_logs
+lookup_tables
+scripts
+alerting_system
+assets
 
-# Weather logs
-weather_logs/
+# Static HTML files
+index.html
+map_deck.html
+verify-success.html
+verify-error.html
+unsubscribe-success.html
 
-# Lookup tables
-lookup_tables/
-
-# Scripts (not needed for API functions)
-scripts/
-alerting_system/
-
-# Assets
-assets/
-
-# HTML files (static, not needed for API)
-*.html
-!api/
+# Git and GitHub
+.git
+.github
 
 # Other
-.git/
-.github/
-notebooks/
-__pycache__/
+__pycache__
 *.pyc
+CNAME
+LICENSE
+README.md
