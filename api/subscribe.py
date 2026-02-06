@@ -1,4 +1,4 @@
-from http.server import BaseHTTPRequestHandler
+from flask import Flask, request, jsonify
 import json
 import os
 import uuid
@@ -9,6 +9,7 @@ from datetime import datetime
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 
+app = Flask(__name__)
 
 # Configuration from environment variables
 EMAIL_SENDER = os.environ.get('EMAIL_SENDER')
@@ -22,7 +23,6 @@ DASHBOARD_URL = 'https://shram.info'
 
 
 def get_sheets_client():
-    """Initialize Google Sheets client."""
     scope = [
         'https://spreadsheets.google.com/feeds',
         'https://www.googleapis.com/auth/drive'
@@ -33,7 +33,6 @@ def get_sheets_client():
 
 
 def check_existing_subscriber(sheet, email):
-    """Check if email already exists in sheet."""
     try:
         records = sheet.get_all_records()
         for i, record in enumerate(records):
@@ -45,7 +44,6 @@ def check_existing_subscriber(sheet, email):
 
 
 def send_verification_email(email, name, token):
-    """Send verification email to subscriber."""
     verify_url = f"https://{VERCEL_BASE_URL}/api/verify?token={token}"
 
     subject = "Verify your SHRAM Heat Alert Subscription"
@@ -120,131 +118,79 @@ def send_verification_email(email, name, token):
         smtp.send_message(msg)
 
 
-class handler(BaseHTTPRequestHandler):
-    def do_OPTIONS(self):
-        self.send_response(200)
-        self.send_header('Access-Control-Allow-Origin', '*')
-        self.send_header('Access-Control-Allow-Methods', 'POST, OPTIONS')
-        self.send_header('Access-Control-Allow-Headers', 'Content-Type')
-        self.end_headers()
+@app.route('/api/subscribe', methods=['POST', 'OPTIONS'])
+def subscribe():
+    # Handle CORS preflight
+    if request.method == 'OPTIONS':
+        response = jsonify({})
+        response.headers['Access-Control-Allow-Origin'] = '*'
+        response.headers['Access-Control-Allow-Methods'] = 'POST, OPTIONS'
+        response.headers['Access-Control-Allow-Headers'] = 'Content-Type'
+        return response
 
-    def do_POST(self):
-        try:
-            content_length = int(self.headers.get('Content-Length', 0))
-            body = self.rfile.read(content_length)
-            data = json.loads(body)
+    try:
+        data = request.get_json()
 
-            email = data.get('email', '').strip().lower()
-            name = data.get('name', '').strip()
-            districts = data.get('districts', [])
-            receive_forecasts = data.get('receive_forecasts', True)
+        email = data.get('email', '').strip().lower()
+        name = data.get('name', '').strip()
+        districts = data.get('districts', [])
+        receive_forecasts = data.get('receive_forecasts', True)
 
-            # Validate email
-            if not email or '@' not in email:
-                self.send_response(400)
-                self.send_header('Access-Control-Allow-Origin', '*')
-                self.send_header('Content-Type', 'application/json')
-                self.end_headers()
-                self.wfile.write(json.dumps({
-                    'success': False,
-                    'error': 'Valid email address is required'
-                }).encode())
-                return
+        # Validate email
+        if not email or '@' not in email:
+            response = jsonify({'success': False, 'error': 'Valid email address is required'})
+            response.headers['Access-Control-Allow-Origin'] = '*'
+            return response, 400
 
-            # Validate districts
-            if not districts or len(districts) == 0:
-                self.send_response(400)
-                self.send_header('Access-Control-Allow-Origin', '*')
-                self.send_header('Content-Type', 'application/json')
-                self.end_headers()
-                self.wfile.write(json.dumps({
-                    'success': False,
-                    'error': 'At least one district must be selected'
-                }).encode())
-                return
+        # Validate districts
+        if not districts or len(districts) == 0:
+            response = jsonify({'success': False, 'error': 'At least one district must be selected'})
+            response.headers['Access-Control-Allow-Origin'] = '*'
+            return response, 400
 
-            # Connect to Google Sheets
-            client = get_sheets_client()
-            sheet = client.open_by_key(SHEET_ID).sheet1
+        # Connect to Google Sheets
+        client = get_sheets_client()
+        sheet = client.open_by_key(SHEET_ID).sheet1
 
-            # Check if already subscribed
-            row_num, existing = check_existing_subscriber(sheet, email)
-            if existing:
-                if existing.get('status') == 'verified':
-                    self.send_response(400)
-                    self.send_header('Access-Control-Allow-Origin', '*')
-                    self.send_header('Content-Type', 'application/json')
-                    self.end_headers()
-                    self.wfile.write(json.dumps({
-                        'success': False,
-                        'error': 'This email is already subscribed.'
-                    }).encode())
-                    return
-                else:
-                    token = existing.get('verification_token')
-                    send_verification_email(email, name, token)
-                    self.send_response(200)
-                    self.send_header('Access-Control-Allow-Origin', '*')
-                    self.send_header('Content-Type', 'application/json')
-                    self.end_headers()
-                    self.wfile.write(json.dumps({
-                        'success': True,
-                        'message': 'Verification email re-sent. Please check your inbox.'
-                    }).encode())
-                    return
+        # Check if already subscribed
+        row_num, existing = check_existing_subscriber(sheet, email)
+        if existing:
+            if existing.get('status') == 'verified':
+                response = jsonify({'success': False, 'error': 'This email is already subscribed.'})
+                response.headers['Access-Control-Allow-Origin'] = '*'
+                return response, 400
+            else:
+                token = existing.get('verification_token')
+                send_verification_email(email, name, token)
+                response = jsonify({'success': True, 'message': 'Verification email re-sent. Please check your inbox.'})
+                response.headers['Access-Control-Allow-Origin'] = '*'
+                return response
 
-            # Generate verification token
-            token = str(uuid.uuid4())
+        # Generate verification token
+        token = str(uuid.uuid4())
 
-            # Prepare row data
-            now = datetime.utcnow().isoformat() + 'Z'
-            districts_str = ','.join(districts) if isinstance(districts, list) else districts
+        # Prepare row data
+        now = datetime.utcnow().isoformat() + 'Z'
+        districts_str = ','.join(districts) if isinstance(districts, list) else districts
 
-            row_data = [
-                email,
-                name,
-                districts_str,
-                'yes' if receive_forecasts else 'no',
-                token,
-                'pending',
-                now,
-                '',
-                ''
-            ]
+        row_data = [
+            email, name, districts_str,
+            'yes' if receive_forecasts else 'no',
+            token, 'pending', now, '', ''
+        ]
 
-            # Add to Google Sheets
-            sheet.append_row(row_data)
+        # Add to Google Sheets
+        sheet.append_row(row_data)
 
-            # Send verification email
-            send_verification_email(email, name, token)
+        # Send verification email
+        send_verification_email(email, name, token)
 
-            # Success response
-            self.send_response(200)
-            self.send_header('Access-Control-Allow-Origin', '*')
-            self.send_header('Content-Type', 'application/json')
-            self.end_headers()
-            self.wfile.write(json.dumps({
-                'success': True,
-                'message': 'Verification email sent! Please check your inbox.'
-            }).encode())
+        response = jsonify({'success': True, 'message': 'Verification email sent! Please check your inbox.'})
+        response.headers['Access-Control-Allow-Origin'] = '*'
+        return response
 
-        except json.JSONDecodeError:
-            self.send_response(400)
-            self.send_header('Access-Control-Allow-Origin', '*')
-            self.send_header('Content-Type', 'application/json')
-            self.end_headers()
-            self.wfile.write(json.dumps({
-                'success': False,
-                'error': 'Invalid JSON in request body'
-            }).encode())
-
-        except Exception as e:
-            print(f"Subscription error: {e}")
-            self.send_response(500)
-            self.send_header('Access-Control-Allow-Origin', '*')
-            self.send_header('Content-Type', 'application/json')
-            self.end_headers()
-            self.wfile.write(json.dumps({
-                'success': False,
-                'error': 'Failed to process subscription. Please try again.'
-            }).encode())
+    except Exception as e:
+        print(f"Subscription error: {e}")
+        response = jsonify({'success': False, 'error': 'Failed to process subscription. Please try again.'})
+        response.headers['Access-Control-Allow-Origin'] = '*'
+        return response, 500
