@@ -1,0 +1,18 @@
+# Exclude large data files not needed for API functions
+weather_logs/
+grid_data.json
+grid_data_prev.json
+geojson/
+lookup_tables/
+scripts/
+alerting_system/
+
+# Exclude other non-API files
+.github/
+assets/
+*.csv
+*.html
+!api/**
+
+# Exclude git
+.git/

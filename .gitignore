@@ -1,5 +1,3 @@
-### Paste this content:
-```
 # Ignore old massive CSV files
 weather_logs/delhi_weather_master.csv
 weather_logs/Delhi_weather_master.csv
@@ -31,4 +29,18 @@ build/
 # OS
 .DS_Store
 Thumbs.db
-```
+
+# Credentials - NEVER commit these!
+*.json
+!ehi_lookup.json
+!india_districts.json
+!grid_data.json
+!grid_data_prev.json
+!weather_logs/*.json
+!geojson/*.json
+!lookup_tables/*.json
+*credentials*.json
+*service_account*.json
+*-key.json
+.env
+.env.*

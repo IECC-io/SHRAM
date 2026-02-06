@@ -11,6 +11,9 @@
     },
     "api/unsubscribe.py": {
       "runtime": "@vercel/python@4.3.1"
+    },
+    "api/preferences.py": {
+      "runtime": "@vercel/python@4.3.1"
     }
   }
 }
