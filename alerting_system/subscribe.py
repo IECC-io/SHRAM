@@ -3,16 +3,8 @@ Vercel Serverless Function: Handle new subscription requests
 
 Endpoint: POST /api/subscribe
 Body: { email, name, districts, receive_forecasts }
-
-Actions:
-1. Validate input
-2. Generate verification token
-3. Add to Google Sheets (status: pending)
-4. Send verification email
-5. Return success/error
 """
 
-from http.server import BaseHTTPRequestHandler
 import json
 import os
 import uuid
@@ -30,7 +22,7 @@ EMAIL_PASSWORD = os.environ.get('EMAIL_PASSWORD')
 GOOGLE_SHEETS_CREDENTIALS = os.environ.get('GOOGLE_SHEETS_CREDENTIALS')
 SHEET_ID = os.environ.get('SHEET_ID')
 
-# Base URL for verification links (update after Vercel deployment)
+# Base URL for verification links
 VERCEL_BASE_URL = os.environ.get('VERCEL_URL', 'shram-alerts.vercel.app')
 DASHBOARD_URL = 'https://shram.info'
 
@@ -89,7 +81,7 @@ def send_verification_email(email, name, token):
                 <p>Thank you for subscribing to SHRAM heat stress alerts. You'll receive:</p>
                 <ul>
                     <li><strong>Instant alerts</strong> when Zone 6 (hazardous) heat stress is detected in your selected districts</li>
-                    <li><strong>7-day forecast digest</strong> (if opted in) every morning</li>
+                    <li><strong>7-day forecast digest</strong> (if opted in) every week</li>
                 </ul>
                 <p>Please verify your email address to activate your subscription:</p>
                 <p style="text-align: center;">
@@ -135,131 +127,167 @@ def send_verification_email(email, name, token):
         smtp.send_message(msg)
 
 
-class handler(BaseHTTPRequestHandler):
-    def do_OPTIONS(self):
-        """Handle CORS preflight requests."""
-        self.send_response(200)
-        self.send_header('Access-Control-Allow-Origin', '*')
-        self.send_header('Access-Control-Allow-Methods', 'POST, OPTIONS')
-        self.send_header('Access-Control-Allow-Headers', 'Content-Type')
-        self.end_headers()
+def handler(request):
+    """Vercel serverless function handler."""
+    # Handle CORS preflight
+    if request.method == 'OPTIONS':
+        return {
+            'statusCode': 200,
+            'headers': {
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Methods': 'POST, OPTIONS',
+                'Access-Control-Allow-Headers': 'Content-Type'
+            },
+            'body': ''
+        }
 
-    def do_POST(self):
-        """Handle subscription request."""
-        # CORS headers
-        self.send_header('Access-Control-Allow-Origin', '*')
+    # Only allow POST
+    if request.method != 'POST':
+        return {
+            'statusCode': 405,
+            'headers': {
+                'Access-Control-Allow-Origin': '*',
+                'Content-Type': 'application/json'
+            },
+            'body': json.dumps({'success': False, 'error': 'Method not allowed'})
+        }
 
-        try:
-            # Parse request body
-            content_length = int(self.headers.get('Content-Length', 0))
-            body = self.rfile.read(content_length)
-            data = json.loads(body)
+    try:
+        # Parse request body
+        body = request.body
+        if isinstance(body, bytes):
+            body = body.decode('utf-8')
+        data = json.loads(body)
 
-            email = data.get('email', '').strip().lower()
-            name = data.get('name', '').strip()
-            districts = data.get('districts', [])
-            receive_forecasts = data.get('receive_forecasts', True)
+        email = data.get('email', '').strip().lower()
+        name = data.get('name', '').strip()
+        districts = data.get('districts', [])
+        receive_forecasts = data.get('receive_forecasts', True)
 
-            # Validate email
-            if not email or '@' not in email:
-                self.send_response(400)
-                self.send_header('Content-Type', 'application/json')
-                self.end_headers()
-                self.wfile.write(json.dumps({
+        # Validate email
+        if not email or '@' not in email:
+            return {
+                'statusCode': 400,
+                'headers': {
+                    'Access-Control-Allow-Origin': '*',
+                    'Content-Type': 'application/json'
+                },
+                'body': json.dumps({
                     'success': False,
                     'error': 'Valid email address is required'
-                }).encode())
-                return
+                })
+            }
 
-            # Validate districts
-            if not districts or len(districts) == 0:
-                self.send_response(400)
-                self.send_header('Content-Type', 'application/json')
-                self.end_headers()
-                self.wfile.write(json.dumps({
+        # Validate districts
+        if not districts or len(districts) == 0:
+            return {
+                'statusCode': 400,
+                'headers': {
+                    'Access-Control-Allow-Origin': '*',
+                    'Content-Type': 'application/json'
+                },
+                'body': json.dumps({
                     'success': False,
                     'error': 'At least one district must be selected'
-                }).encode())
-                return
+                })
+            }
 
-            # Connect to Google Sheets
-            client = get_sheets_client()
-            sheet = client.open_by_key(SHEET_ID).sheet1
+        # Connect to Google Sheets
+        client = get_sheets_client()
+        sheet = client.open_by_key(SHEET_ID).sheet1
 
-            # Check if already subscribed
-            row_num, existing = check_existing_subscriber(sheet, email)
-            if existing:
-                if existing.get('status') == 'verified':
-                    self.send_response(400)
-                    self.send_header('Content-Type', 'application/json')
-                    self.end_headers()
-                    self.wfile.write(json.dumps({
+        # Check if already subscribed
+        row_num, existing = check_existing_subscriber(sheet, email)
+        if existing:
+            if existing.get('status') == 'verified':
+                return {
+                    'statusCode': 400,
+                    'headers': {
+                        'Access-Control-Allow-Origin': '*',
+                        'Content-Type': 'application/json'
+                    },
+                    'body': json.dumps({
                         'success': False,
                         'error': 'This email is already subscribed. Check your inbox for alerts.'
-                    }).encode())
-                    return
-                else:
-                    # Re-send verification for pending subscription
-                    token = existing.get('verification_token')
-                    send_verification_email(email, name, token)
-                    self.send_response(200)
-                    self.send_header('Content-Type', 'application/json')
-                    self.end_headers()
-                    self.wfile.write(json.dumps({
+                    })
+                }
+            else:
+                # Re-send verification for pending subscription
+                token = existing.get('verification_token')
+                send_verification_email(email, name, token)
+                return {
+                    'statusCode': 200,
+                    'headers': {
+                        'Access-Control-Allow-Origin': '*',
+                        'Content-Type': 'application/json'
+                    },
+                    'body': json.dumps({
                         'success': True,
                         'message': 'Verification email re-sent. Please check your inbox.'
-                    }).encode())
-                    return
+                    })
+                }
 
-            # Generate verification token
-            token = str(uuid.uuid4())
+        # Generate verification token
+        token = str(uuid.uuid4())
 
-            # Prepare row data
-            now = datetime.utcnow().isoformat() + 'Z'
-            districts_str = ','.join(districts) if isinstance(districts, list) else districts
+        # Prepare row data
+        now = datetime.utcnow().isoformat() + 'Z'
+        districts_str = ','.join(districts) if isinstance(districts, list) else districts
 
-            row_data = [
-                email,
-                name,
-                districts_str,
-                'yes' if receive_forecasts else 'no',
-                token,
-                'pending',
-                now,
-                '',  # verified_at (empty until verified)
-                ''   # last_alert_sent (empty)
-            ]
+        row_data = [
+            email,
+            name,
+            districts_str,
+            'yes' if receive_forecasts else 'no',
+            token,
+            'pending',
+            now,
+            '',  # verified_at (empty until verified)
+            ''   # last_alert_sent (empty)
+        ]
 
-            # Add to Google Sheets
-            sheet.append_row(row_data)
+        # Add to Google Sheets
+        sheet.append_row(row_data)
 
-            # Send verification email
-            send_verification_email(email, name, token)
+        # Send verification email
+        send_verification_email(email, name, token)
 
-            # Success response
-            self.send_response(200)
-            self.send_header('Content-Type', 'application/json')
-            self.end_headers()
-            self.wfile.write(json.dumps({
+        # Success response
+        return {
+            'statusCode': 200,
+            'headers': {
+                'Access-Control-Allow-Origin': '*',
+                'Content-Type': 'application/json'
+            },
+            'body': json.dumps({
                 'success': True,
                 'message': 'Verification email sent! Please check your inbox and click the verification link.'
-            }).encode())
+            })
+        }
 
-        except json.JSONDecodeError:
-            self.send_response(400)
-            self.send_header('Content-Type', 'application/json')
-            self.end_headers()
-            self.wfile.write(json.dumps({
+    except json.JSONDecodeError:
+        return {
+            'statusCode': 400,
+            'headers': {
+                'Access-Control-Allow-Origin': '*',
+                'Content-Type': 'application/json'
+            },
+            'body': json.dumps({
                 'success': False,
                 'error': 'Invalid JSON in request body'
-            }).encode())
+            })
+        }
 
-        except Exception as e:
-            print(f"Subscription error: {e}")
-            self.send_response(500)
-            self.send_header('Content-Type', 'application/json')
-            self.end_headers()
-            self.wfile.write(json.dumps({
+    except Exception as e:
+        print(f"Subscription error: {e}")
+        return {
+            'statusCode': 500,
+            'headers': {
+                'Access-Control-Allow-Origin': '*',
+                'Content-Type': 'application/json'
+            },
+            'body': json.dumps({
                 'success': False,
                 'error': 'Failed to process subscription. Please try again.'
-            }).encode())
+            })
+        }

@@ -6,6 +6,12 @@
       "use": "@vercel/python"
     }
   ],
+  "routes": [
+    {
+      "src": "/api/(.*)",
+      "dest": "/api/$1"
+    }
+  ],
   "env": {
     "EMAIL_SENDER": "@email_sender",
     "EMAIL_PASSWORD": "@email_password",

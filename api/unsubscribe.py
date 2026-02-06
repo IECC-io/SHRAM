@@ -9,10 +9,8 @@ Actions:
 3. Redirect to confirmation page
 """
 
-from http.server import BaseHTTPRequestHandler
 import json
 import os
-from datetime import datetime
 from urllib.parse import parse_qs, urlparse
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
@@ -48,54 +46,68 @@ def find_subscriber_by_token(sheet, token):
         return None, None
 
 
-class handler(BaseHTTPRequestHandler):
-    def do_GET(self):
-        """Handle unsubscribe request."""
-        try:
-            # Parse query parameters
-            parsed_url = urlparse(self.path)
-            query_params = parse_qs(parsed_url.query)
+def handler(request):
+    """Vercel serverless function handler."""
+    try:
+        # Parse query parameters from the request URL
+        url = request.url if hasattr(request, 'url') else request.path
+        parsed_url = urlparse(url)
+        query_params = parse_qs(parsed_url.query)
+
+        # Also check request.query for Vercel's parsed query params
+        if hasattr(request, 'query') and request.query:
+            token = request.query.get('token')
+        else:
             token = query_params.get('token', [None])[0]
 
-            if not token:
-                # Redirect to error page
-                self.send_response(302)
-                self.send_header('Location', f'{DASHBOARD_URL}/unsubscribe-error.html?reason=missing_token')
-                self.end_headers()
-                return
+        if not token:
+            return {
+                'statusCode': 302,
+                'headers': {
+                    'Location': f'{DASHBOARD_URL}/unsubscribe-error.html?reason=missing_token'
+                }
+            }
 
-            # Connect to Google Sheets
-            client = get_sheets_client()
-            sheet = client.open_by_key(SHEET_ID).sheet1
+        # Connect to Google Sheets
+        client = get_sheets_client()
+        sheet = client.open_by_key(SHEET_ID).sheet1
 
-            # Find subscriber by token
-            row_num, subscriber = find_subscriber_by_token(sheet, token)
+        # Find subscriber by token
+        row_num, subscriber = find_subscriber_by_token(sheet, token)
 
-            if not subscriber:
-                # Token not found - might already be unsubscribed
-                self.send_response(302)
-                self.send_header('Location', f'{DASHBOARD_URL}/unsubscribe-success.html?already=true')
-                self.end_headers()
-                return
+        if not subscriber:
+            # Token not found - might already be unsubscribed
+            return {
+                'statusCode': 302,
+                'headers': {
+                    'Location': f'{DASHBOARD_URL}/unsubscribe-success.html?already=true'
+                }
+            }
 
-            # Check if already unsubscribed
-            if subscriber.get('status') == 'unsubscribed':
-                self.send_response(302)
-                self.send_header('Location', f'{DASHBOARD_URL}/unsubscribe-success.html?already=true')
-                self.end_headers()
-                return
+        # Check if already unsubscribed
+        if subscriber.get('status') == 'unsubscribed':
+            return {
+                'statusCode': 302,
+                'headers': {
+                    'Location': f'{DASHBOARD_URL}/unsubscribe-success.html?already=true'
+                }
+            }
 
-            # Mark as unsubscribed (keeping record for audit trail)
-            # Alternatively, could delete the row with: sheet.delete_rows(row_num)
-            sheet.update_cell(row_num, 6, 'unsubscribed')  # status column
+        # Mark as unsubscribed (keeping record for audit trail)
+        sheet.update_cell(row_num, 6, 'unsubscribed')  # status column
 
-            # Redirect to success page
-            self.send_response(302)
-            self.send_header('Location', f'{DASHBOARD_URL}/unsubscribe-success.html')
-            self.end_headers()
+        return {
+            'statusCode': 302,
+            'headers': {
+                'Location': f'{DASHBOARD_URL}/unsubscribe-success.html'
+            }
+        }
 
-        except Exception as e:
-            print(f"Unsubscribe error: {e}")
-            self.send_response(302)
-            self.send_header('Location', f'{DASHBOARD_URL}/unsubscribe-error.html?reason=error')
-            self.end_headers()
+    except Exception as e:
+        print(f"Unsubscribe error: {e}")
+        return {
+            'statusCode': 302,
+            'headers': {
+                'Location': f'{DASHBOARD_URL}/unsubscribe-error.html?reason=error'
+            }
+        }
