@@ -119,15 +119,33 @@ def load_forecast_data():
         return None
 
 
-def get_district_forecast(forecast_data, district):
+def get_district_forecast(forecast_data, district, met_levels=None, sun_shade='shade'):
     """
     Extract 7-day forecast for a specific district.
+
+    Args:
+        forecast_data: Full forecast data
+        district: District name
+        met_levels: List of MET levels to consider (e.g., [3, 4, 5, 6])
+        sun_shade: 'shade', 'sun', or 'both'
 
     Returns:
         list: [{date, max_zone, max_temp, conditions}, ...]
     """
     if not forecast_data:
         return []
+
+    # Default to all MET levels if not specified
+    if not met_levels:
+        met_levels = [3, 4, 5, 6]
+
+    # Determine which conditions to check
+    if sun_shade == 'both':
+        conditions = ['shade', 'sun']
+    elif sun_shade == 'sun':
+        conditions = ['sun']
+    else:
+        conditions = ['shade']
 
     district_forecast = []
 
@@ -147,12 +165,13 @@ def get_district_forecast(forecast_data, district):
                 break
 
         if district_data:
-            # Get max zone across all MET levels
+            # Get max zone for subscriber's MET levels and conditions only
             max_zone = 0
-            for met in ['met3', 'met4', 'met5', 'met6']:
-                for cond in ['shade', 'sun']:
+            for met in met_levels:
+                met_key = f'met{met}'
+                for cond in conditions:
                     try:
-                        zone = district_data.get('data', {}).get(met, {}).get(cond, {}).get('zone', 0)
+                        zone = district_data.get('data', {}).get(met_key, {}).get(cond, {}).get('zone', 0)
                         max_zone = max(max_zone, zone)
                     except (KeyError, TypeError):
                         pass
@@ -167,16 +186,22 @@ def get_district_forecast(forecast_data, district):
     return district_forecast
 
 
-def get_max_zone_for_districts(forecast_data, districts):
+def get_max_zone_for_districts(forecast_data, districts, met_levels=None, sun_shade='shade'):
     """
     Get the maximum forecast zone for a list of districts over the next 7 days.
+
+    Args:
+        forecast_data: Full forecast data
+        districts: List of district names
+        met_levels: List of MET levels to consider
+        sun_shade: 'shade', 'sun', or 'both'
 
     Returns:
         dict: {district: [{date, max_zone, ...}, ...]}
     """
     result = {}
     for district in districts:
-        result[district] = get_district_forecast(forecast_data, district)
+        result[district] = get_district_forecast(forecast_data, district, met_levels, sun_shade)
     return result
 
 
@@ -215,7 +240,7 @@ def get_zone6_days(district_forecasts):
     return sorted(list(zone6_days))
 
 
-def send_forecast_digest(subscriber, district_forecasts, metadata):
+def send_forecast_digest(subscriber, district_forecasts, metadata, met_levels=None, sun_shade='shade'):
     """
     Send 7-day forecast digest email to a subscriber.
 
@@ -223,6 +248,8 @@ def send_forecast_digest(subscriber, district_forecasts, metadata):
         subscriber: Subscriber record from Google Sheets
         district_forecasts: Dict of forecasts by district
         metadata: Forecast metadata
+        met_levels: List of MET levels used for this forecast
+        sun_shade: Sun/shade condition used for this forecast
     """
     email = subscriber.get('email')
     name = subscriber.get('name', '')
@@ -230,6 +257,25 @@ def send_forecast_digest(subscriber, district_forecasts, metadata):
 
     if not email:
         return False
+
+    # Default MET levels if not specified
+    if not met_levels:
+        met_levels = [6]
+
+    # Format MET levels and condition for display
+    if len(met_levels) == 1:
+        met_display = f"MET {met_levels[0]}"
+    else:
+        met_display = f"MET {', '.join(map(str, met_levels))}"
+
+    if sun_shade == 'both':
+        condition_display = "Sun & Shade"
+    elif sun_shade == 'sun':
+        condition_display = "Sun"
+    else:
+        condition_display = "Shade"
+
+    settings_display = f"{met_display} | {condition_display}"
 
     # Get the first district for deep linking
     first_district = list(district_forecasts.keys())[0] if district_forecasts else None
@@ -328,6 +374,10 @@ def send_forecast_digest(subscriber, district_forecasts, metadata):
 
                 <p>Here's your weekly 7-day heat stress forecast for your subscribed districts:</p>
 
+                <p style="background: #e0f2f1; padding: 10px 15px; border-radius: 6px; font-size: 13px; margin-bottom: 15px;">
+                    <strong>Your settings:</strong> {settings_display}
+                </p>
+
                 <table>
                     <thead>
                         <tr>
@@ -375,6 +425,8 @@ def send_forecast_digest(subscriber, district_forecasts, metadata):
     {today.strftime('%A, %d %B %Y')}
 
     Good evening{', ' + name if name else ''}!
+
+    Your settings: {settings_display}
 
     Your subscribed districts:
     {districts_list}
@@ -457,14 +509,32 @@ def main():
             print(f"  Skipping {subscriber.get('email')} - no districts configured")
             continue
 
-        # Get forecast for their districts
-        district_forecasts = get_max_zone_for_districts(forecast_data, sub_districts)
+        # Parse subscriber's MET levels preference (e.g., "3,4,5,6" or "6")
+        met_levels_str = subscriber.get('met_levels', '6')
+        try:
+            met_levels = [int(m.strip()) for m in str(met_levels_str).split(',') if m.strip()]
+            if not met_levels:
+                met_levels = [6]  # Default to MET 6
+        except (ValueError, AttributeError):
+            met_levels = [6]
 
-        # Send digest
+        # Get subscriber's sun/shade preference
+        sun_shade = subscriber.get('sun_shade', 'shade')
+        if sun_shade not in ['shade', 'sun', 'both']:
+            sun_shade = 'shade'
+
+        # Get forecast for their districts with their preferences
+        district_forecasts = get_max_zone_for_districts(
+            forecast_data, sub_districts, met_levels, sun_shade
+        )
+
+        # Send digest with subscriber's preferences
         success = send_forecast_digest(
             subscriber,
             district_forecasts,
-            forecast_data.get('metadata', {}) if forecast_data else {}
+            forecast_data.get('metadata', {}) if forecast_data else {},
+            met_levels,
+            sun_shade
         )
 
         if success:
