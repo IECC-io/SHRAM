@@ -2,14 +2,8 @@
   "version": 2,
   "builds": [
     {
-      "src": "alerting_system/*.py",
+      "src": "api/*.py",
       "use": "@vercel/python"
-    }
-  ],
-  "routes": [
-    {
-      "src": "/api/(.*)",
-      "dest": "/alerting_system/$1"
     }
   ],
   "env": {
