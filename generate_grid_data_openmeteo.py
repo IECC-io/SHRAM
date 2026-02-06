@@ -171,11 +171,13 @@ def generate_grid_points(india_boundary):
     return points
 
 
-def fetch_weather_batch_openmeteo(points, batch_size=50):
+def fetch_weather_batch_openmeteo(points, batch_size=50, max_retries=3):
     """
     Fetch weather data from Open-Meteo API in batches.
     Open-Meteo supports up to 100 locations per request.
+    Includes retry logic to handle transient API failures.
     """
+    import time
     all_weather = []
 
     for i in range(0, len(points), batch_size):
@@ -194,38 +196,50 @@ def fetch_weather_batch_openmeteo(points, batch_size=50):
             f"&apikey={OPENMETEO_API_KEY}"
         )
 
-        try:
-            response = requests.get(url, timeout=60)
-            data = response.json()
+        batch_results = None
+        for attempt in range(max_retries):
+            try:
+                response = requests.get(url, timeout=60)
+                data = response.json()
 
-            # Handle single vs multiple location response
-            if isinstance(data, list):
-                # Multiple locations returned as array
-                for j, loc_data in enumerate(data):
-                    if 'current' in loc_data:
-                        all_weather.append({
-                            'temp': loc_data['current'].get('temperature_2m'),
-                            'rh': loc_data['current'].get('relative_humidity_2m')
-                        })
-                    else:
-                        all_weather.append(None)
-            elif 'current' in data:
-                # Single location
-                all_weather.append({
-                    'temp': data['current'].get('temperature_2m'),
-                    'rh': data['current'].get('relative_humidity_2m')
-                })
-            else:
-                # Error or no data
-                for _ in batch:
-                    all_weather.append(None)
-                if 'error' in data:
-                    print(f"API error: {data.get('reason', 'Unknown error')}")
+                # Handle single vs multiple location response
+                if isinstance(data, list):
+                    # Multiple locations returned as array
+                    batch_results = []
+                    for j, loc_data in enumerate(data):
+                        if 'current' in loc_data:
+                            batch_results.append({
+                                'temp': loc_data['current'].get('temperature_2m'),
+                                'rh': loc_data['current'].get('relative_humidity_2m')
+                            })
+                        else:
+                            batch_results.append(None)
+                    break  # Success
+                elif 'current' in data:
+                    # Single location
+                    batch_results = [{
+                        'temp': data['current'].get('temperature_2m'),
+                        'rh': data['current'].get('relative_humidity_2m')
+                    }]
+                    break  # Success
+                else:
+                    # Error or no data
+                    if 'error' in data:
+                        print(f"API error (attempt {attempt+1}): {data.get('reason', 'Unknown error')}")
+                    if attempt < max_retries - 1:
+                        time.sleep(2 ** attempt)  # Exponential backoff: 1s, 2s, 4s
 
-        except Exception as e:
-            print(f"Error fetching batch {i//batch_size + 1}: {e}")
-            for _ in batch:
-                all_weather.append(None)
+            except Exception as e:
+                print(f"Error fetching batch {i//batch_size + 1} (attempt {attempt+1}): {e}")
+                if attempt < max_retries - 1:
+                    time.sleep(2 ** attempt)  # Exponential backoff
+
+        # If all retries failed, use None for this batch
+        if batch_results is None:
+            print(f"  WARNING: Batch {i//batch_size + 1} failed after {max_retries} retries")
+            batch_results = [None] * len(batch)
+
+        all_weather.extend(batch_results)
 
         # Progress update
         fetched = min(i + batch_size, len(points))
@@ -247,6 +261,27 @@ def compute_ehi_and_zone(temp_c, rh_percent, met_level, sun_condition):
         return None, 0
 
 
+def load_previous_data():
+    """Load previous grid data to fill gaps when API fails."""
+    script_dir = os.path.dirname(__file__) or '.'
+    prev_file = os.path.join(script_dir, 'grid_data.json')
+
+    if os.path.exists(prev_file):
+        try:
+            with open(prev_file, 'r') as f:
+                data = json.load(f)
+            # Build lookup by (lat, lon)
+            prev_lookup = {}
+            for point in data.get('points', []):
+                key = (point['lat'], point['lon'])
+                prev_lookup[key] = point
+            print(f"Loaded {len(prev_lookup)} points from previous data for gap filling")
+            return prev_lookup
+        except Exception as e:
+            print(f"Could not load previous data: {e}")
+    return {}
+
+
 def generate_grid_data():
     """Main function to generate pre-computed grid data."""
     print("Loading India boundary...")
@@ -259,6 +294,10 @@ def generate_grid_data():
     points = generate_grid_points(india_boundary)
     print(f"Found {len(points)} points within India at {GRID_CONFIG['resolution']}° resolution")
 
+    # Load previous data for gap filling
+    print("Loading previous data for gap filling...")
+    prev_data = load_previous_data()
+
     # Pre-compute district for each point
     print("Mapping points to districts...")
     point_districts = {}
@@ -270,6 +309,24 @@ def generate_grid_data():
 
     print("Fetching weather data from Open-Meteo...")
     weather_data = fetch_weather_batch_openmeteo(points)
+
+    # Count failures and fill from previous data
+    failed_count = sum(1 for w in weather_data if w is None)
+    filled_count = 0
+    if failed_count > 0 and prev_data:
+        print(f"  {failed_count} points failed - attempting to fill from previous data...")
+        for i, (point, weather) in enumerate(zip(points, weather_data)):
+            if weather is None:
+                key = (point['lat'], point['lon'])
+                if key in prev_data:
+                    # Use previous temp/rh
+                    prev_point = prev_data[key]
+                    weather_data[i] = {
+                        'temp': prev_point.get('temp'),
+                        'rh': prev_point.get('rh')
+                    }
+                    filled_count += 1
+        print(f"  Filled {filled_count}/{failed_count} gaps from previous data")
 
     # Prepare output data structure
     ist = pytz.timezone('Asia/Kolkata')
@@ -357,8 +414,23 @@ def generate_grid_data():
         if (i + 1) % 500 == 0:
             print(f"Processed {i + 1}/{len(points)} points")
 
+    # Validate: check for latitude gaps (excluding ocean areas in far south)
+    output_lats = set(p['lat'] for p in output['points'])
+    expected_lats = set()
+    lat = GRID_CONFIG['lat_min']
+    while lat <= GRID_CONFIG['lat_max']:
+        expected_lats.add(round(lat, 2))
+        lat += GRID_CONFIG['resolution']
+
+    # Check for missing latitudes (excluding 7.25-8.0 which are mostly ocean)
+    missing_lats = [lat for lat in expected_lats if lat not in output_lats and lat > 8.0]
+    if missing_lats:
+        print(f"\n⚠ WARNING: Missing {len(missing_lats)} latitude bands: {sorted(missing_lats)[:10]}...")
+        print("  This may cause white horizontal stripes on the map")
+
     # Save to file
-    output_path = 'grid_data.json'
+    script_dir = os.path.dirname(__file__) or '.'
+    output_path = os.path.join(script_dir, 'grid_data.json')
     with open(output_path, 'w') as f:
         json.dump(output, f)
 
@@ -367,6 +439,12 @@ def generate_grid_data():
     print(f"  File size: {file_size:.2f} MB")
     print(f"  Resolution: {GRID_CONFIG['resolution']}°")
     print(f"  Generated at: {output['metadata']['generated_at_ist']}")
+
+    # Final status
+    if not missing_lats:
+        print("  ✓ Full latitude coverage (no gaps)")
+    else:
+        print(f"  ⚠ {len(missing_lats)} latitude gaps remain")
 
     return output
 
