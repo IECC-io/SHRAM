@@ -1,9 +1,9 @@
-name: Send Daily Forecast Digest
+name: Send Weekly Forecast Digest
 
 on:
   schedule:
-    # Run at 6:00 AM IST (00:30 UTC)
-    - cron: '30 0 * * *'
+    # Run at 5:00 PM IST on Sundays (11:30 UTC)
+    - cron: '30 11 * * 0'
   workflow_dispatch:  # Allow manual trigger
 
 permissions:
@@ -26,11 +26,11 @@ jobs:
         run: |
           pip install requests pytz gspread oauth2client
 
-      - name: Send daily forecast digest
+      - name: Send weekly forecast digest
         env:
           EMAIL_SENDER: ${{ secrets.EMAIL_SENDER }}
           GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
           GOOGLE_SHEETS_CREDENTIALS: ${{ secrets.GOOGLE_SHEETS_CREDENTIALS }}
           SHEET_ID: ${{ secrets.SHEET_ID }}
           VERCEL_URL: ${{ secrets.VERCEL_URL }}
-        run: python scripts/send_daily_digest.py
+        run: python scripts/send_weekly_digest.py

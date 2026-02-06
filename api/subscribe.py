@@ -24,6 +24,34 @@ def get_sheets_client():
     return gspread.authorize(creds)
 
 
+def log_subscriber_activity(client, action, email, details=None):
+    """
+    Log subscriber activity to a separate 'Activity Log' sheet.
+
+    Args:
+        client: gspread client
+        action: 'subscribed', 'verified', 'unsubscribed', 'resent_verification', 'preferences_changed'
+        email: subscriber email
+        details: optional dict with additional info
+    """
+    try:
+        spreadsheet = client.open_by_key(SHEET_ID)
+
+        # Get or create Activity Log sheet
+        try:
+            log_sheet = spreadsheet.worksheet('Activity Log')
+        except gspread.exceptions.WorksheetNotFound:
+            log_sheet = spreadsheet.add_worksheet(title='Activity Log', rows=1000, cols=10)
+            log_sheet.append_row(['timestamp', 'action', 'email', 'details', 'ip_address'])
+
+        now = datetime.utcnow().isoformat() + 'Z'
+        details_str = json.dumps(details) if details else ''
+
+        log_sheet.append_row([now, action, email, details_str, ''])
+    except Exception as e:
+        print(f"Warning: Could not log activity: {e}")
+
+
 def check_existing_subscriber(sheet, email):
     try:
         records = sheet.get_all_records()
@@ -87,8 +115,13 @@ class handler(BaseHTTPRequestHandler):
 
             email = data.get('email', '').strip().lower()
             name = data.get('name', '').strip()
+            phone = data.get('phone', '').strip()  # For future SMS alerts
             districts = data.get('districts', [])
+            met_levels = data.get('met_levels', [6])  # Default to MET 6
+            alert_zones = data.get('alert_zones', [6])  # Default to Zone 6
+            sun_shade = data.get('sun_shade', 'shade')  # Default to shade
             receive_forecasts = data.get('receive_forecasts', True)
+            receive_sms = data.get('receive_sms', False)  # For future SMS alerts
 
             if not email or '@' not in email:
                 self.send_response(400)
@@ -121,6 +154,7 @@ class handler(BaseHTTPRequestHandler):
                 else:
                     token = existing.get('verification_token')
                     send_verification_email(email, name, token)
+                    log_subscriber_activity(client, 'resent_verification', email)
                     self.send_response(200)
                     self.send_header('Access-Control-Allow-Origin', '*')
                     self.send_header('Content-Type', 'application/json')
@@ -131,8 +165,26 @@ class handler(BaseHTTPRequestHandler):
             token = str(uuid.uuid4())
             now = datetime.utcnow().isoformat() + 'Z'
             districts_str = ','.join(districts) if isinstance(districts, list) else districts
+            met_levels_str = ','.join(str(m) for m in met_levels) if isinstance(met_levels, list) else str(met_levels)
+            alert_zones_str = ','.join(str(z) for z in alert_zones) if isinstance(alert_zones, list) else str(alert_zones)
 
-            sheet.append_row([email, name, districts_str, 'yes' if receive_forecasts else 'no', token, 'pending', now, '', ''])
+            # Columns: email, name, phone, districts, met_levels, alert_zones, sun_shade, receive_forecasts, receive_sms, verification_token, status, subscribed_at, verified_at, last_alert_sent
+            sheet.append_row([
+                email, name, phone, districts_str, met_levels_str, alert_zones_str, sun_shade,
+                'yes' if receive_forecasts else 'no', 'yes' if receive_sms else 'no',
+                token, 'pending', now, '', ''
+            ])
+
+            # Log subscription activity
+            log_subscriber_activity(client, 'subscribed', email, {
+                'name': name,
+                'phone': phone,
+                'districts': districts,
+                'met_levels': met_levels,
+                'alert_zones': alert_zones,
+                'sun_shade': sun_shade,
+                'receive_sms': receive_sms
+            })
             send_verification_email(email, name, token)
 
             self.send_response(200)

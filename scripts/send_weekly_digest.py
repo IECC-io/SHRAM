@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 """
-Send Daily 7-Day Forecast Digest to Subscribers
+Send Weekly 7-Day Forecast Digest to Subscribers
 
-This script runs daily at 6:00 AM IST via GitHub Actions.
-It sends a morning summary of the 7-day heat forecast to opted-in subscribers.
+This script runs every Sunday at 5:00 PM IST via GitHub Actions.
+It sends a weekly summary of the 7-day heat forecast to opted-in subscribers.
 
 Usage:
-    python send_daily_digest.py
+    python send_weekly_digest.py
 
 Environment Variables Required:
     GMAIL_APP_PASSWORD - Gmail app password for sending emails
@@ -49,13 +49,13 @@ DASHBOARD_URL = 'https://shram.info'
 # Vercel URL for unsubscribe links
 VERCEL_URL = os.environ.get('VERCEL_URL', 'shram-alerts.vercel.app')
 
-# Zone colors for email styling
+# Zone colors for email styling (accessible text colors)
 ZONE_COLORS = {
     1: {'bg': '#e3f2fd', 'text': '#1976D2', 'name': 'Cold Stress'},
     2: {'bg': '#e8f5e9', 'text': '#2E7D32', 'name': 'Comfortable'},
-    3: {'bg': '#fffde7', 'text': '#F9A825', 'name': 'Moderate'},
-    4: {'bg': '#fff3e0', 'text': '#e65100', 'name': 'High'},
-    5: {'bg': '#ffebee', 'text': '#d32f2f', 'name': 'Very High'},
+    3: {'bg': '#fffde7', 'text': '#F9A825', 'name': 'Mild'},
+    4: {'bg': '#fff3e0', 'text': '#C24400', 'name': 'Moderate'},
+    5: {'bg': '#ffebee', 'text': '#CA2B2B', 'name': 'High'},
     6: {'bg': '#f3e5f5', 'text': '#7B1FA2', 'name': 'Hazardous'}
 }
 
@@ -193,6 +193,28 @@ def format_zone_badge(zone):
     return f'<span style="padding: 2px 8px; border-radius: 4px; background: {colors["bg"]}; color: {colors["text"]}; font-weight: 600;">Zone {zone}</span>'
 
 
+def get_zone6_days(district_forecasts):
+    """
+    Find which days have Zone 6 forecasted across all districts.
+
+    Returns:
+        list: List of day names (e.g., ['Tuesday', 'Wednesday']) with Zone 6
+    """
+    zone6_days = set()
+
+    for district, forecast in district_forecasts.items():
+        for day in forecast:
+            if day.get('max_zone') == 6:
+                date_str = day.get('date', '')
+                try:
+                    date_obj = datetime.strptime(date_str, '%Y-%m-%d')
+                    zone6_days.add(date_obj.strftime('%A'))  # Full day name
+                except:
+                    pass
+
+    return sorted(list(zone6_days))
+
+
 def send_forecast_digest(subscriber, district_forecasts, metadata):
     """
     Send 7-day forecast digest email to a subscriber.
@@ -209,9 +231,20 @@ def send_forecast_digest(subscriber, district_forecasts, metadata):
     if not email:
         return False
 
+    # Get the first district for deep linking
+    first_district = list(district_forecasts.keys())[0] if district_forecasts else None
+    forecast_url = DASHBOARD_URL
+    if first_district:
+        # URL encode the district name (replace spaces with underscores as used in dashboard)
+        district_param = first_district.replace(' ', '_')
+        forecast_url = f"{DASHBOARD_URL}?district={district_param}"
+
     # Get today's date
     ist = pytz.timezone('Asia/Kolkata')
     today = datetime.now(ist)
+
+    # Check for Zone 6 days for dynamic subject line
+    zone6_days = get_zone6_days(district_forecasts)
 
     # Build forecast table HTML
     forecast_rows = []
@@ -245,7 +278,7 @@ def send_forecast_digest(subscriber, district_forecasts, metadata):
             date_str = day.get('date', '')
             try:
                 date_obj = datetime.strptime(date_str, '%Y-%m-%d')
-                day_headers.append(f'<th style="padding: 8px; background: #2d637f; color: white;">{date_obj.strftime("%a %d")}</th>')
+                day_headers.append(f'<th style="padding: 8px; background: #2d637f; color: white;">{date_obj.strftime("%d %b")}</th>')
             except:
                 day_headers.append(f'<th style="padding: 8px; background: #2d637f; color: white;">{date_str}</th>')
 
@@ -253,8 +286,18 @@ def send_forecast_digest(subscriber, district_forecasts, metadata):
     while len(day_headers) < 7:
         day_headers.append('<th style="padding: 8px; background: #2d637f; color: white;">-</th>')
 
-    # Subject line
-    subject = f"☀️ SHRAM 7-Day Forecast - {today.strftime('%d %b %Y')}"
+    # Subject line - highlight Zone 6 if forecasted (keep short)
+    if zone6_days:
+        # Abbreviate day names
+        abbrev_days = [d[:3] for d in zone6_days]  # Mon, Tue, Wed, etc.
+        if len(zone6_days) == 1:
+            subject = f"SHRAM Forecast: Zone 6 Hazardous {abbrev_days[0]}"
+        elif len(zone6_days) == 2:
+            subject = f"SHRAM Forecast: Zone 6 Hazardous {abbrev_days[0]} & {abbrev_days[1]}"
+        else:
+            subject = f"SHRAM Forecast: Zone 6 Hazardous {len(zone6_days)} Days"
+    else:
+        subject = f"SHRAM Heat Forecast: {today.strftime('%d %b %Y')}"
 
     # Build HTML email
     html_body = f"""
@@ -277,13 +320,13 @@ def send_forecast_digest(subscriber, district_forecasts, metadata):
     <body>
         <div class="container">
             <div class="header">
-                <h1 style="margin: 0; font-size: 22px;">☀️ 7-Day Heat Forecast</h1>
+                <h1 style="margin: 0; font-size: 22px;">7-Day Heat Forecast</h1>
                 <p style="margin: 10px 0 0 0; opacity: 0.9;">{today.strftime('%A, %d %B %Y')}</p>
             </div>
             <div class="content">
-                <p>Good morning{', ' + name if name else ''}!</p>
+                <p>Good evening{', ' + name if name else ''}!</p>
 
-                <p>Here's your 7-day heat stress forecast for your subscribed districts:</p>
+                <p>Here's your weekly 7-day heat stress forecast for your subscribed districts:</p>
 
                 <table>
                     <thead>
@@ -300,23 +343,23 @@ def send_forecast_digest(subscriber, district_forecasts, metadata):
                 <div class="legend">
                     <span style="font-weight: 600; margin-right: 10px;">Legend:</span>
                     <span class="legend-item">{format_zone_badge(2)} Comfortable</span>
-                    <span class="legend-item">{format_zone_badge(3)} Moderate</span>
-                    <span class="legend-item">{format_zone_badge(4)} High</span>
-                    <span class="legend-item">{format_zone_badge(5)} Very High</span>
+                    <span class="legend-item">{format_zone_badge(3)} Mild</span>
+                    <span class="legend-item">{format_zone_badge(4)} Moderate</span>
+                    <span class="legend-item">{format_zone_badge(5)} High</span>
                     <span class="legend-item">{format_zone_badge(6)} Hazardous</span>
                 </div>
 
                 <p style="text-align: center; margin: 25px 0;">
-                    <a href="{DASHBOARD_URL}" class="btn">View Full Forecast on Dashboard</a>
+                    <a href="{forecast_url}" class="btn">View Full Forecast on Dashboard</a>
                 </p>
 
                 <div class="footer">
                     <p>
-                        You're receiving this daily digest because you subscribed to SHRAM forecasts.
+                        You're receiving this weekly digest because you subscribed to SHRAM forecasts.
                         <br>
                         <a href="https://{VERCEL_URL}/api/unsubscribe?token={token}">Unsubscribe</a> |
                         <a href="{DASHBOARD_URL}">SHRAM Dashboard</a> |
-                        <a href="https://iecc.gspp.berkeley.edu/">IECC</a>
+                        <a href="https://iecc.gspp.berkeley.edu">IECC</a>
                     </p>
                 </div>
             </div>
@@ -331,13 +374,13 @@ def send_forecast_digest(subscriber, district_forecasts, metadata):
     SHRAM 7-Day Heat Forecast
     {today.strftime('%A, %d %B %Y')}
 
-    Good morning{', ' + name if name else ''}!
+    Good evening{', ' + name if name else ''}!
 
     Your subscribed districts:
     {districts_list}
 
     View the full 7-day forecast on the SHRAM Dashboard:
-    {DASHBOARD_URL}
+    {forecast_url}
 
     ---
     Unsubscribe: https://{VERCEL_URL}/api/unsubscribe?token={token}
@@ -371,9 +414,9 @@ def send_forecast_digest(subscriber, district_forecasts, metadata):
 # =============================================================================
 
 def main():
-    """Main daily digest logic."""
+    """Main weekly digest logic."""
     print("=" * 60)
-    print("SHRAM Daily Forecast Digest")
+    print("SHRAM Weekly Forecast Digest")
     print("=" * 60)
 
     ist = pytz.timezone('Asia/Kolkata')
@@ -397,11 +440,11 @@ def main():
     subscribers = get_forecast_subscribers()
 
     if not subscribers:
-        print("No subscribers opted in for daily forecasts.")
+        print("No subscribers opted in for weekly forecasts.")
         return
 
     # Send digest to each subscriber
-    print(f"\n[3/3] Sending daily digest to {len(subscribers)} subscribers...")
+    print(f"\n[3/3] Sending weekly digest to {len(subscribers)} subscribers...")
     digests_sent = 0
     digests_failed = 0
 

@@ -1,9 +1,16 @@
 #!/usr/bin/env python3
 """
-Send Zone 6 Heat Stress Alerts to Verified Subscribers
+Send Heat Stress Alerts to Verified Subscribers
 
 This script runs after generate_grid_data_openmeteo.py in GitHub Actions.
-It checks for NEW Zone 6 conditions and sends instant alerts to subscribers.
+It checks for NEW zone conditions matching subscriber preferences and sends instant alerts.
+
+Key Features:
+- Respects subscriber MET level preferences (only alerts for their chosen MET levels)
+- Respects subscriber zone preferences (Zone 4, 5, 6 - Zone 6 always included)
+- Respects subscriber sun/shade preferences
+- CRITICAL: During nighttime (6 PM - 6 AM IST), always uses shade data regardless of preference
+- Deduplication: Only alerts when a zone is NEWLY detected (not for persistent conditions)
 
 Usage:
     python send_alerts.py
@@ -11,7 +18,7 @@ Usage:
 Environment Variables Required:
     GMAIL_APP_PASSWORD - Gmail app password for sending emails
     GOOGLE_SHEETS_CREDENTIALS - JSON string of service account credentials
-    SHEET_ID - Google Sheets document ID (optional, defaults to env var or config)
+    SHEET_ID - Google Sheets document ID
 """
 
 import json
@@ -30,7 +37,7 @@ from oauth2client.service_account import ServiceAccountCredentials
 # CONFIGURATION
 # =============================================================================
 
-# Email settings (use IECC account)
+# Email settings
 EMAIL_SENDER = os.environ.get('EMAIL_SENDER', 'eliana101299@gmail.com')
 EMAIL_PASSWORD = os.environ.get('GMAIL_APP_PASSWORD')
 
@@ -43,12 +50,64 @@ SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 ROOT_DIR = os.path.dirname(SCRIPT_DIR)  # Parent of scripts/
 GRID_DATA_PATH = os.path.join(ROOT_DIR, 'grid_data.json')
 ALERT_STATE_PATH = os.path.join(ROOT_DIR, 'weather_logs', 'alert_state.json')
+ALERT_HISTORY_PATH = os.path.join(ROOT_DIR, 'weather_logs', 'alert_history.json')
 
 # Dashboard URL
 DASHBOARD_URL = 'https://shram.info'
 
 # Vercel URL for unsubscribe links
 VERCEL_URL = os.environ.get('VERCEL_URL', 'shram-alerts.vercel.app')
+
+# IST timezone
+IST = pytz.timezone('Asia/Kolkata')
+
+# Zone colors for email styling (matching dashboard colors, accessible text)
+ZONE_COLORS = {
+    4: {'bg': '#fff3e0', 'border': '#e65100', 'text': '#C24400', 'name': 'Moderate', 'subject': 'Moderate Risk'},
+    5: {'bg': '#ffebee', 'border': '#d32f2f', 'text': '#CA2B2B', 'name': 'High', 'subject': 'High Risk'},
+    6: {'bg': '#f3e5f5', 'border': '#7B1FA2', 'text': '#7B1FA2', 'name': 'Hazardous', 'subject': 'Hazardous'}
+}
+
+
+# =============================================================================
+# NIGHTTIME DETECTION
+# =============================================================================
+
+def is_nighttime_ist():
+    """
+    Check if current IST time is during nighttime (6 PM to 6 AM).
+    During nighttime, sun values equal shade values (no solar radiation).
+
+    Returns:
+        bool: True if nighttime (6 PM to 6 AM IST), False otherwise
+    """
+    now_ist = datetime.now(IST)
+    hour = now_ist.hour
+    # Nighttime is 18:00 (6 PM) to 05:59 (before 6 AM)
+    return hour >= 18 or hour < 6
+
+
+def get_effective_sun_shade(subscriber_preference, is_night):
+    """
+    Determine which sun/shade condition to use for alerting.
+
+    Args:
+        subscriber_preference: 'sun', 'shade', or 'both'
+        is_night: Whether it's currently nighttime in IST
+
+    Returns:
+        list: List of conditions to check ['shade'], ['sun'], or ['sun', 'shade']
+    """
+    if is_night:
+        # At night, always use shade (no solar radiation)
+        return ['shade']
+
+    if subscriber_preference == 'both':
+        return ['sun', 'shade']
+    elif subscriber_preference == 'sun':
+        return ['sun']
+    else:  # 'shade' or default
+        return ['shade']
 
 
 # =============================================================================
@@ -67,7 +126,12 @@ def get_sheets_client():
 
 
 def get_verified_subscribers():
-    """Fetch all verified subscribers from Google Sheets."""
+    """
+    Fetch all verified subscribers from Google Sheets.
+
+    Returns:
+        list: List of subscriber records with parsed preferences
+    """
     if not GOOGLE_SHEETS_CREDENTIALS or not SHEET_ID:
         print("WARNING: Google Sheets credentials not configured. Skipping subscriber fetch.")
         return []
@@ -77,8 +141,46 @@ def get_verified_subscribers():
         sheet = client.open_by_key(SHEET_ID).sheet1
         records = sheet.get_all_records()
 
-        # Filter to verified subscribers only
-        verified = [r for r in records if r.get('status') == 'verified']
+        # Filter to verified subscribers and parse preferences
+        verified = []
+        for r in records:
+            if r.get('status') != 'verified':
+                continue
+
+            # Parse MET levels (stored as "3,4,5,6" or similar)
+            met_levels_str = str(r.get('met_levels', '6'))
+            met_levels = [int(m.strip()) for m in met_levels_str.split(',') if m.strip().isdigit()]
+            if not met_levels:
+                met_levels = [6]  # Default to MET 6
+
+            # Parse alert zones (stored as "4,5,6" or similar)
+            alert_zones_str = str(r.get('alert_zones', '6'))
+            alert_zones = [int(z.strip()) for z in alert_zones_str.split(',') if z.strip().isdigit()]
+            if not alert_zones:
+                alert_zones = [6]  # Default to Zone 6
+
+            # Parse sun/shade preference
+            sun_shade = r.get('sun_shade', 'shade')
+            if sun_shade not in ['sun', 'shade', 'both']:
+                sun_shade = 'shade'
+
+            # Parse districts
+            districts_str = r.get('districts', '')
+            districts = [d.strip() for d in districts_str.split(',') if d.strip()]
+
+            verified.append({
+                'email': r.get('email'),
+                'name': r.get('name', ''),
+                'phone': r.get('phone', ''),  # For future SMS alerts
+                'districts': districts,
+                'met_levels': met_levels,
+                'alert_zones': alert_zones,
+                'sun_shade': sun_shade,
+                'verification_token': r.get('verification_token'),
+                'receive_forecasts': r.get('receive_forecasts', 'yes') == 'yes',
+                'receive_sms': r.get('receive_sms', 'no') == 'yes'  # For future SMS alerts
+            })
+
         print(f"Found {len(verified)} verified subscribers")
         return verified
 
@@ -102,7 +204,7 @@ def load_grid_data():
 
 
 def load_alert_state():
-    """Load previous alert state to track which Zone 6 events have been alerted."""
+    """Load previous alert state to track which zone events have been alerted."""
     if os.path.exists(ALERT_STATE_PATH):
         try:
             with open(ALERT_STATE_PATH, 'r') as f:
@@ -112,124 +214,258 @@ def load_alert_state():
 
     return {
         'last_check': None,
-        'active_zone6_districts': {}
+        'active_alerts': {}  # {subscriber_email: {district: {met: zone_level}}}
     }
 
 
 def save_alert_state(state):
-    """Save alert state to track Zone 6 events."""
+    """Save alert state to track zone events."""
     os.makedirs(os.path.dirname(ALERT_STATE_PATH), exist_ok=True)
     with open(ALERT_STATE_PATH, 'w') as f:
         json.dump(state, f, indent=2)
 
 
+def load_alert_history():
+    """Load alert history for appending new entries."""
+    if os.path.exists(ALERT_HISTORY_PATH):
+        try:
+            with open(ALERT_HISTORY_PATH, 'r') as f:
+                return json.load(f)
+        except Exception as e:
+            print(f"Warning: Could not load alert history: {e}")
+    return {'alerts': []}
+
+
+def log_alert(subscriber_email, subscriber_name, alerts, is_night, success):
+    """
+    Log an alert to the alert history file.
+
+    Args:
+        subscriber_email: Email of the subscriber
+        subscriber_name: Name of the subscriber (may be empty)
+        alerts: List of alert items sent
+        is_night: Whether it was nighttime
+        success: Whether the email was sent successfully
+    """
+    history = load_alert_history()
+
+    now_ist = datetime.now(IST)
+
+    # Create log entry
+    entry = {
+        'timestamp': now_ist.isoformat(),
+        'subscriber_email': subscriber_email,
+        'subscriber_name': subscriber_name,
+        'districts': list(set(a['district'] for a in alerts)),
+        'zones': list(set(a['zone'] for a in alerts)),
+        'met_levels': list(set(a['met_level'] for a in alerts)),
+        'conditions': list(set(a['condition'] for a in alerts)),
+        'is_nighttime': is_night,
+        'success': success,
+        'alert_count': len(alerts)
+    }
+
+    history['alerts'].append(entry)
+
+    # Save updated history (kept indefinitely for analysis)
+    os.makedirs(os.path.dirname(ALERT_HISTORY_PATH), exist_ok=True)
+    with open(ALERT_HISTORY_PATH, 'w') as f:
+        json.dump(history, f, indent=2)
+
+
 # =============================================================================
-# ZONE 6 DETECTION
+# ZONE DETECTION
 # =============================================================================
 
-def get_zone6_districts(grid_data):
+def get_district_zones(grid_data, is_night):
     """
-    Extract all districts currently in Zone 6 for any MET level or sun/shade condition.
+    Extract zone levels for all districts from grid_data.
+
+    Args:
+        grid_data: Loaded grid_data.json
+        is_night: Whether it's nighttime (affects sun/shade logic)
 
     Returns:
-        dict: {district_name: {'state': state_name, 'met_levels': set, 'conditions': set}}
+        dict: {district_name: {state, temp, rh, zones: {met3: {shade: zone, sun: zone}, ...}}}
     """
-    zone6_districts = {}
+    district_data = {}
 
     for point in grid_data.get('points', []):
         district = point.get('district')
-        state = point.get('state')
-
         if not district:
             continue
 
-        # Check all MET levels and conditions
-        for met in ['met3', 'met4', 'met5', 'met6']:
+        # Get zone data for each MET level
+        zones = {}
+        for met_num in [3, 4, 5, 6]:
+            met_key = f'met{met_num}'
+            zones[met_num] = {}
+
             for condition in ['shade', 'sun']:
                 try:
-                    zone = point['data'][met][condition]['zone']
-                    if zone == 6:
-                        if district not in zone6_districts:
-                            zone6_districts[district] = {
-                                'state': state,
-                                'met_levels': set(),
-                                'conditions': set()
-                            }
-                        zone6_districts[district]['met_levels'].add(met)
-                        zone6_districts[district]['conditions'].add(condition)
+                    zone = point['data'][met_key][condition]['zone']
+                    zones[met_num][condition] = zone
                 except (KeyError, TypeError):
-                    continue
+                    zones[met_num][condition] = None
 
-    return zone6_districts
+        # Store or update district data (use highest zones if multiple points)
+        if district not in district_data:
+            district_data[district] = {
+                'state': point.get('state'),
+                'temp': point.get('temp'),
+                'rh': point.get('rh'),
+                'zones': zones
+            }
+        else:
+            # Update to higher zone if this point has worse conditions
+            for met_num in [3, 4, 5, 6]:
+                for condition in ['shade', 'sun']:
+                    existing = district_data[district]['zones'][met_num].get(condition)
+                    new_zone = zones[met_num].get(condition)
+                    if new_zone is not None:
+                        if existing is None or new_zone > existing:
+                            district_data[district]['zones'][met_num][condition] = new_zone
+
+    return district_data
 
 
-def get_new_zone6_districts(current_zone6, previous_zone6):
+def check_subscriber_alerts(subscriber, district_data, previous_alerts, is_night):
     """
-    Determine which districts are NEWLY in Zone 6.
+    Check which alerts should be sent to a subscriber based on their preferences.
 
     Args:
-        current_zone6: Current Zone 6 districts from grid_data
-        previous_zone6: Previously alerted Zone 6 districts from alert_state
+        subscriber: Subscriber record with preferences
+        district_data: Zone data for all districts
+        previous_alerts: Previously sent alerts for this subscriber
+        is_night: Whether it's nighttime
 
     Returns:
-        set: District names that are newly in Zone 6
+        list: List of alert items to send, each with district, met, zone, condition info
     """
-    current_districts = set(current_zone6.keys())
-    previous_districts = set(previous_zone6.keys())
+    alerts_to_send = []
 
-    # Districts that are in Zone 6 now but weren't before
-    new_districts = current_districts - previous_districts
+    # Get effective sun/shade conditions to check
+    conditions_to_check = get_effective_sun_shade(subscriber['sun_shade'], is_night)
 
-    return new_districts
+    for district in subscriber['districts']:
+        if district not in district_data:
+            continue
+
+        data = district_data[district]
+
+        # Check each MET level the subscriber cares about
+        for met_level in subscriber['met_levels']:
+            if met_level not in data['zones']:
+                continue
+
+            # Check each condition (sun/shade based on preference and time of day)
+            for condition in conditions_to_check:
+                zone = data['zones'][met_level].get(condition)
+                if zone is None:
+                    continue
+
+                # Check if this zone level is in subscriber's alert zones
+                if zone not in subscriber['alert_zones']:
+                    continue
+
+                # Check if this is a NEW alert (deduplication)
+                prev_key = f"{district}_{met_level}_{condition}"
+                prev_zone = previous_alerts.get(prev_key)
+
+                if prev_zone != zone:
+                    # This is a new or changed zone - send alert
+                    alerts_to_send.append({
+                        'district': district,
+                        'state': data['state'],
+                        'met_level': met_level,
+                        'zone': zone,
+                        'condition': condition,
+                        'temp': data['temp'],
+                        'rh': data['rh']
+                    })
+
+    return alerts_to_send
 
 
 # =============================================================================
 # EMAIL FUNCTIONS
 # =============================================================================
 
-def send_zone6_alert(subscriber, districts_affected, zone6_info, metadata):
+def send_alert_email(subscriber, alerts, metadata, is_night):
     """
-    Send Zone 6 heat stress alert email to a subscriber.
+    Send heat stress alert email to a subscriber.
 
     Args:
-        subscriber: Subscriber record from Google Sheets
-        districts_affected: List of district names in Zone 6
-        zone6_info: Dict with zone 6 details for each district
-        metadata: Grid data metadata (timestamp, etc.)
+        subscriber: Subscriber record
+        alerts: List of alert items to include
+        metadata: Grid data metadata
+        is_night: Whether it's nighttime
     """
     email = subscriber.get('email')
     name = subscriber.get('name', '')
     token = subscriber.get('verification_token')
 
-    if not email:
+    if not email or not alerts:
         return False
 
+    # Group alerts by zone level for display
+    alerts_by_zone = {4: [], 5: [], 6: []}
+    for alert in alerts:
+        zone = alert['zone']
+        if zone in alerts_by_zone:
+            alerts_by_zone[zone].append(alert)
+
+    # Find highest zone for subject line
+    highest_zone = max(a['zone'] for a in alerts)
+    zone_info = ZONE_COLORS[highest_zone]
+
     # Build district list HTML
-    district_items = []
-    for district in districts_affected:
-        info = zone6_info.get(district, {})
-        state = info.get('state', '')
-        met_levels = info.get('met_levels', set())
-        conditions = info.get('conditions', set())
+    alert_sections = []
+    for zone in [6, 5, 4]:  # Show highest zones first
+        if not alerts_by_zone[zone]:
+            continue
 
-        # Format MET levels
-        met_str = ', '.join(sorted([m.replace('met', 'MET ') for m in met_levels]))
-        cond_str = ' & '.join(sorted(conditions))
+        color = ZONE_COLORS[zone]
+        district_items = []
+        for alert in alerts_by_zone[zone]:
+            met_label = f"MET {alert['met_level']}"
+            cond_icon = "Shade" if alert['condition'] == 'shade' else "Sun"
+            if is_night and alert['condition'] == 'shade':
+                cond_icon = "Night"
 
-        district_items.append(f"""
-            <li style="margin-bottom: 8px;">
-                <strong>{district}</strong>{', ' + state if state else ''}
-                <br><span style="font-size: 12px; color: #666;">({met_str} | {cond_str})</span>
-            </li>
+            district_items.append(f"""
+                <li style="margin-bottom: 8px;">
+                    <strong>{alert['district']}</strong>{', ' + alert['state'] if alert['state'] else ''}
+                    <br><span style="font-size: 12px; color: #666;">
+                        {met_label} | {cond_icon} | {alert['temp']:.1f}°C, {alert['rh']}% RH
+                    </span>
+                </li>
+            """)
+
+        alert_sections.append(f"""
+            <div style="margin-bottom: 20px; padding: 15px; background: {color['bg']}; border-left: 4px solid {color['border']}; border-radius: 6px;">
+                <h3 style="margin: 0 0 10px 0; color: {color['text']};">Zone {zone} - {color['name']}</h3>
+                <ul style="margin: 0; padding-left: 20px;">
+                    {''.join(district_items)}
+                </ul>
+            </div>
         """)
 
-    district_list_html = '\n'.join(district_items)
-
     # Subject line
-    if len(districts_affected) == 1:
-        subject = f"🔴 SHRAM Alert: Zone 6 Heat Stress in {districts_affected[0]}"
+    district_names = list(set(a['district'] for a in alerts))
+    if len(district_names) == 1:
+        subject = f"SHRAM Alert: Zone {highest_zone} {zone_info['subject']} - {district_names[0]}"
     else:
-        subject = f"🔴 SHRAM Alert: Zone 6 Heat Stress in {len(districts_affected)} Districts"
+        subject = f"SHRAM Alert: Zone {highest_zone} {zone_info['subject']} - {len(district_names)} Districts"
+
+    # Nighttime notice
+    nighttime_notice = ""
+    if is_night:
+        nighttime_notice = """
+            <p style="background: #e3f2fd; padding: 10px; border-radius: 6px; font-size: 13px;">
+                <strong>Nighttime Alert:</strong> This alert uses shade values as there is no solar radiation between 6 PM and 6 AM IST.
+            </p>
+        """
 
     # Build HTML email
     html_body = f"""
@@ -239,10 +475,9 @@ def send_zone6_alert(subscriber, districts_affected, zone6_info, metadata):
         <style>
             body {{ font-family: 'Montserrat', Arial, sans-serif; line-height: 1.6; color: #333; }}
             .container {{ max-width: 600px; margin: 0 auto; padding: 20px; }}
-            .alert-header {{ background: linear-gradient(135deg, #7B1FA2 0%, #9C27B0 100%); color: white; padding: 25px; text-align: center; border-radius: 8px 8px 0 0; }}
+            .alert-header {{ background: linear-gradient(135deg, {zone_info['border']} 0%, {zone_info['text']} 100%); color: white; padding: 25px; text-align: center; border-radius: 8px 8px 0 0; }}
             .content {{ background: #f8f9fa; padding: 25px; border-radius: 0 0 8px 8px; }}
-            .district-list {{ background: white; padding: 15px; border-radius: 6px; border-left: 4px solid #7B1FA2; }}
-            .action-box {{ background: #fff3e0; padding: 15px; border-radius: 6px; margin: 20px 0; border-left: 4px solid #e65100; }}
+            .action-box {{ background: #e0f2f1; padding: 15px; border-radius: 6px; margin: 20px 0; border-left: 4px solid #006D77; }}
             .btn {{ display: inline-block; background: #006D77; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: 600; }}
             .footer {{ font-size: 12px; color: #666; margin-top: 25px; padding-top: 20px; border-top: 1px solid #ddd; }}
         </style>
@@ -250,28 +485,26 @@ def send_zone6_alert(subscriber, districts_affected, zone6_info, metadata):
     <body>
         <div class="container">
             <div class="alert-header">
-                <h1 style="margin: 0; font-size: 24px;">⚠️ Zone 6 Heat Alert</h1>
-                <p style="margin: 10px 0 0 0; opacity: 0.9;">Hazardous Heat Stress Detected</p>
+                <h1 style="margin: 0; font-size: 24px;">Zone {highest_zone} {zone_info['subject']} Heat Alert</h1>
+                <p style="margin: 10px 0 0 0; opacity: 0.9;">{zone_info['name']} Heat Stress Detected</p>
             </div>
             <div class="content">
-                <p>Hello{', ' + name if name else ''},</p>
+                <p>Hello{' ' + name if name else ''},</p>
 
-                <p><strong>Hazardous heat conditions (Zone 6)</strong> have been detected in your subscribed district(s):</p>
+                <p><strong>{zone_info['name']} heat stress conditions (Zone {highest_zone})</strong> have been detected in your subscribed district(s):</p>
 
-                <div class="district-list">
-                    <ul style="margin: 0; padding-left: 20px;">
-                        {district_list_html}
-                    </ul>
-                </div>
+                {nighttime_notice}
+
+                {''.join(alert_sections)}
 
                 <div class="action-box">
-                    <h3 style="margin: 0 0 10px 0; color: #e65100;">🛡️ Protective Actions</h3>
+                    <h3 style="margin: 0 0 10px 0; color: #006D77;">Recommended Actions</h3>
                     <ul style="margin: 0; padding-left: 20px;">
-                        <li><strong>Stop outdoor work immediately</strong> if possible</li>
+                        {'<li><strong>Stop outdoor work immediately</strong> if possible</li>' if highest_zone == 6 else '<li><strong>Take extra precautions</strong> during work</li>'}
                         <li>Move to a cooler, shaded location</li>
                         <li>Drink water frequently</li>
-                        <li>Watch for signs of heat illness (dizziness, nausea, rapid heartbeat)</li>
-                        <li>Seek medical help if symptoms occur</li>
+                        <li>Watch for signs of heat illness (e.g., dizziness, nausea, rapid heartbeat)</li>
+                        {'<li>Seek medical help if symptoms occur</li>' if highest_zone >= 5 else ''}
                     </ul>
                 </div>
 
@@ -285,7 +518,7 @@ def send_zone6_alert(subscriber, districts_affected, zone6_info, metadata):
 
                 <div class="footer">
                     <p>
-                        You're receiving this because you subscribed to SHRAM heat alerts.
+                        You're receiving this because you subscribed to SHRAM heat alerts for Zone {', '.join(str(z) for z in sorted(subscriber['alert_zones']))} at MET {', '.join(str(m) for m in sorted(subscriber['met_levels']))}.
                         <br>
                         <a href="https://{VERCEL_URL}/api/unsubscribe?token={token}">Unsubscribe</a> |
                         <a href="{DASHBOARD_URL}">SHRAM Dashboard</a> |
@@ -299,27 +532,30 @@ def send_zone6_alert(subscriber, districts_affected, zone6_info, metadata):
     """
 
     # Plain text version
+    district_list = ', '.join(district_names)
     text_body = f"""
-    ZONE 6 HEAT ALERT - Hazardous Conditions
+ZONE {highest_zone} {zone_info['subject'].upper()} HEAT ALERT
 
-    Hello{', ' + name if name else ''},
+Hello{' ' + name if name else ''},
 
-    Hazardous heat conditions (Zone 6) have been detected in your subscribed district(s):
-    {', '.join(districts_affected)}
+{zone_info['name']} heat stress conditions (Zone {highest_zone}) have been detected in your subscribed district(s):
+{district_list}
 
-    PROTECTIVE ACTIONS:
-    - Stop outdoor work immediately if possible
-    - Move to a cooler, shaded location
-    - Drink water frequently
-    - Watch for signs of heat illness
-    - Seek medical help if symptoms occur
+{'Note: This is a nighttime alert. Shade values are used as there is no solar radiation between 6 PM and 6 AM IST.' if is_night else ''}
 
-    View live dashboard: {DASHBOARD_URL}
+RECOMMENDED ACTIONS:
+- {'Stop outdoor work immediately if possible' if highest_zone == 6 else 'Take extra precautions during work'}
+- Move to a cooler, shaded location
+- Drink water frequently
+- Watch for signs of heat illness (e.g., dizziness, nausea, rapid heartbeat)
+{'- Seek medical help if symptoms occur' if highest_zone >= 5 else ''}
 
-    Data updated: {metadata.get('generated_at_ist', 'Unknown')}
+View live dashboard: {DASHBOARD_URL}
 
-    ---
-    Unsubscribe: https://{VERCEL_URL}/api/unsubscribe?token={token}
+Data updated: {metadata.get('generated_at_ist', 'Unknown')}
+
+---
+Unsubscribe: https://{VERCEL_URL}/api/unsubscribe?token={token}
     """
 
     # Send email
@@ -337,7 +573,7 @@ def send_zone6_alert(subscriber, districts_affected, zone6_info, metadata):
             smtp.login(EMAIL_SENDER, EMAIL_PASSWORD)
             smtp.send_message(msg)
 
-        print(f"  ✓ Alert sent to {email}")
+        print(f"  ✓ Alert sent to {email} ({len(alerts)} districts)")
         return True
 
     except Exception as e:
@@ -352,12 +588,18 @@ def send_zone6_alert(subscriber, districts_affected, zone6_info, metadata):
 def main():
     """Main alert sending logic."""
     print("=" * 60)
-    print("SHRAM Zone 6 Alert System")
+    print("SHRAM Heat Alert System")
     print("=" * 60)
+
+    # Check if nighttime
+    is_night = is_nighttime_ist()
+    now_ist = datetime.now(IST)
+    print(f"\nCurrent IST time: {now_ist.strftime('%Y-%m-%d %H:%M:%S')}")
+    print(f"Nighttime mode: {'Yes (using shade values)' if is_night else 'No (respecting sun/shade preferences)'}")
 
     # Check credentials
     if not EMAIL_PASSWORD:
-        print("ERROR: GMAIL_APP_PASSWORD not set. Cannot send emails.")
+        print("\nERROR: GMAIL_APP_PASSWORD not set. Cannot send emails.")
         return
 
     # Load grid data
@@ -370,109 +612,104 @@ def main():
     print(f"  Loaded {len(grid_data.get('points', []))} points")
     print(f"  Generated at: {grid_data.get('metadata', {}).get('generated_at_ist', 'Unknown')}")
 
-    # Find Zone 6 districts
-    print("\n[2/5] Checking for Zone 6 conditions...")
-    current_zone6 = get_zone6_districts(grid_data)
+    # Extract district zone data
+    print("\n[2/5] Analyzing zone conditions...")
+    district_data = get_district_zones(grid_data, is_night)
+    print(f"  Found data for {len(district_data)} districts")
 
-    if not current_zone6:
-        print("  No Zone 6 conditions detected. No alerts needed.")
-        # Still update state to clear any previous Zone 6 districts
-        state = load_alert_state()
-        state['last_check'] = datetime.now(pytz.timezone('Asia/Kolkata')).isoformat()
-        state['active_zone6_districts'] = {}
-        save_alert_state(state)
-        print("\n✓ Alert check complete. No alerts sent.")
-        return
-
-    print(f"  Zone 6 detected in {len(current_zone6)} districts:")
-    for district in sorted(current_zone6.keys())[:10]:
-        print(f"    - {district}")
-    if len(current_zone6) > 10:
-        print(f"    ... and {len(current_zone6) - 10} more")
-
-    # Check for NEW Zone 6 events
-    print("\n[3/5] Checking for NEW Zone 6 events...")
-    state = load_alert_state()
-    previous_zone6 = state.get('active_zone6_districts', {})
-
-    new_zone6 = get_new_zone6_districts(current_zone6, previous_zone6)
-
-    if not new_zone6:
-        print("  No NEW Zone 6 events. All current Zone 6 districts were already alerted.")
-        # Update state with current districts
-        state['last_check'] = datetime.now(pytz.timezone('Asia/Kolkata')).isoformat()
-        state['active_zone6_districts'] = {
-            d: {'state': info.get('state')}
-            for d, info in current_zone6.items()
-        }
-        save_alert_state(state)
-        print("\n✓ Alert check complete. No new alerts sent.")
-        return
-
-    print(f"  NEW Zone 6 events in {len(new_zone6)} districts:")
-    for district in sorted(new_zone6):
-        print(f"    - {district}")
+    # Count districts in each zone
+    zone_counts = {4: 0, 5: 0, 6: 0}
+    for district, data in district_data.items():
+        for met in data['zones'].values():
+            for zone in met.values():
+                if zone in zone_counts:
+                    zone_counts[zone] = max(zone_counts[zone], 1)  # Just count as present
 
     # Get verified subscribers
-    print("\n[4/5] Fetching verified subscribers...")
+    print("\n[3/5] Fetching verified subscribers...")
     subscribers = get_verified_subscribers()
 
     if not subscribers:
-        print("  No verified subscribers found.")
-        # Still update state
-        state['last_check'] = datetime.now(pytz.timezone('Asia/Kolkata')).isoformat()
-        state['active_zone6_districts'] = {
-            d: {'state': info.get('state')}
-            for d, info in current_zone6.items()
-        }
-        save_alert_state(state)
-        print("\n✓ Alert check complete. No subscribers to notify.")
+        print("  No verified subscribers found. Exiting.")
         return
 
-    # Send alerts to matching subscribers
-    print(f"\n[5/5] Sending alerts to subscribers...")
+    # Load previous alert state
+    print("\n[4/5] Checking for new alerts...")
+    state = load_alert_state()
+
+    # Track alerts sent
     alerts_sent = 0
     alerts_failed = 0
+    new_state = {
+        'last_check': now_ist.isoformat(),
+        'active_alerts': {}
+    }
 
+    print("\n[5/5] Processing subscribers...")
     for subscriber in subscribers:
-        # Parse subscriber's districts
-        sub_districts_str = subscriber.get('districts', '')
-        sub_districts = set(d.strip() for d in sub_districts_str.split(',') if d.strip())
+        email = subscriber['email']
 
-        # Find matching districts that are newly in Zone 6
-        matching = sub_districts & new_zone6
+        # Get previous alerts for this subscriber
+        prev_alerts = state.get('active_alerts', {}).get(email, {})
 
-        if matching:
-            print(f"\n  Alerting {subscriber.get('email')} for: {', '.join(matching)}")
-            success = send_zone6_alert(
+        # Check what alerts should be sent
+        alerts = check_subscriber_alerts(subscriber, district_data, prev_alerts, is_night)
+
+        # Update state with current conditions
+        new_state['active_alerts'][email] = {}
+        for district in subscriber['districts']:
+            if district not in district_data:
+                continue
+            data = district_data[district]
+            for met_level in subscriber['met_levels']:
+                if met_level not in data['zones']:
+                    continue
+                conditions = get_effective_sun_shade(subscriber['sun_shade'], is_night)
+                for condition in conditions:
+                    zone = data['zones'][met_level].get(condition)
+                    if zone and zone in subscriber['alert_zones']:
+                        key = f"{district}_{met_level}_{condition}"
+                        new_state['active_alerts'][email][key] = zone
+
+        if alerts:
+            print(f"\n  Alerting {email}:")
+            for a in alerts:
+                print(f"    - {a['district']}: Zone {a['zone']} (MET {a['met_level']}, {a['condition']})")
+
+            success = send_alert_email(
                 subscriber,
-                list(matching),
-                {d: current_zone6[d] for d in matching},
-                grid_data.get('metadata', {})
+                alerts,
+                grid_data.get('metadata', {}),
+                is_night
             )
+
+            # Log the alert to history
+            log_alert(
+                subscriber_email=email,
+                subscriber_name=subscriber.get('name', ''),
+                alerts=alerts,
+                is_night=is_night,
+                success=success
+            )
+
             if success:
                 alerts_sent += 1
             else:
                 alerts_failed += 1
 
-    # Update alert state
-    state['last_check'] = datetime.now(pytz.timezone('Asia/Kolkata')).isoformat()
-    state['active_zone6_districts'] = {
-        d: {'state': info.get('state'), 'first_detected': datetime.now(pytz.timezone('Asia/Kolkata')).isoformat()}
-        for d, info in current_zone6.items()
-    }
-    save_alert_state(state)
+    # Save new state
+    save_alert_state(new_state)
 
     # Summary
     print("\n" + "=" * 60)
     print("ALERT SUMMARY")
     print("=" * 60)
-    print(f"  Zone 6 districts: {len(current_zone6)}")
-    print(f"  NEW Zone 6 events: {len(new_zone6)}")
+    print(f"  Districts analyzed: {len(district_data)}")
     print(f"  Verified subscribers: {len(subscribers)}")
     print(f"  Alerts sent: {alerts_sent}")
     if alerts_failed:
         print(f"  Alerts failed: {alerts_failed}")
+    print(f"  Nighttime mode: {'Yes' if is_night else 'No'}")
     print("=" * 60)
 
 

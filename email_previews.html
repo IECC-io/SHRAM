@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>SHRAM Email Previews</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f0f0f0;
+            padding: 20px;
+        }
+        .preview-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .preview-section {
+            margin-bottom: 40px;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .preview-title {
+            background: #333;
+            color: white;
+            padding: 10px 15px;
+            margin: -20px -20px 20px -20px;
+            border-radius: 8px 8px 0 0;
+            font-size: 14px;
+        }
+        .email-frame {
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        hr {
+            border: none;
+            border-top: 2px solid #006D77;
+            margin: 40px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="preview-container">
+        <h1 style="text-align: center; color: #006D77;">SHRAM Email Previews</h1>
+
+        <!-- ZONE 6 ALERT -->
+        <div class="preview-section">
+            <div class="preview-title">ZONE 6 ALERT - Subject: "SHRAM Alert: Zone 6 Hazardous - Ahmedabad"</div>
+            <div class="email-frame">
+                <div style="font-family: 'Montserrat', Arial, sans-serif; line-height: 1.6; color: #333;">
+                    <div style="max-width: 600px; margin: 0 auto; padding: 20px;">
+                        <div style="background: linear-gradient(135deg, #7B1FA2 0%, #7B1FA2 100%); color: white; padding: 25px; text-align: center; border-radius: 8px 8px 0 0;">
+                            <h1 style="margin: 0; font-size: 24px;">Zone 6 Hazardous Heat Alert</h1>
+                            <p style="margin: 10px 0 0 0; opacity: 0.9;">Hazardous Heat Stress Detected</p>
+                        </div>
+                        <div style="background: #f8f9fa; padding: 25px; border-radius: 0 0 8px 8px;">
+                            <p>Hello Subscriber,</p>
+                            <p><strong>Hazardous heat stress conditions (Zone 6)</strong> have been detected in your subscribed district(s):</p>
+
+                            <div style="margin-bottom: 20px; padding: 15px; background: #f3e5f5; border-left: 4px solid #7B1FA2; border-radius: 6px;">
+                                <h3 style="margin: 0 0 10px 0; color: #7B1FA2;">Zone 6 - Hazardous</h3>
+                                <ul style="margin: 0; padding-left: 20px;">
+                                    <li style="margin-bottom: 8px;">
+                                        <strong>Ahmedabad</strong>, Gujarat
+                                        <br><span style="font-size: 12px; color: #666;">
+                                            MET 6 | Shade | 44.2°C, 38% RH
+                                        </span>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <div style="background: #e0f2f1; padding: 15px; border-radius: 6px; margin: 20px 0; border-left: 4px solid #006D77;">
+                                <h3 style="margin: 0 0 10px 0; color: #006D77;">Recommended Actions</h3>
+                                <ul style="margin: 0; padding-left: 20px;">
+                                    <li><strong>Stop outdoor work immediately</strong> if possible</li>
+                                    <li>Move to a cooler, shaded location</li>
+                                    <li>Drink water frequently</li>
+                                    <li>Watch for signs of heat illness (e.g., dizziness, nausea, rapid heartbeat)</li>
+                                    <li>Seek medical help if symptoms occur</li>
+                                </ul>
+                            </div>
+
+                            <p style="text-align: center; margin: 25px 0;">
+                                <a href="https://shram.info" style="display: inline-block; background: #006D77; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: 600;">View Live Dashboard</a>
+                            </p>
+
+                            <p style="font-size: 13px; color: #666;">
+                                Data updated: 2026-02-06 14:30 IST
+                            </p>
+
+                            <div style="font-size: 12px; color: #666; margin-top: 25px; padding-top: 20px; border-top: 1px solid #ddd;">
+                                <p>
+                                    You're receiving this because you subscribed to SHRAM heat alerts for Zone 6 at MET 6.
+                                    <br>
+                                    <a href="https://shram-alerts.vercel.app/api/unsubscribe?token=example">Unsubscribe</a> |
+                                    <a href="https://shram.info">SHRAM Dashboard</a> |
+                                    <a href="https://iecc.gspp.berkeley.edu">IECC</a>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <hr>
+
+        <!-- ZONE 5 ALERT -->
+        <div class="preview-section">
+            <div class="preview-title">ZONE 5 ALERT - Subject: "SHRAM Alert: Zone 5 High Risk - Surat"</div>
+            <div class="email-frame">
+                <div style="font-family: 'Montserrat', Arial, sans-serif; line-height: 1.6; color: #333;">
+                    <div style="max-width: 600px; margin: 0 auto; padding: 20px;">
+                        <div style="background: linear-gradient(135deg, #d32f2f 0%, #CA2B2B 100%); color: white; padding: 25px; text-align: center; border-radius: 8px 8px 0 0;">
+                            <h1 style="margin: 0; font-size: 24px;">Zone 5 High Risk Heat Alert</h1>
+                            <p style="margin: 10px 0 0 0; opacity: 0.9;">High Heat Stress Detected</p>
+                        </div>
+                        <div style="background: #f8f9fa; padding: 25px; border-radius: 0 0 8px 8px;">
+                            <p>Hello,</p>
+                            <p><strong>High heat stress conditions (Zone 5)</strong> have been detected in your subscribed district(s):</p>
+
+                            <div style="margin-bottom: 20px; padding: 15px; background: #ffebee; border-left: 4px solid #d32f2f; border-radius: 6px;">
+                                <h3 style="margin: 0 0 10px 0; color: #CA2B2B;">Zone 5 - High</h3>
+                                <ul style="margin: 0; padding-left: 20px;">
+                                    <li style="margin-bottom: 8px;">
+                                        <strong>Surat</strong>, Gujarat
+                                        <br><span style="font-size: 12px; color: #666;">
+                                            MET 5 | Sun | 41.5°C, 45% RH
+                                        </span>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <div style="background: #e0f2f1; padding: 15px; border-radius: 6px; margin: 20px 0; border-left: 4px solid #006D77;">
+                                <h3 style="margin: 0 0 10px 0; color: #006D77;">Recommended Actions</h3>
+                                <ul style="margin: 0; padding-left: 20px;">
+                                    <li><strong>Take extra precautions</strong> during work</li>
+                                    <li>Move to a cooler, shaded location</li>
+                                    <li>Drink water frequently</li>
+                                    <li>Watch for signs of heat illness (e.g., dizziness, nausea, rapid heartbeat)</li>
+                                    <li>Seek medical help if symptoms occur</li>
+                                </ul>
+                            </div>
+
+                            <p style="text-align: center; margin: 25px 0;">
+                                <a href="https://shram.info" style="display: inline-block; background: #006D77; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: 600;">View Live Dashboard</a>
+                            </p>
+
+                            <p style="font-size: 13px; color: #666;">
+                                Data updated: 2026-02-06 14:30 IST
+                            </p>
+
+                            <div style="font-size: 12px; color: #666; margin-top: 25px; padding-top: 20px; border-top: 1px solid #ddd;">
+                                <p>
+                                    You're receiving this because you subscribed to SHRAM heat alerts for Zone 5, 6 at MET 5, 6.
+                                    <br>
+                                    <a href="https://shram-alerts.vercel.app/api/unsubscribe?token=example">Unsubscribe</a> |
+                                    <a href="https://shram.info">SHRAM Dashboard</a> |
+                                    <a href="https://iecc.gspp.berkeley.edu">IECC</a>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <hr>
+
+        <!-- ZONE 4 ALERT -->
+        <div class="preview-section">
+            <div class="preview-title">ZONE 4 ALERT - Subject: "SHRAM Alert: Zone 4 Moderate Risk - 2 Districts"</div>
+            <div class="email-frame">
+                <div style="font-family: 'Montserrat', Arial, sans-serif; line-height: 1.6; color: #333;">
+                    <div style="max-width: 600px; margin: 0 auto; padding: 20px;">
+                        <div style="background: linear-gradient(135deg, #e65100 0%, #C24400 100%); color: white; padding: 25px; text-align: center; border-radius: 8px 8px 0 0;">
+                            <h1 style="margin: 0; font-size: 24px;">Zone 4 Moderate Risk Heat Alert</h1>
+                            <p style="margin: 10px 0 0 0; opacity: 0.9;">Moderate Heat Stress Detected</p>
+                        </div>
+                        <div style="background: #f8f9fa; padding: 25px; border-radius: 0 0 8px 8px;">
+                            <p>Hello Subscriber,</p>
+                            <p><strong>Moderate heat stress conditions (Zone 4)</strong> have been detected in your subscribed district(s):</p>
+
+                            <div style="margin-bottom: 20px; padding: 15px; background: #fff3e0; border-left: 4px solid #e65100; border-radius: 6px;">
+                                <h3 style="margin: 0 0 10px 0; color: #C24400;">Zone 4 - Moderate</h3>
+                                <ul style="margin: 0; padding-left: 20px;">
+                                    <li style="margin-bottom: 8px;">
+                                        <strong>Vadodara</strong>, Gujarat
+                                        <br><span style="font-size: 12px; color: #666;">
+                                            MET 4 | Shade | 38.8°C, 50% RH
+                                        </span>
+                                    </li>
+                                    <li style="margin-bottom: 8px;">
+                                        <strong>Rajkot</strong>, Gujarat
+                                        <br><span style="font-size: 12px; color: #666;">
+                                            MET 4 | Shade | 37.5°C, 48% RH
+                                        </span>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <div style="background: #e0f2f1; padding: 15px; border-radius: 6px; margin: 20px 0; border-left: 4px solid #006D77;">
+                                <h3 style="margin: 0 0 10px 0; color: #006D77;">Recommended Actions</h3>
+                                <ul style="margin: 0; padding-left: 20px;">
+                                    <li><strong>Take extra precautions</strong> during work</li>
+                                    <li>Move to a cooler, shaded location</li>
+                                    <li>Drink water frequently</li>
+                                    <li>Watch for signs of heat illness (e.g., dizziness, nausea, rapid heartbeat)</li>
+                                </ul>
+                            </div>
+
+                            <p style="text-align: center; margin: 25px 0;">
+                                <a href="https://shram.info" style="display: inline-block; background: #006D77; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: 600;">View Live Dashboard</a>
+                            </p>
+
+                            <p style="font-size: 13px; color: #666;">
+                                Data updated: 2026-02-06 14:30 IST
+                            </p>
+
+                            <div style="font-size: 12px; color: #666; margin-top: 25px; padding-top: 20px; border-top: 1px solid #ddd;">
+                                <p>
+                                    You're receiving this because you subscribed to SHRAM heat alerts for Zone 4, 5, 6 at MET 4, 5, 6.
+                                    <br>
+                                    <a href="https://shram-alerts.vercel.app/api/unsubscribe?token=example">Unsubscribe</a> |
+                                    <a href="https://shram.info">SHRAM Dashboard</a> |
+                                    <a href="https://iecc.gspp.berkeley.edu">IECC</a>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <hr>
+
+        <!-- NIGHTTIME ALERT -->
+        <div class="preview-section">
+            <div class="preview-title">NIGHTTIME ALERT (6 PM - 6 AM IST) - Subject: "SHRAM Alert: Zone 6 Hazardous - Ahmedabad"</div>
+            <div class="email-frame">
+                <div style="font-family: 'Montserrat', Arial, sans-serif; line-height: 1.6; color: #333;">
+                    <div style="max-width: 600px; margin: 0 auto; padding: 20px;">
+                        <div style="background: linear-gradient(135deg, #7B1FA2 0%, #7B1FA2 100%); color: white; padding: 25px; text-align: center; border-radius: 8px 8px 0 0;">
+                            <h1 style="margin: 0; font-size: 24px;">Zone 6 Hazardous Heat Alert</h1>
+                            <p style="margin: 10px 0 0 0; opacity: 0.9;">Hazardous Heat Stress Detected</p>
+                        </div>
+                        <div style="background: #f8f9fa; padding: 25px; border-radius: 0 0 8px 8px;">
+                            <p>Hello,</p>
+                            <p><strong>Hazardous heat stress conditions (Zone 6)</strong> have been detected in your subscribed district(s):</p>
+
+                            <p style="background: #e3f2fd; padding: 10px; border-radius: 6px; font-size: 13px;">
+                                <strong>Nighttime Alert:</strong> This alert uses shade values as there is no solar radiation between 6 PM and 6 AM IST.
+                            </p>
+
+                            <div style="margin-bottom: 20px; padding: 15px; background: #f3e5f5; border-left: 4px solid #7B1FA2; border-radius: 6px;">
+                                <h3 style="margin: 0 0 10px 0; color: #7B1FA2;">Zone 6 - Hazardous</h3>
+                                <ul style="margin: 0; padding-left: 20px;">
+                                    <li style="margin-bottom: 8px;">
+                                        <strong>Ahmedabad</strong>, Gujarat
+                                        <br><span style="font-size: 12px; color: #666;">
+                                            MET 6 | Night | 42.0°C, 42% RH
+                                        </span>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <div style="background: #e0f2f1; padding: 15px; border-radius: 6px; margin: 20px 0; border-left: 4px solid #006D77;">
+                                <h3 style="margin: 0 0 10px 0; color: #006D77;">Recommended Actions</h3>
+                                <ul style="margin: 0; padding-left: 20px;">
+                                    <li><strong>Stop outdoor work immediately</strong> if possible</li>
+                                    <li>Move to a cooler, shaded location</li>
+                                    <li>Drink water frequently</li>
+                                    <li>Watch for signs of heat illness (e.g., dizziness, nausea, rapid heartbeat)</li>
+                                    <li>Seek medical help if symptoms occur</li>
+                                </ul>
+                            </div>
+
+                            <p style="text-align: center; margin: 25px 0;">
+                                <a href="https://shram.info" style="display: inline-block; background: #006D77; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: 600;">View Live Dashboard</a>
+                            </p>
+
+                            <p style="font-size: 13px; color: #666;">
+                                Data updated: 2026-02-06 21:30 IST
+                            </p>
+
+                            <div style="font-size: 12px; color: #666; margin-top: 25px; padding-top: 20px; border-top: 1px solid #ddd;">
+                                <p>
+                                    You're receiving this because you subscribed to SHRAM heat alerts for Zone 6 at MET 6.
+                                    <br>
+                                    <a href="https://shram-alerts.vercel.app/api/unsubscribe?token=example">Unsubscribe</a> |
+                                    <a href="https://shram.info">SHRAM Dashboard</a> |
+                                    <a href="https://iecc.gspp.berkeley.edu">IECC</a>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <hr>
+
+        <!-- WEEKLY FORECAST - NO ZONE 6 -->
+        <div class="preview-section">
+            <div class="preview-title">WEEKLY FORECAST (No Zone 6) - Subject: "SHRAM Heat Forecast: 06 Feb 2026"</div>
+            <div class="email-frame">
+                <div style="font-family: 'Montserrat', Arial, sans-serif; line-height: 1.6; color: #333;">
+                    <div style="max-width: 700px; margin: 0 auto; padding: 20px;">
+                        <div style="background: linear-gradient(135deg, #2d637f 0%, #006D77 100%); color: white; padding: 25px; text-align: center; border-radius: 8px 8px 0 0;">
+                            <h1 style="margin: 0; font-size: 22px;">7-Day Heat Forecast</h1>
+                            <p style="margin: 10px 0 0 0; opacity: 0.9;">Sunday, 06 February 2026</p>
+                        </div>
+                        <div style="background: #f8f9fa; padding: 25px; border-radius: 0 0 8px 8px;">
+                            <p>Good evening Subscriber!</p>
+                            <p>Here's your weekly 7-day heat stress forecast for your subscribed districts:</p>
+
+                            <table style="width: 100%; border-collapse: collapse; margin: 20px 0;">
+                                <thead>
+                                    <tr>
+                                        <th style="padding: 8px; background: #2d637f; color: white; text-align: left;">District</th>
+                                        <th style="padding: 8px; background: #2d637f; color: white;">06 Feb</th>
+                                        <th style="padding: 8px; background: #2d637f; color: white;">07 Feb</th>
+                                        <th style="padding: 8px; background: #2d637f; color: white;">08 Feb</th>
+                                        <th style="padding: 8px; background: #2d637f; color: white;">09 Feb</th>
+                                        <th style="padding: 8px; background: #2d637f; color: white;">10 Feb</th>
+                                        <th style="padding: 8px; background: #2d637f; color: white;">11 Feb</th>
+                                        <th style="padding: 8px; background: #2d637f; color: white;">12 Feb</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td style="padding: 8px; font-weight: 600; background: #f8f9fa; border: 1px solid #ddd;">Ahmedabad</td>
+                                        <td style="padding: 8px; text-align: center; border: 1px solid #ddd;"><span style="padding: 2px 8px; border-radius: 4px; background: #fff3e0; color: #C24400; font-weight: 600;">Zone 4</span></td>
+                                        <td style="padding: 8px; text-align: center; border: 1px solid #ddd;"><span style="padding: 2px 8px; border-radius: 4px; background: #ffebee; color: #CA2B2B; font-weight: 600;">Zone 5</span></td>
+                                        <td style="padding: 8px; text-align: center; border: 1px solid #ddd;"><span style="padding: 2px 8px; border-radius: 4px; background: #ffebee; color: #CA2B2B; font-weight: 600;">Zone 5</span></td>
+                                        <td style="padding: 8px; text-align: center; border: 1px solid #ddd;"><span style="padding: 2px 8px; border-radius: 4px; background: #fff3e0; color: #C24400; font-weight: 600;">Zone 4</span></td>
+                                        <td style="padding: 8px; text-align: center; border: 1px solid #ddd;"><span style="padding: 2px 8px; border-radius: 4px; background: #fffde7; color: #F9A825; font-weight: 600;">Zone 3</span></td>
+                                        <td style="padding: 8px; text-align: center; border: 1px solid #ddd;"><span style="padding: 2px 8px; border-radius: 4px; background: #fffde7; color: #F9A825; font-weight: 600;">Zone 3</span></td>
+                                        <td style="padding: 8px; text-align: center; border: 1px solid #ddd;"><span style="padding: 2px 8px; border-radius: 4px; background: #fff3e0; color: #C24400; font-weight: 600;">Zone 4</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding: 8px; font-weight: 600; background: #f8f9fa; border: 1px solid #ddd;">Surat</td>
+                                        <td style="padding: 8px; text-align: center; border: 1px solid #ddd;"><span style="padding: 2px 8px; border-radius: 4px; background: #fffde7; color: #F9A825; font-weight: 600;">Zone 3</span></td>
+                                        <td style="padding: 8px; text-align: center; border: 1px solid #ddd;"><span style="padding: 2px 8px; border-radius: 4px; background: #fff3e0; color: #C24400; font-weight: 600;">Zone 4</span></td>
+                                        <td style="padding: 8px; text-align: center; border: 1px solid #ddd;"><span style="padding: 2px 8px; border-radius: 4px; background: #fff3e0; color: #C24400; font-weight: 600;">Zone 4</span></td>
+                                        <td style="padding: 8px; text-align: center; border: 1px solid #ddd;"><span style="padding: 2px 8px; border-radius: 4px; background: #fffde7; color: #F9A825; font-weight: 600;">Zone 3</span></td>
+                                        <td style="padding: 8px; text-align: center; border: 1px solid #ddd;"><span style="padding: 2px 8px; border-radius: 4px; background: #e8f5e9; color: #2E7D32; font-weight: 600;">Zone 2</span></td>
+                                        <td style="padding: 8px; text-align: center; border: 1px solid #ddd;"><span style="padding: 2px 8px; border-radius: 4px; background: #e8f5e9; color: #2E7D32; font-weight: 600;">Zone 2</span></td>
+                                        <td style="padding: 8px; text-align: center; border: 1px solid #ddd;"><span style="padding: 2px 8px; border-radius: 4px; background: #fffde7; color: #F9A825; font-weight: 600;">Zone 3</span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <div style="display: flex; flex-wrap: wrap; gap: 10px; margin: 20px 0;">
+                                <span style="font-weight: 600; margin-right: 10px;">Legend:</span>
+                                <span style="display: flex; align-items: center; gap: 5px; font-size: 12px;"><span style="padding: 2px 8px; border-radius: 4px; background: #e8f5e9; color: #2E7D32; font-weight: 600;">Zone 2</span> Comfortable</span>
+                                <span style="display: flex; align-items: center; gap: 5px; font-size: 12px;"><span style="padding: 2px 8px; border-radius: 4px; background: #fffde7; color: #F9A825; font-weight: 600;">Zone 3</span> Mild</span>
+                                <span style="display: flex; align-items: center; gap: 5px; font-size: 12px;"><span style="padding: 2px 8px; border-radius: 4px; background: #fff3e0; color: #C24400; font-weight: 600;">Zone 4</span> Moderate</span>
+                                <span style="display: flex; align-items: center; gap: 5px; font-size: 12px;"><span style="padding: 2px 8px; border-radius: 4px; background: #ffebee; color: #CA2B2B; font-weight: 600;">Zone 5</span> High</span>
+                                <span style="display: flex; align-items: center; gap: 5px; font-size: 12px;"><span style="padding: 2px 8px; border-radius: 4px; background: #f3e5f5; color: #7B1FA2; font-weight: 600;">Zone 6</span> Hazardous</span>
+                            </div>
+
+                            <p style="text-align: center; margin: 25px 0;">
+                                <a href="https://shram.info?district=Ahmedabad" style="display: inline-block; background: #006D77; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: 600;">View Full Forecast on Dashboard</a>
+                            </p>
+
+                            <div style="font-size: 12px; color: #666; margin-top: 25px; padding-top: 20px; border-top: 1px solid #ddd;">
+                                <p>
+                                    You're receiving this weekly digest because you subscribed to SHRAM forecasts.
+                                    <br>
+                                    <a href="https://shram-alerts.vercel.app/api/unsubscribe?token=example">Unsubscribe</a> |
+                                    <a href="https://shram.info">SHRAM Dashboard</a> |
+                                    <a href="https://iecc.gspp.berkeley.edu">IECC</a>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <hr>
+
+        <!-- WEEKLY FORECAST - WITH ZONE 6 -->
+        <div class="preview-section">
+            <div class="preview-title">WEEKLY FORECAST (Zone 6 forecasted) - Subject: "SHRAM Forecast: Zone 6 Hazardous Tue & Wed"</div>
+            <div class="email-frame">
+                <div style="font-family: 'Montserrat', Arial, sans-serif; line-height: 1.6; color: #333;">
+                    <div style="max-width: 700px; margin: 0 auto; padding: 20px;">
+                        <div style="background: linear-gradient(135deg, #2d637f 0%, #006D77 100%); color: white; padding: 25px; text-align: center; border-radius: 8px 8px 0 0;">
+                            <h1 style="margin: 0; font-size: 22px;">7-Day Heat Forecast</h1>
+                            <p style="margin: 10px 0 0 0; opacity: 0.9;">Sunday, 06 February 2026</p>
+                        </div>
+                        <div style="background: #f8f9fa; padding: 25px; border-radius: 0 0 8px 8px;">
+                            <p>Good evening!</p>
+                            <p>Here's your weekly 7-day heat stress forecast for your subscribed districts:</p>
+
+                            <table style="width: 100%; border-collapse: collapse; margin: 20px 0;">
+                                <thead>
+                                    <tr>
+                                        <th style="padding: 8px; background: #2d637f; color: white; text-align: left;">District</th>
+                                        <th style="padding: 8px; background: #2d637f; color: white;">06 Feb</th>
+                                        <th style="padding: 8px; background: #2d637f; color: white;">07 Feb</th>
+                                        <th style="padding: 8px; background: #2d637f; color: white;">08 Feb</th>
+                                        <th style="padding: 8px; background: #2d637f; color: white;">09 Feb</th>
+                                        <th style="padding: 8px; background: #2d637f; color: white;">10 Feb</th>
+                                        <th style="padding: 8px; background: #2d637f; color: white;">11 Feb</th>
+                                        <th style="padding: 8px; background: #2d637f; color: white;">12 Feb</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td style="padding: 8px; font-weight: 600; background: #f8f9fa; border: 1px solid #ddd;">Ahmedabad</td>
+                                        <td style="padding: 8px; text-align: center; border: 1px solid #ddd;"><span style="padding: 2px 8px; border-radius: 4px; background: #ffebee; color: #CA2B2B; font-weight: 600;">Zone 5</span></td>
+                                        <td style="padding: 8px; text-align: center; border: 1px solid #ddd;"><span style="padding: 2px 8px; border-radius: 4px; background: #ffebee; color: #CA2B2B; font-weight: 600;">Zone 5</span></td>
+                                        <td style="padding: 8px; text-align: center; border: 1px solid #ddd;"><span style="padding: 2px 8px; border-radius: 4px; background: #f3e5f5; color: #7B1FA2; font-weight: 600;">Zone 6</span></td>
+                                        <td style="padding: 8px; text-align: center; border: 1px solid #ddd;"><span style="padding: 2px 8px; border-radius: 4px; background: #f3e5f5; color: #7B1FA2; font-weight: 600;">Zone 6</span></td>
+                                        <td style="padding: 8px; text-align: center; border: 1px solid #ddd;"><span style="padding: 2px 8px; border-radius: 4px; background: #ffebee; color: #CA2B2B; font-weight: 600;">Zone 5</span></td>
+                                        <td style="padding: 8px; text-align: center; border: 1px solid #ddd;"><span style="padding: 2px 8px; border-radius: 4px; background: #fff3e0; color: #C24400; font-weight: 600;">Zone 4</span></td>
+                                        <td style="padding: 8px; text-align: center; border: 1px solid #ddd;"><span style="padding: 2px 8px; border-radius: 4px; background: #fff3e0; color: #C24400; font-weight: 600;">Zone 4</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding: 8px; font-weight: 600; background: #f8f9fa; border: 1px solid #ddd;">Surat</td>
+                                        <td style="padding: 8px; text-align: center; border: 1px solid #ddd;"><span style="padding: 2px 8px; border-radius: 4px; background: #fff3e0; color: #C24400; font-weight: 600;">Zone 4</span></td>
+                                        <td style="padding: 8px; text-align: center; border: 1px solid #ddd;"><span style="padding: 2px 8px; border-radius: 4px; background: #ffebee; color: #CA2B2B; font-weight: 600;">Zone 5</span></td>
+                                        <td style="padding: 8px; text-align: center; border: 1px solid #ddd;"><span style="padding: 2px 8px; border-radius: 4px; background: #ffebee; color: #CA2B2B; font-weight: 600;">Zone 5</span></td>
+                                        <td style="padding: 8px; text-align: center; border: 1px solid #ddd;"><span style="padding: 2px 8px; border-radius: 4px; background: #ffebee; color: #CA2B2B; font-weight: 600;">Zone 5</span></td>
+                                        <td style="padding: 8px; text-align: center; border: 1px solid #ddd;"><span style="padding: 2px 8px; border-radius: 4px; background: #fff3e0; color: #C24400; font-weight: 600;">Zone 4</span></td>
+                                        <td style="padding: 8px; text-align: center; border: 1px solid #ddd;"><span style="padding: 2px 8px; border-radius: 4px; background: #fffde7; color: #F9A825; font-weight: 600;">Zone 3</span></td>
+                                        <td style="padding: 8px; text-align: center; border: 1px solid #ddd;"><span style="padding: 2px 8px; border-radius: 4px; background: #fffde7; color: #F9A825; font-weight: 600;">Zone 3</span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <div style="display: flex; flex-wrap: wrap; gap: 10px; margin: 20px 0;">
+                                <span style="font-weight: 600; margin-right: 10px;">Legend:</span>
+                                <span style="display: flex; align-items: center; gap: 5px; font-size: 12px;"><span style="padding: 2px 8px; border-radius: 4px; background: #e8f5e9; color: #2E7D32; font-weight: 600;">Zone 2</span> Comfortable</span>
+                                <span style="display: flex; align-items: center; gap: 5px; font-size: 12px;"><span style="padding: 2px 8px; border-radius: 4px; background: #fffde7; color: #F9A825; font-weight: 600;">Zone 3</span> Mild</span>
+                                <span style="display: flex; align-items: center; gap: 5px; font-size: 12px;"><span style="padding: 2px 8px; border-radius: 4px; background: #fff3e0; color: #C24400; font-weight: 600;">Zone 4</span> Moderate</span>
+                                <span style="display: flex; align-items: center; gap: 5px; font-size: 12px;"><span style="padding: 2px 8px; border-radius: 4px; background: #ffebee; color: #CA2B2B; font-weight: 600;">Zone 5</span> High</span>
+                                <span style="display: flex; align-items: center; gap: 5px; font-size: 12px;"><span style="padding: 2px 8px; border-radius: 4px; background: #f3e5f5; color: #7B1FA2; font-weight: 600;">Zone 6</span> Hazardous</span>
+                            </div>
+
+                            <p style="text-align: center; margin: 25px 0;">
+                                <a href="https://shram.info?district=Ahmedabad" style="display: inline-block; background: #006D77; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: 600;">View Full Forecast on Dashboard</a>
+                            </p>
+
+                            <div style="font-size: 12px; color: #666; margin-top: 25px; padding-top: 20px; border-top: 1px solid #ddd;">
+                                <p>
+                                    You're receiving this weekly digest because you subscribed to SHRAM forecasts.
+                                    <br>
+                                    <a href="https://shram-alerts.vercel.app/api/unsubscribe?token=example">Unsubscribe</a> |
+                                    <a href="https://shram.info">SHRAM Dashboard</a> |
+                                    <a href="https://iecc.gspp.berkeley.edu">IECC</a>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <hr>
+
+        <!-- VERIFICATION EMAIL -->
+        <div class="preview-section">
+            <div class="preview-title">VERIFICATION EMAIL - Subject: "Verify your SHRAM Heat Alert Subscription"</div>
+            <div class="email-frame">
+                <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
+                    <div style="max-width: 600px; margin: 0 auto; padding: 20px;">
+                        <div style="background: #006D77; color: white; padding: 30px; text-align: center;">
+                            <h1 style="margin: 0;">SHRAM Heat Alerts</h1>
+                        </div>
+                        <div style="background: #f8f9fa; padding: 30px;">
+                            <h2>Welcome, Subscriber!</h2>
+                            <p>Please verify your email:</p>
+                            <p><a href="https://shram-alerts.vercel.app/api/verify?token=example" style="display: inline-block; background: #006D77; color: white; padding: 14px 28px; text-decoration: none; border-radius: 6px;">Verify Email Address</a></p>
+                            <p style="font-size: 13px;">Or copy: https://shram-alerts.vercel.app/api/verify?token=abc123...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</body>
+</html>
