@@ -201,24 +201,26 @@ class handler(BaseHTTPRequestHandler):
 
             if 'met_levels' in data:
                 # Validate MET levels (should be comma-separated numbers 3-6)
-                met_str = str(data['met_levels']).strip()
+                met_str = str(data['met_levels']).strip().lstrip("'")
                 try:
                     met_vals = [int(m.strip()) for m in met_str.split(',') if m.strip()]
                     valid_mets = [m for m in met_vals if 3 <= m <= 6]
                     if valid_mets:
-                        sheet.update_cell(row_num, 5, ','.join(map(str, valid_mets)))
+                        # Prefix with apostrophe to force Google Sheets to treat as text
+                        sheet.update_cell(row_num, 5, "'" + ','.join(map(str, valid_mets)))
                         updates_made.append('met_levels')
                 except ValueError:
                     pass  # Invalid format, skip
 
             if 'alert_zones' in data:
                 # Validate alert zones (should be comma-separated numbers 4-6)
-                zones_str = str(data['alert_zones']).strip()
+                zones_str = str(data['alert_zones']).strip().lstrip("'")
                 try:
                     zone_vals = [int(z.strip()) for z in zones_str.split(',') if z.strip()]
                     valid_zones = [z for z in zone_vals if 4 <= z <= 6]
                     if valid_zones:
-                        sheet.update_cell(row_num, 6, ','.join(map(str, valid_zones)))
+                        # Prefix with apostrophe to force Google Sheets to treat as text
+                        sheet.update_cell(row_num, 6, "'" + ','.join(map(str, valid_zones)))
                         updates_made.append('alert_zones')
                 except ValueError:
                     pass

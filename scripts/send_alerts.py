@@ -147,15 +147,23 @@ def get_verified_subscribers():
             if r.get('status') != 'verified':
                 continue
 
-            # Parse MET levels (stored as "3,4,5,6" or similar)
-            met_levels_str = str(r.get('met_levels', '6'))
-            met_levels = [int(m.strip()) for m in met_levels_str.split(',') if m.strip().isdigit()]
+            # Parse MET levels (stored as "'3,4,5,6" or "3456" if Google Sheets stripped commas)
+            met_levels_str = str(r.get('met_levels', '6')).lstrip("'")  # Strip leading apostrophe if present
+            if ',' in met_levels_str:
+                met_levels = [int(m.strip()) for m in met_levels_str.split(',') if m.strip().isdigit()]
+            else:
+                # Handle case where Google Sheets stored as number without commas (e.g., "3456" -> [3,4,5,6])
+                met_levels = [int(d) for d in met_levels_str if d.isdigit() and 3 <= int(d) <= 6]
             if not met_levels:
                 met_levels = [6]  # Default to MET 6
 
-            # Parse alert zones (stored as "4,5,6" or similar)
-            alert_zones_str = str(r.get('alert_zones', '6'))
-            alert_zones = [int(z.strip()) for z in alert_zones_str.split(',') if z.strip().isdigit()]
+            # Parse alert zones (stored as "'4,5,6" or "456" if Google Sheets stripped commas)
+            alert_zones_str = str(r.get('alert_zones', '6')).lstrip("'")  # Strip leading apostrophe if present
+            if ',' in alert_zones_str:
+                alert_zones = [int(z.strip()) for z in alert_zones_str.split(',') if z.strip().isdigit()]
+            else:
+                # Handle case where Google Sheets stored as number without commas (e.g., "456" -> [4,5,6])
+                alert_zones = [int(d) for d in alert_zones_str if d.isdigit() and 4 <= int(d) <= 6]
             if not alert_zones:
                 alert_zones = [6]  # Default to Zone 6
 

@@ -165,8 +165,9 @@ class handler(BaseHTTPRequestHandler):
             token = str(uuid.uuid4())
             now = datetime.utcnow().isoformat() + 'Z'
             districts_str = ','.join(districts) if isinstance(districts, list) else districts
-            met_levels_str = ','.join(str(m) for m in met_levels) if isinstance(met_levels, list) else str(met_levels)
-            alert_zones_str = ','.join(str(z) for z in alert_zones) if isinstance(alert_zones, list) else str(alert_zones)
+            # Prefix with apostrophe to force Google Sheets to treat as text (prevents "3,4,5,6" -> 3456)
+            met_levels_str = "'" + (','.join(str(m) for m in met_levels) if isinstance(met_levels, list) else str(met_levels))
+            alert_zones_str = "'" + (','.join(str(z) for z in alert_zones) if isinstance(alert_zones, list) else str(alert_zones))
 
             # Columns: email, name, phone, districts, met_levels, alert_zones, sun_shade, receive_forecasts, receive_sms, verification_token, status, subscribed_at, verified_at, last_alert_sent
             sheet.append_row([
