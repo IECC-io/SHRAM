@@ -1,10 +1,4 @@
-"""
-Vercel Serverless Function: Handle new subscription requests
-
-Endpoint: POST /api/subscribe
-Body: { email, name, districts, receive_forecasts }
-"""
-
+from http.server import BaseHTTPRequestHandler
 import json
 import os
 import uuid
@@ -44,7 +38,7 @@ def check_existing_subscriber(sheet, email):
         records = sheet.get_all_records()
         for i, record in enumerate(records):
             if record.get('email', '').lower() == email.lower():
-                return i + 2, record  # +2 for header row and 1-indexing
+                return i + 2, record
         return None, None
     except Exception:
         return None, None
@@ -66,7 +60,6 @@ def send_verification_email(email, name, token):
             .header {{ background: linear-gradient(135deg, #2d637f 0%, #006D77 100%); color: white; padding: 30px; text-align: center; border-radius: 8px 8px 0 0; }}
             .content {{ background: #f8f9fa; padding: 30px; border-radius: 0 0 8px 8px; }}
             .btn {{ display: inline-block; background: #006D77; color: white; padding: 14px 28px; text-decoration: none; border-radius: 6px; font-weight: 600; margin: 20px 0; }}
-            .btn:hover {{ background: #005a63; }}
             .footer {{ font-size: 12px; color: #666; margin-top: 30px; padding-top: 20px; border-top: 1px solid #ddd; }}
         </style>
     </head>
@@ -81,7 +74,7 @@ def send_verification_email(email, name, token):
                 <p>Thank you for subscribing to SHRAM heat stress alerts. You'll receive:</p>
                 <ul>
                     <li><strong>Instant alerts</strong> when Zone 6 (hazardous) heat stress is detected in your selected districts</li>
-                    <li><strong>7-day forecast digest</strong> (if opted in) every week</li>
+                    <li><strong>Weekly forecast digest</strong> (if opted in)</li>
                 </ul>
                 <p>Please verify your email address to activate your subscription:</p>
                 <p style="text-align: center;">
@@ -127,167 +120,131 @@ def send_verification_email(email, name, token):
         smtp.send_message(msg)
 
 
-def handler(request):
-    """Vercel serverless function handler."""
-    # Handle CORS preflight
-    if request.method == 'OPTIONS':
-        return {
-            'statusCode': 200,
-            'headers': {
-                'Access-Control-Allow-Origin': '*',
-                'Access-Control-Allow-Methods': 'POST, OPTIONS',
-                'Access-Control-Allow-Headers': 'Content-Type'
-            },
-            'body': ''
-        }
+class handler(BaseHTTPRequestHandler):
+    def do_OPTIONS(self):
+        self.send_response(200)
+        self.send_header('Access-Control-Allow-Origin', '*')
+        self.send_header('Access-Control-Allow-Methods', 'POST, OPTIONS')
+        self.send_header('Access-Control-Allow-Headers', 'Content-Type')
+        self.end_headers()
 
-    # Only allow POST
-    if request.method != 'POST':
-        return {
-            'statusCode': 405,
-            'headers': {
-                'Access-Control-Allow-Origin': '*',
-                'Content-Type': 'application/json'
-            },
-            'body': json.dumps({'success': False, 'error': 'Method not allowed'})
-        }
+    def do_POST(self):
+        try:
+            content_length = int(self.headers.get('Content-Length', 0))
+            body = self.rfile.read(content_length)
+            data = json.loads(body)
 
-    try:
-        # Parse request body
-        body = request.body
-        if isinstance(body, bytes):
-            body = body.decode('utf-8')
-        data = json.loads(body)
+            email = data.get('email', '').strip().lower()
+            name = data.get('name', '').strip()
+            districts = data.get('districts', [])
+            receive_forecasts = data.get('receive_forecasts', True)
 
-        email = data.get('email', '').strip().lower()
-        name = data.get('name', '').strip()
-        districts = data.get('districts', [])
-        receive_forecasts = data.get('receive_forecasts', True)
-
-        # Validate email
-        if not email or '@' not in email:
-            return {
-                'statusCode': 400,
-                'headers': {
-                    'Access-Control-Allow-Origin': '*',
-                    'Content-Type': 'application/json'
-                },
-                'body': json.dumps({
+            # Validate email
+            if not email or '@' not in email:
+                self.send_response(400)
+                self.send_header('Access-Control-Allow-Origin', '*')
+                self.send_header('Content-Type', 'application/json')
+                self.end_headers()
+                self.wfile.write(json.dumps({
                     'success': False,
                     'error': 'Valid email address is required'
-                })
-            }
+                }).encode())
+                return
 
-        # Validate districts
-        if not districts or len(districts) == 0:
-            return {
-                'statusCode': 400,
-                'headers': {
-                    'Access-Control-Allow-Origin': '*',
-                    'Content-Type': 'application/json'
-                },
-                'body': json.dumps({
+            # Validate districts
+            if not districts or len(districts) == 0:
+                self.send_response(400)
+                self.send_header('Access-Control-Allow-Origin', '*')
+                self.send_header('Content-Type', 'application/json')
+                self.end_headers()
+                self.wfile.write(json.dumps({
                     'success': False,
                     'error': 'At least one district must be selected'
-                })
-            }
+                }).encode())
+                return
 
-        # Connect to Google Sheets
-        client = get_sheets_client()
-        sheet = client.open_by_key(SHEET_ID).sheet1
+            # Connect to Google Sheets
+            client = get_sheets_client()
+            sheet = client.open_by_key(SHEET_ID).sheet1
 
-        # Check if already subscribed
-        row_num, existing = check_existing_subscriber(sheet, email)
-        if existing:
-            if existing.get('status') == 'verified':
-                return {
-                    'statusCode': 400,
-                    'headers': {
-                        'Access-Control-Allow-Origin': '*',
-                        'Content-Type': 'application/json'
-                    },
-                    'body': json.dumps({
+            # Check if already subscribed
+            row_num, existing = check_existing_subscriber(sheet, email)
+            if existing:
+                if existing.get('status') == 'verified':
+                    self.send_response(400)
+                    self.send_header('Access-Control-Allow-Origin', '*')
+                    self.send_header('Content-Type', 'application/json')
+                    self.end_headers()
+                    self.wfile.write(json.dumps({
                         'success': False,
-                        'error': 'This email is already subscribed. Check your inbox for alerts.'
-                    })
-                }
-            else:
-                # Re-send verification for pending subscription
-                token = existing.get('verification_token')
-                send_verification_email(email, name, token)
-                return {
-                    'statusCode': 200,
-                    'headers': {
-                        'Access-Control-Allow-Origin': '*',
-                        'Content-Type': 'application/json'
-                    },
-                    'body': json.dumps({
+                        'error': 'This email is already subscribed.'
+                    }).encode())
+                    return
+                else:
+                    token = existing.get('verification_token')
+                    send_verification_email(email, name, token)
+                    self.send_response(200)
+                    self.send_header('Access-Control-Allow-Origin', '*')
+                    self.send_header('Content-Type', 'application/json')
+                    self.end_headers()
+                    self.wfile.write(json.dumps({
                         'success': True,
                         'message': 'Verification email re-sent. Please check your inbox.'
-                    })
-                }
+                    }).encode())
+                    return
 
-        # Generate verification token
-        token = str(uuid.uuid4())
+            # Generate verification token
+            token = str(uuid.uuid4())
 
-        # Prepare row data
-        now = datetime.utcnow().isoformat() + 'Z'
-        districts_str = ','.join(districts) if isinstance(districts, list) else districts
+            # Prepare row data
+            now = datetime.utcnow().isoformat() + 'Z'
+            districts_str = ','.join(districts) if isinstance(districts, list) else districts
 
-        row_data = [
-            email,
-            name,
-            districts_str,
-            'yes' if receive_forecasts else 'no',
-            token,
-            'pending',
-            now,
-            '',  # verified_at (empty until verified)
-            ''   # last_alert_sent (empty)
-        ]
+            row_data = [
+                email,
+                name,
+                districts_str,
+                'yes' if receive_forecasts else 'no',
+                token,
+                'pending',
+                now,
+                '',
+                ''
+            ]
 
-        # Add to Google Sheets
-        sheet.append_row(row_data)
+            # Add to Google Sheets
+            sheet.append_row(row_data)
 
-        # Send verification email
-        send_verification_email(email, name, token)
+            # Send verification email
+            send_verification_email(email, name, token)
 
-        # Success response
-        return {
-            'statusCode': 200,
-            'headers': {
-                'Access-Control-Allow-Origin': '*',
-                'Content-Type': 'application/json'
-            },
-            'body': json.dumps({
+            # Success response
+            self.send_response(200)
+            self.send_header('Access-Control-Allow-Origin', '*')
+            self.send_header('Content-Type', 'application/json')
+            self.end_headers()
+            self.wfile.write(json.dumps({
                 'success': True,
-                'message': 'Verification email sent! Please check your inbox and click the verification link.'
-            })
-        }
+                'message': 'Verification email sent! Please check your inbox.'
+            }).encode())
 
-    except json.JSONDecodeError:
-        return {
-            'statusCode': 400,
-            'headers': {
-                'Access-Control-Allow-Origin': '*',
-                'Content-Type': 'application/json'
-            },
-            'body': json.dumps({
+        except json.JSONDecodeError:
+            self.send_response(400)
+            self.send_header('Access-Control-Allow-Origin', '*')
+            self.send_header('Content-Type', 'application/json')
+            self.end_headers()
+            self.wfile.write(json.dumps({
                 'success': False,
                 'error': 'Invalid JSON in request body'
-            })
-        }
+            }).encode())
 
-    except Exception as e:
-        print(f"Subscription error: {e}")
-        return {
-            'statusCode': 500,
-            'headers': {
-                'Access-Control-Allow-Origin': '*',
-                'Content-Type': 'application/json'
-            },
-            'body': json.dumps({
+        except Exception as e:
+            print(f"Subscription error: {e}")
+            self.send_response(500)
+            self.send_header('Access-Control-Allow-Origin', '*')
+            self.send_header('Content-Type', 'application/json')
+            self.end_headers()
+            self.wfile.write(json.dumps({
                 'success': False,
                 'error': 'Failed to process subscription. Please try again.'
-            })
-        }
+            }).encode())
