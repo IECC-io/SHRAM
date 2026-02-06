@@ -6371,6 +6371,14 @@ print(hazardous[['DISTRICT', 'STATE', 'EHI_350 (in shade °C)']])</code></pre>
                             }
                             document.getElementById('forecast-district-select').value = district;
                             loadForecast();
+
+                            // Scroll to forecast section after a brief delay for content to load
+                            setTimeout(() => {
+                                const forecastSection = document.getElementById('forecast-section');
+                                if (forecastSection) {
+                                    forecastSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                                }
+                            }, 300);
                         }
                     }
                 });
