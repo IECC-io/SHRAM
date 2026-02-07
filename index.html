@@ -4621,27 +4621,38 @@ print(hazardous[['DISTRICT', 'STATE', 'EHI_350 (in shade °C)']])</code></pre>
             dropdownCallbacks[dropdownId] = onChange;
 
             // Only attach listeners once (check for data attribute)
-            if (dropdown.dataset.initialized) return;
+            if (dropdown.dataset.initialized) {
+                console.log('Dropdown already initialized:', dropdownId);
+                return;
+            }
             dropdown.dataset.initialized = 'true';
+            console.log('Initializing dropdown:', dropdownId);
 
             // Toggle dropdown on click
             selected.addEventListener('click', function(e) {
+                console.log('Dropdown selected clicked:', dropdownId);
                 e.stopPropagation();
                 // Close other dropdowns
                 document.querySelectorAll('.custom-dropdown.open').forEach(d => {
                     if (d !== dropdown) d.classList.remove('open');
                 });
                 dropdown.classList.toggle('open');
+                console.log('Dropdown open state:', dropdown.classList.contains('open'));
             });
 
             // Handle option selection via event delegation on the container
             optionsContainer.addEventListener('click', function(e) {
+                console.log('Options container clicked');
                 const opt = e.target.closest('.custom-dropdown-option');
-                if (!opt) return;
+                if (!opt) {
+                    console.log('No option found in click target');
+                    return;
+                }
 
                 e.stopPropagation();
                 const value = opt.dataset.value;
                 const label = opt.textContent;
+                console.log('Option selected:', value, label);
 
                 // Update display
                 selected.textContent = label;
@@ -4664,7 +4675,8 @@ print(hazardous[['DISTRICT', 'STATE', 'EHI_350 (in shade °C)']])</code></pre>
             // Close on outside click (only attach once globally)
             if (!window._dropdownCloseListenerAttached) {
                 window._dropdownCloseListenerAttached = true;
-                document.addEventListener('click', function() {
+                document.addEventListener('click', function(e) {
+                    console.log('Document click - closing dropdowns');
                     document.querySelectorAll('.custom-dropdown.open').forEach(d => d.classList.remove('open'));
                 });
             }
