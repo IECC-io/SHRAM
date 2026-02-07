@@ -2,7 +2,7 @@ name: India AWS Logger
 
 on:
   schedule:
-    - cron: '0 * * * *'  # Every hour (UTC)
+    - cron: '5 * * * *'  # Every hour at 5 minutes past (offset to avoid conflicts)
   workflow_dispatch:
 
 permissions:
@@ -38,32 +38,42 @@ jobs:
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          
-          # Pull latest changes first to avoid conflicts
-          git pull --rebase origin main || echo "No remote changes"
-          
-          # Stage changes
+
+          # Stage changes first
           git add weather_logs/*.csv weather_logs/*.json
-          
+
           # Commit if there are changes
           if git diff --staged --quiet; then
             echo "No changes to commit"
-          else
-            git commit -m "[Auto] Update India weather logs $(date -u +'%Y-%m-%d %H:%M UTC')"
-            
-            # Try to push with retry logic
-            max_attempts=3
-            attempt=1
-            until git push origin main || [ $attempt -eq $max_attempts ]; do
-              echo "Push failed, attempt $attempt/$max_attempts. Pulling and retrying..."
-              git pull --rebase origin main
-              attempt=$((attempt + 1))
-              sleep 2
-            done
-            
-            if [ $attempt -eq $max_attempts ]; then
-              echo "Failed to push after $max_attempts attempts"
-              exit 1
-            fi
+            exit 0
           fi
-        continue-on-error: false
+
+          git commit -m "[Auto] Update India weather logs $(date -u +'%Y-%m-%d %H:%M UTC')"
+
+          # Try to push with retry logic
+          max_attempts=3
+          attempt=1
+          while [ $attempt -le $max_attempts ]; do
+            if git push origin main; then
+              echo "Push succeeded"
+              exit 0
+            fi
+
+            echo "Push failed, attempt $attempt/$max_attempts. Pulling and retrying..."
+
+            # Abort any failed rebase
+            git rebase --abort 2>/dev/null || true
+
+            # Use merge instead of rebase to avoid conflicts with data files
+            git pull --no-rebase origin main -X theirs || true
+
+            # Re-stage and amend if needed
+            git add weather_logs/*.csv weather_logs/*.json
+            git diff --staged --quiet || git commit --amend --no-edit
+
+            attempt=$((attempt + 1))
+            sleep 3
+          done
+
+          echo "Failed to push after $max_attempts attempts"
+          exit 1
