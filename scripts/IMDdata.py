@@ -327,11 +327,17 @@ def fetch_and_log():
 
         alerts_df = merged_df[alert_conditions]
 
+        # Check if nighttime (6 PM to 6 AM IST) - no sun exposure at night
+        now_ist = datetime.now(ZoneInfo("Asia/Calcutta"))
+        current_hour = now_ist.hour
+        is_nighttime = current_hour >= 18 or current_hour < 6
+
         alerts_json = {
             "timestamp": datetime.now(ZoneInfo("Asia/Calcutta")).isoformat(),
             "total_stations": len(merged_df),
             "alert_count": len(alerts_df),  # Only Zone 5 and 6 count as alerts
             "zone_counts": zone_counts,
+            "is_nighttime": is_nighttime,  # True if 6 PM - 6 AM IST (no sun values)
             # Legacy fields for backward compatibility (EHI-6 shade)
             "zone_6_count": zone_counts.get("met6_shade_zone6", 0),
             "zone_5_count": zone_counts.get("met6_shade_zone5", 0),

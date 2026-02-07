@@ -3664,7 +3664,46 @@ print(hazardous[['DISTRICT', 'STATE', 'EHI_350 (in shade °C)']])</code></pre>
             last24h: true
         };
 
+        // Track nighttime state for each section
+        let nighttimeStates = {
+            current: false,
+            last24h: false
+        };
+
+        // Handle nighttime mode - disable sun button and show notice
+        function handleNighttimeMode(isNighttime, section) {
+            nighttimeStates[section] = isNighttime;
+            const sunBtn = document.getElementById(`${section}-sun-btn`);
+            const shadeBtn = document.getElementById(`${section}-shade-btn`);
+
+            if (!sunBtn || !shadeBtn) return;
+
+            if (isNighttime) {
+                // Disable sun button during nighttime
+                sunBtn.disabled = true;
+                sunBtn.style.opacity = '0.5';
+                sunBtn.style.cursor = 'not-allowed';
+                sunBtn.title = 'Sun values unavailable during nighttime (6pm-6am IST)';
+
+                // Force shade mode if currently on sun
+                if (!shadeStates[section]) {
+                    setShade(section, true);
+                }
+            } else {
+                // Enable sun button during daytime
+                sunBtn.disabled = false;
+                sunBtn.style.opacity = '1';
+                sunBtn.style.cursor = 'pointer';
+                sunBtn.title = '';
+            }
+        }
+
         function setShade(section, isShade) {
+            // Prevent switching to sun during nighttime for current section
+            if (!isShade && nighttimeStates[section]) {
+                return; // Don't allow sun selection during nighttime
+            }
+
             shadeStates[section] = isShade;
 
             // Track shade/sun toggle in GA
@@ -5303,6 +5342,9 @@ print(hazardous[['DISTRICT', 'STATE', 'EHI_350 (in shade °C)']])</code></pre>
 
                 // Store data globally for filtering
                 allAlertsData = data;
+
+                // Handle nighttime mode - disable sun button if nighttime
+                handleNighttimeMode(data.is_nighttime, 'current');
 
                 // Populate state dropdowns
                 populateStateDropdowns(data.alerts);
