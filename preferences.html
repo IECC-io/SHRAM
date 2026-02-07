@@ -360,8 +360,10 @@
                 <!-- Districts -->
                 <div class="form-group">
                     <label>Districts</label>
-                    <p class="hint">Comma-separated list of districts you want to monitor</p>
-                    <input type="text" id="districts" placeholder="Ahmedabad, Surat, Vadodara">
+                    <p class="hint">Select one or more districts to monitor (hold Ctrl/Cmd to select multiple)</p>
+                    <select id="districts" multiple style="height: 200px;">
+                        <option value="">Loading districts...</option>
+                    </select>
                 </div>
 
                 <!-- MET Levels -->
@@ -473,6 +475,7 @@
 
     <script>
         const API_URL = 'https://shram-alerts.vercel.app/api/preferences';
+        const GRID_DATA_URL = 'https://raw.githubusercontent.com/IECC-io/SHRAM/main/grid_data.json';
 
         // Get token from URL
         const urlParams = new URLSearchParams(window.location.search);
@@ -482,6 +485,8 @@
         const errorEl = document.getElementById('error');
         const successEl = document.getElementById('success');
         const formEl = document.getElementById('preferences-form');
+
+        let allDistricts = []; // Will be populated from grid_data.json
 
         function showError(message) {
             errorEl.textContent = message;
@@ -511,6 +516,38 @@
             input.addEventListener('change', updateCheckboxStyles);
         });
 
+        async function loadDistricts() {
+            try {
+                const response = await fetch(GRID_DATA_URL);
+                const gridData = await response.json();
+
+                // Extract unique districts from grid data
+                const districtsSet = new Set();
+                gridData.points.forEach(point => {
+                    if (point.district) {
+                        districtsSet.add(point.district);
+                    }
+                });
+
+                allDistricts = Array.from(districtsSet).sort();
+
+                // Populate the select dropdown
+                const selectEl = document.getElementById('districts');
+                selectEl.innerHTML = '';
+                allDistricts.forEach(district => {
+                    const option = document.createElement('option');
+                    option.value = district;
+                    option.textContent = district;
+                    selectEl.appendChild(option);
+                });
+
+                return true;
+            } catch (err) {
+                console.error('Failed to load districts:', err);
+                return false;
+            }
+        }
+
         async function loadPreferences() {
             if (!token) {
                 loadingEl.style.display = 'none';
@@ -519,6 +556,9 @@
             }
 
             try {
+                // Load districts first
+                await loadDistricts();
+
                 const response = await fetch(`${API_URL}?token=${encodeURIComponent(token)}`);
                 const data = await response.json();
 
@@ -538,7 +578,14 @@
                 document.getElementById('email').value = prefs.email || '';
                 document.getElementById('name').value = prefs.name || '';
                 document.getElementById('phone').value = prefs.phone || '';
-                document.getElementById('districts').value = prefs.districts || '';
+
+                // Select the user's districts in the multi-select
+                const districtsStr = prefs.districts || '';
+                const userDistricts = districtsStr.split(',').map(d => d.trim()).filter(d => d);
+                const selectEl = document.getElementById('districts');
+                Array.from(selectEl.options).forEach(option => {
+                    option.selected = userDistricts.includes(option.value);
+                });
 
                 // MET levels - handle both "3,4,5,6" string and 3456 number formats
                 let metLevelsStr = String(prefs.met_levels || '6');
@@ -602,10 +649,14 @@
                 .map(cb => cb.value).join(',');
             const sunShade = document.querySelector('input[name="sun_shade"]:checked')?.value || 'shade';
 
+            // Get selected districts from multi-select
+            const selectEl = document.getElementById('districts');
+            const selectedDistricts = Array.from(selectEl.selectedOptions).map(opt => opt.value).join(',');
+
             const data = {
                 name: document.getElementById('name').value,
                 phone: document.getElementById('phone').value,
-                districts: document.getElementById('districts').value,
+                districts: selectedDistricts,
                 met_levels: metLevels || '6',
                 alert_zones: alertZones || '6',
                 sun_shade: sunShade,
