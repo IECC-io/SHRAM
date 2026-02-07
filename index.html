@@ -4289,7 +4289,7 @@ print(hazardous[['DISTRICT', 'STATE', 'EHI_350 (in shade °C)']])</code></pre>
             document.getElementById('result-zone').style.color = zoneColors[zone] || '#333';
             document.getElementById('result-value').textContent = `${ehiLabel}: ${ehiValue.toFixed(1)}°C`;
             document.getElementById('result-description').textContent = descriptions[zone] || '';
-            document.getElementById('result-display').classList.add('show');
+            document.getElementById('result-display').style.display = 'flex';
 
             // Draw the zone scatter plot with user's position
             drawZoneScatterPlot(lookupTable, temp, rh, zone, zoneColors, ehiLabel);
