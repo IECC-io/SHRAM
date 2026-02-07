@@ -267,7 +267,8 @@ def load_previous_data(max_age_minutes=45):
     Only uses data if it's less than max_age_minutes old (default 45 min).
     """
     script_dir = os.path.dirname(__file__) or '.'
-    prev_file = os.path.join(script_dir, 'grid_data.json')
+    repo_root = os.path.dirname(script_dir)
+    prev_file = os.path.join(repo_root, 'grid_data.json')
 
     if os.path.exists(prev_file):
         try:
@@ -450,9 +451,10 @@ def generate_grid_data():
         print(f"\n⚠ WARNING: Missing {len(missing_lats)} latitude bands: {sorted(missing_lats)[:10]}...")
         print("  This may cause white horizontal stripes on the map")
 
-    # Save to file
+    # Save to file (in repo root, not scripts folder)
     script_dir = os.path.dirname(__file__) or '.'
-    output_path = os.path.join(script_dir, 'grid_data.json')
+    repo_root = os.path.dirname(script_dir)
+    output_path = os.path.join(repo_root, 'grid_data.json')
     with open(output_path, 'w') as f:
         json.dump(output, f)
 
