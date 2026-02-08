@@ -6088,6 +6088,12 @@ print(hazardous[['DISTRICT', 'STATE', 'EHI_350 (in shade °C)']])</code></pre>
                 // Store globally for historical data lookups (used by filterCurrentStatus for unavailable locations)
                 all24HourData = data;
 
+                // Re-populate state dropdowns now that we have ALL station data (not just Zone 5/6 alerts)
+                // This ensures states with only Zone 1-4 data are not greyed out
+                if (allAlertsData) {
+                    populateStateDropdowns(allAlertsData.alerts);
+                }
+
                 // Get selected state and district
                 const selectedState = document.getElementById('charts-state-select').value;
                 const selectedDistrict = document.getElementById('charts-district-select').value;
