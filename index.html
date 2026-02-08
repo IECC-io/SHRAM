@@ -4537,11 +4537,13 @@ print(hazardous[['DISTRICT', 'STATE', 'EHI_350 (in shade °C)']])</code></pre>
                     const mostRecentEntry = hourlySource[0];
                     const stations = mostRecentEntry.alerts || mostRecentEntry.stations || [];
                     availableStates = [...new Set(stations.map(s => s.STATE).filter(s => s && typeof s === 'string'))].sort();
+                    console.log('[DEBUG] populateStateDropdowns using 24h data:', availableStates.length, 'states, includes Chandigarh:', availableStates.includes('Chandigarh'));
                 }
             }
             // Fallback to alerts if 24h data not loaded yet
             if (availableStates.length === 0) {
                 availableStates = [...new Set(alerts.map(a => a.STATE))].sort();
+                console.log('[DEBUG] populateStateDropdowns FALLBACK to Zone 5/6 alerts:', availableStates.length, 'states, includes Chandigarh:', availableStates.includes('Chandigarh'));
             }
 
             // All Indian states/UTs for reference (title case to match IMD data format)
