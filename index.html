@@ -5264,24 +5264,31 @@ print(hazardous[['DISTRICT', 'STATE', 'EHI_350 (in shade °C)']])</code></pre>
             const selectedState = document.getElementById('current-state-select').value;
             const selectedDistrict = document.getElementById('current-district-select').value;
 
-            let filteredAlerts = allAlertsData.alerts;
+            let filteredAlerts = [];
             let isHistoricalData = false;
             let dataTimestamp = allAlertsData.timestamp;
 
-            if (selectedState !== 'all') {
-                filteredAlerts = filteredAlerts.filter(a => a.STATE === selectedState);
-            }
-            if (selectedDistrict !== 'all') {
-                filteredAlerts = filteredAlerts.filter(a => a.DISTRICT === selectedDistrict);
-            }
+            // For "All India", use the Zone 5/6 alerts from latest_alerts.json
+            if (selectedState === 'all') {
+                filteredAlerts = allAlertsData.alerts;
+            } else {
+                // For specific state/district, get ALL station data from alerts_24h.json (not just Zone 5/6)
+                // This ensures we show Zone 1-4 data too
+                const currentData = findLastAvailableData(selectedState, selectedDistrict);
+                if (currentData) {
+                    filteredAlerts = currentData.alerts;
+                    dataTimestamp = currentData.timestamp;
 
-            // If no current data found, try to get last available from 24h history
-            if (filteredAlerts.length === 0 && selectedState !== 'all') {
-                const historicalData = findLastAvailableData(selectedState, selectedDistrict);
-                if (historicalData) {
-                    filteredAlerts = historicalData.alerts;
-                    dataTimestamp = historicalData.timestamp;
-                    isHistoricalData = true;
+                    // Check if this is truly historical (timestamp differs from current by > 30 min)
+                    const currentTimestamp = new Date(allAlertsData.timestamp).getTime();
+                    const dataTimestampMs = new Date(currentData.timestamp).getTime();
+                    const timeDiff = Math.abs(currentTimestamp - dataTimestampMs);
+                    isHistoricalData = timeDiff > 30 * 60 * 1000; // More than 30 min difference = historical
+                }
+
+                // Filter by district if specified
+                if (selectedDistrict !== 'all' && filteredAlerts.length > 0) {
+                    filteredAlerts = filteredAlerts.filter(a => a.DISTRICT === selectedDistrict);
                 }
             }
 
