@@ -2,7 +2,7 @@ name: India AWS Logger
 
 on:
   schedule:
-    - cron: '5 * * * *'  # Every hour at 5 minutes past (offset to avoid conflicts)
+    - cron: '5,35 * * * *'  # Every 30 minutes (at 5 and 35 minutes past each hour)
   workflow_dispatch:
 
 permissions:
