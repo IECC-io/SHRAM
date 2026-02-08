@@ -4724,7 +4724,8 @@ print(hazardous[['DISTRICT', 'STATE', 'EHI_350 (in shade °C)']])</code></pre>
                 hourlySource.forEach(entry => {
                     const stations = entry.alerts || entry.stations || [];
                     stations.forEach(s => {
-                        if (normalizeLocationName(s.STATE) === normalizedState) {
+                        // Check both STATE and DISTRICT exist and match
+                        if (s.STATE && s.DISTRICT && normalizeLocationName(s.STATE) === normalizedState) {
                             allHistoricalDistricts.add(s.DISTRICT);
                         }
                     });
@@ -4741,7 +4742,7 @@ print(hazardous[['DISTRICT', 'STATE', 'EHI_350 (in shade °C)']])</code></pre>
                 districtSelect.innerHTML += `<option value="${district}">${label}</option>`;
             });
 
-            // Populate custom dropdown with red styling for historical/unavailable
+            // Populate custom dropdown with grey styling for historical/unavailable
             const headerClass = isHistorical ? ' unavailable' : '';
             districtOptions.innerHTML = `<div class="custom-dropdown-option selected${headerClass}" data-value="all">All Districts</div>`;
             districts.forEach(district => {
@@ -5179,7 +5180,8 @@ print(hazardous[['DISTRICT', 'STATE', 'EHI_350 (in shade °C)']])</code></pre>
                 hourlySource.forEach(entry => {
                     const stations = entry.alerts || entry.stations || [];
                     stations.forEach(s => {
-                        if (normalizeLocationName(s.STATE) === normalizedState) {
+                        // Check both STATE and DISTRICT exist and match
+                        if (s.STATE && s.DISTRICT && normalizeLocationName(s.STATE) === normalizedState) {
                             allHistoricalDistricts.add(s.DISTRICT);
                         }
                     });
