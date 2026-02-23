@@ -2474,16 +2474,16 @@
                         <ul style="padding-left: 1.5rem; margin-bottom: 1rem;">
                             <li>Wind speed: 1 m/s (light breeze)</li>
                             <li>Clothing: 0.5 clo (light work clothing)</li>
-                            <li>Body parameters: 75 kg weight, 1.8 m² surface area</li>
+                            <li>Body parameters: 65 kg, 1.64 m height (Indian adult average), 1.71 m² surface area (DuBois)</li>
                         </ul>
 
                         <h4 style="color: var(--shram-teal);">MET Levels</h4>
                         <p>The metabolic rate (MET) levels represent different work intensities:</p>
                         <ul style="padding-left: 1.5rem; margin-bottom: 1rem;">
-                            <li><strong>MET 3 (180 W/m²):</strong> Light work - walking, light housework</li>
-                            <li><strong>MET 4 (240 W/m²):</strong> Moderate work - carrying loads, cleaning</li>
-                            <li><strong>MET 5 (300 W/m²):</strong> Heavy work - construction, farming</li>
-                            <li><strong>MET 6 (360 W/m²):</strong> Very heavy work - agricultural labor, heavy lifting</li>
+                            <li><strong>MET 3 (174 W/m²):</strong> Light work - walking, light housework</li>
+                            <li><strong>MET 4 (233 W/m²):</strong> Moderate work - carrying loads, cleaning</li>
+                            <li><strong>MET 5 (291 W/m²):</strong> Heavy work - construction, farming</li>
+                            <li><strong>MET 6 (349 W/m²):</strong> Very heavy work - agricultural labor, heavy lifting</li>
                         </ul>
 
                         <h4 style="color: var(--shram-teal);">Sun Exposure</h4>
@@ -5122,31 +5122,40 @@ print(hazardous[['DISTRICT', 'STATE', 'EHI_350 (in shade °C)']])</code></pre>
                         });
 
                         layer.on('click', function() {
-                            // Track district selection in GA
-                            if (typeof gtag === 'function') {
-                                gtag('event', 'select_district', {
-                                    event_category: 'Map Interaction',
-                                    event_label: `${currentSelectedState}_${districtName}`.replace(/_/g, ' ')
+                            try {
+                                // Track district selection in GA
+                                if (typeof gtag === 'function') {
+                                    gtag('event', 'select_district', {
+                                        event_category: 'Map Interaction',
+                                        event_label: `${currentSelectedState}_${districtName}`.replace(/_/g, ' ')
+                                    });
+                                }
+
+                                // Highlight selected district - reset others to IECC blue
+                                districtLayer.eachLayer(l => {
+                                    l.setStyle({ fillColor: '#2d637f', fillOpacity: 0.3 });
                                 });
+                                // Set selected district to IECC brown
+                                layer.setStyle({ fillColor: '#8B5A2B', fillOpacity: 0.6 });
+
+                                // Update label immediately
+                                const lbl = document.getElementById('selected-location-label');
+                                if (lbl) lbl.textContent = `Selected: ${districtName.replace(/_/g, ' ')}`;
+
+                                // Store coordinates
+                                const lat = centroid ? centroid[1] : layer.getBounds().getCenter().lat;
+                                const lon = centroid ? centroid[0] : layer.getBounds().getCenter().lng;
+                                selectedDistrictCoords = {
+                                    name: districtName,
+                                    lat: lat,
+                                    lon: lon
+                                };
+
+                                document.getElementById('forecast-district-select').value = districtName;
+                                loadForecast();
+                            } catch (err) {
+                                console.error('District click error:', err);
                             }
-
-                            // Highlight selected district - reset others to IECC blue
-                            districtLayer.eachLayer(l => {
-                                l.setStyle({ fillColor: '#2d637f', fillOpacity: 0.3 });
-                            });
-                            // Set selected district to IECC brown
-                            layer.setStyle({ fillColor: '#8B5A2B', fillOpacity: 0.6 });
-
-                            // Store coordinates
-                            selectedDistrictCoords = {
-                                name: districtName,
-                                lat: centroid[1],
-                                lon: centroid[0]
-                            };
-
-                            label.textContent = `Selected: ${districtName.replace(/_/g, ' ')}`;
-                            document.getElementById('forecast-district-select').value = districtName;
-                            loadForecast();
                         });
 
                         layer.on('mouseover', function() {
