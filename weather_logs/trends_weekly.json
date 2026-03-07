@@ -1,76 +1,76 @@
 {
-  "generated": "2026-03-08T04:07:30.188863+05:30",
+  "generated": "2026-03-08T04:27:24.305884+05:30",
   "period": "weekly",
   "hours": 168,
-  "start_date": "2026-03-01T04:05:33.077786+05:30",
-  "end_date": "2026-03-08T04:05:33.077786+05:30",
+  "start_date": "2026-03-01T04:25:26.458920+05:30",
+  "end_date": "2026-03-08T04:25:26.458920+05:30",
   "data": [
     {
       "timestamp": "2026-03-01T04:00:00",
-      "total_stations": 1559,
+      "total_stations": 779,
       "met3_shade": {
         "zone1": 0,
-        "zone2": 266,
-        "zone3": 922,
-        "zone4": 77,
-        "zone5": 8,
-        "zone6": 3
+        "zone2": 135,
+        "zone3": 440,
+        "zone4": 35,
+        "zone5": 4,
+        "zone6": 1
       },
       "met3_sun": {
         "zone1": 0,
-        "zone2": 255,
-        "zone3": 339,
-        "zone4": 642,
-        "zone5": 37,
-        "zone6": 3
+        "zone2": 126,
+        "zone3": 168,
+        "zone4": 304,
+        "zone5": 16,
+        "zone6": 1
       },
       "met4_shade": {
         "zone1": 0,
-        "zone2": 69,
-        "zone3": 703,
-        "zone4": 484,
-        "zone5": 17,
-        "zone6": 3
+        "zone2": 37,
+        "zone3": 341,
+        "zone4": 228,
+        "zone5": 8,
+        "zone6": 1
       },
       "met4_sun": {
         "zone1": 0,
-        "zone2": 88,
-        "zone3": 124,
-        "zone4": 872,
-        "zone5": 189,
-        "zone6": 3
+        "zone2": 45,
+        "zone3": 61,
+        "zone4": 420,
+        "zone5": 88,
+        "zone6": 1
       },
       "met5_shade": {
         "zone1": 0,
-        "zone2": 21,
-        "zone3": 288,
-        "zone4": 837,
-        "zone5": 127,
-        "zone6": 3
+        "zone2": 11,
+        "zone3": 142,
+        "zone4": 401,
+        "zone5": 60,
+        "zone6": 1
       },
       "met5_sun": {
         "zone1": 0,
-        "zone2": 52,
-        "zone3": 53,
-        "zone4": 808,
-        "zone5": 355,
-        "zone6": 8
+        "zone2": 30,
+        "zone3": 24,
+        "zone4": 394,
+        "zone5": 163,
+        "zone6": 4
       },
       "met6_shade": {
         "zone1": 0,
-        "zone2": 4,
-        "zone3": 127,
-        "zone4": 843,
-        "zone5": 297,
-        "zone6": 5
+        "zone2": 2,
+        "zone3": 63,
+        "zone4": 411,
+        "zone5": 137,
+        "zone6": 2
       },
       "met6_sun": {
         "zone1": 0,
-        "zone2": 16,
-        "zone3": 44,
-        "zone4": 522,
-        "zone5": 683,
-        "zone6": 11
+        "zone2": 9,
+        "zone3": 22,
+        "zone4": 256,
+        "zone5": 323,
+        "zone6": 5
       },
       "districts": {
         "Andaman And Nicobar|Nicobar": {
@@ -120,18 +120,6 @@
           "met6_sun": 4,
           "temp": 17.1,
           "rh": 90.0
-        },
-        "Andhra Pradesh|Anakapalli": {
-          "met3_shade": 3,
-          "met3_sun": 4,
-          "met4_shade": 4,
-          "met4_sun": 4,
-          "met5_shade": 4,
-          "met5_sun": 5,
-          "met6_shade": 5,
-          "met6_sun": 5,
-          "temp": 21.6,
-          "rh": 100.0
         },
         "Andhra Pradesh|Anantapur": {
           "met3_shade": 4,
@@ -361,18 +349,6 @@
           "temp": 15.1,
           "rh": 92.0
         },
-        "Arunachal Pradesh|East Siang": {
-          "met3_shade": 3,
-          "met3_sun": 3,
-          "met4_shade": 3,
-          "met4_sun": 4,
-          "met5_shade": 4,
-          "met5_sun": 4,
-          "met6_shade": 4,
-          "met6_sun": 5,
-          "temp": 16.6,
-          "rh": 97.0
-        },
         "Arunachal Pradesh|Kamle": {
           "met3_shade": 2,
           "met3_sun": 2,
@@ -457,18 +433,6 @@
           "temp": 15.8,
           "rh": 100.0
         },
-        "Arunachal Pradesh|Pakke Kesang": {
-          "met3_shade": 2,
-          "met3_sun": 2,
-          "met4_shade": 3,
-          "met4_sun": 3,
-          "met5_shade": 3,
-          "met5_sun": 4,
-          "met6_shade": 3,
-          "met6_sun": 4,
-          "temp": 10.3,
-          "rh": 100.0
-        },
         "Arunachal Pradesh|Papumpare": {
           "met3_shade": 3,
           "met3_sun": 3,
@@ -526,8 +490,8 @@
           "met5_sun": 4,
           "met6_shade": 4,
           "met6_sun": 4,
-          "rh": 53.0,
-          "temp": 16.0
+          "temp": 16.0,
+          "rh": 53.0
         },
         "Arunachal Pradesh|Upper Subhanseri": {
           "met3_shade": 3,
@@ -588,18 +552,6 @@
           "met6_sun": 5,
           "temp": 17.8,
           "rh": 100.0
-        },
-        "Assam|Cachar": {
-          "met3_shade": 2,
-          "met3_sun": 2,
-          "met4_shade": 3,
-          "met4_sun": 4,
-          "met5_shade": 3,
-          "met5_sun": 4,
-          "met6_shade": 4,
-          "met6_sun": 4,
-          "temp": 14.5,
-          "rh": 96.0
         },
         "Assam|Charaideo": {
           "met3_shade": 3,
@@ -1081,18 +1033,6 @@
           "temp": 16.9,
           "rh": 100.0
         },
-        "Bihar|Sasaram": {
-          "met3_shade": 3,
-          "met3_sun": 4,
-          "met4_shade": 3,
-          "met4_sun": 4,
-          "met5_shade": 4,
-          "met5_sun": 4,
-          "met6_shade": 4,
-          "met6_sun": 5,
-          "temp": 18.5,
-          "rh": 92.0
-        },
         "Bihar|Siwan": {
           "met3_shade": 3,
           "met3_sun": 3,
@@ -1417,18 +1357,6 @@
           "temp": 19.5,
           "rh": 88.0
         },
-        "Gujarat|Anand": {
-          "met3_shade": 3,
-          "met3_sun": 4,
-          "met4_shade": 4,
-          "met4_sun": 4,
-          "met5_shade": 4,
-          "met5_sun": 4,
-          "met6_shade": 4,
-          "met6_sun": 5,
-          "temp": 20.3,
-          "rh": 80.0
-        },
         "Gujarat|Arawali": {
           "met3_shade": 3,
           "met3_sun": 3,
@@ -1657,18 +1585,6 @@
           "temp": 21.1,
           "rh": 83.0
         },
-        "Haryana|Charkhi Dadri": {
-          "met3_shade": 3,
-          "met3_sun": 3,
-          "met4_shade": 3,
-          "met4_sun": 4,
-          "met5_shade": 4,
-          "met5_sun": 4,
-          "met6_shade": 4,
-          "met6_sun": 5,
-          "temp": 17.4,
-          "rh": 88.0
-        },
         "Haryana|Gurgaon": {
           "met3_shade": 3,
           "met3_sun": 3,
@@ -1812,6 +1728,17 @@
           "met6_sun": 4,
           "temp": 16.9,
           "rh": 68.0
+        },
+        "Himachal Pradesh|Lahaul And Spiti": {
+          "met3_shade": 2,
+          "met3_sun": 2,
+          "met4_shade": 2,
+          "met4_sun": 2,
+          "met5_shade": 2,
+          "met5_sun": 2,
+          "met6_shade": 3,
+          "met6_sun": 2,
+          "rh": 29.0
         },
         "Himachal Pradesh|Mandi": {
           "met3_shade": 2,
@@ -2077,18 +2004,6 @@
           "temp": 17.4,
           "rh": 92.0
         },
-        "Jharkhand|Deoghar": {
-          "met3_shade": 3,
-          "met3_sun": 3,
-          "met4_shade": 3,
-          "met4_sun": 4,
-          "met5_shade": 4,
-          "met5_sun": 4,
-          "met6_shade": 4,
-          "met6_sun": 4,
-          "temp": 16.5,
-          "rh": 65.0
-        },
         "Jharkhand|East Singhbhum": {
           "met3_shade": 3,
           "met3_sun": 4,
@@ -2293,18 +2208,6 @@
           "temp": 24.8,
           "rh": 49.0
         },
-        "Karnataka|Hassan": {
-          "met3_shade": 3,
-          "met3_sun": 4,
-          "met4_shade": 3,
-          "met4_sun": 4,
-          "met5_shade": 4,
-          "met5_sun": 4,
-          "met6_shade": 4,
-          "met6_sun": 5,
-          "temp": 18.4,
-          "rh": 100.0
-        },
         "Karnataka|Kolar": {
           "met3_shade": 3,
           "met3_sun": 4,
@@ -2446,8 +2349,8 @@
           "met5_sun": 5,
           "met6_shade": 5,
           "met6_sun": 5,
-          "rh": 100.0,
-          "temp": 20.5
+          "temp": 20.5,
+          "rh": 100.0
         },
         "Kerala|Kollam": {
           "met3_shade": 3,
@@ -2916,18 +2819,6 @@
           "temp": 22.5,
           "rh": 79.0
         },
-        "Maharashtra|Dhule": {
-          "met3_shade": 3,
-          "met3_sun": 4,
-          "met4_shade": 4,
-          "met4_sun": 4,
-          "met5_shade": 4,
-          "met5_sun": 4,
-          "met6_shade": 4,
-          "met6_sun": 5,
-          "temp": 21.8,
-          "rh": 66.0
-        },
         "Maharashtra|Hingoli": {
           "met3_shade": 3,
           "met3_sun": 4,
@@ -2951,18 +2842,6 @@
           "met6_sun": 4,
           "temp": 13.2,
           "rh": 100.0
-        },
-        "Maharashtra|Latur": {
-          "met3_shade": 3,
-          "met3_sun": 4,
-          "met4_shade": 4,
-          "met4_sun": 4,
-          "met5_shade": 4,
-          "met5_sun": 4,
-          "met6_shade": 4,
-          "met6_sun": 4,
-          "temp": 22.4,
-          "rh": 51.0
         },
         "Maharashtra|Mumbai Suburban": {
           "met3_shade": 3,
@@ -3084,18 +2963,6 @@
           "temp": 15.1,
           "rh": 80.0
         },
-        "Maharashtra|Sangli": {
-          "met3_shade": 3,
-          "met3_sun": 3,
-          "met4_shade": 3,
-          "met4_sun": 4,
-          "met5_shade": 4,
-          "met5_sun": 4,
-          "met6_shade": 4,
-          "met6_sun": 4,
-          "temp": 15.7,
-          "rh": 97.0
-        },
         "Maharashtra|Satara": {
           "met3_shade": 3,
           "met3_sun": 3,
@@ -3168,17 +3035,17 @@
           "temp": 7.5,
           "rh": 100.0
         },
-        "Manipur|Imphal East": {
-          "met3_shade": 3,
-          "met3_sun": 3,
+        "Manipur|Kamjong": {
+          "met3_shade": 2,
+          "met3_sun": 2,
           "met4_shade": 3,
-          "met4_sun": 4,
+          "met4_sun": 3,
           "met5_shade": 3,
           "met5_sun": 4,
-          "met6_shade": 4,
+          "met6_shade": 3,
           "met6_sun": 4,
-          "temp": 14.5,
-          "rh": 99.0
+          "temp": 10.4,
+          "rh": 70.0
         },
         "Manipur|Kangpokpi": {
           "met3_shade": 2,
@@ -3299,18 +3166,6 @@
           "met6_sun": 4,
           "temp": 15.5,
           "rh": 95.0
-        },
-        "Meghalaya|South West Khasi Hills": {
-          "met3_shade": 2,
-          "met3_sun": 2,
-          "met4_shade": 3,
-          "met4_sun": 3,
-          "met5_shade": 3,
-          "met5_sun": 3,
-          "met6_shade": 3,
-          "met6_sun": 4,
-          "temp": 9.2,
-          "rh": 100.0
         },
         "Meghalaya|West Garo Hills": {
           "met3_shade": 3,
@@ -3648,6 +3503,18 @@
           "temp": 24.6,
           "rh": 99.0
         },
+        "Puducherry|Mahe": {
+          "met3_shade": 3,
+          "met3_sun": 4,
+          "met4_shade": 4,
+          "met4_sun": 5,
+          "met5_shade": 5,
+          "met5_sun": 5,
+          "met6_shade": 5,
+          "met6_sun": 5,
+          "temp": 23.0,
+          "rh": 100.0
+        },
         "Puducherry|Puducherry": {
           "met3_shade": 3,
           "met3_sun": 4,
@@ -3816,6 +3683,18 @@
           "temp": 21.7,
           "rh": 60.0
         },
+        "Rajasthan|Nagaur": {
+          "met3_shade": 2,
+          "met3_sun": 3,
+          "met4_shade": 3,
+          "met4_sun": 4,
+          "met5_shade": 3,
+          "met5_sun": 4,
+          "met6_shade": 4,
+          "met6_sun": 4,
+          "temp": 15.4,
+          "rh": 60.0
+        },
         "Rajasthan|Pali": {
           "met3_shade": 3,
           "met3_sun": 3,
@@ -3863,42 +3742,6 @@
           "met6_sun": 4,
           "temp": 15.4,
           "rh": 51.0
-        },
-        "Rajasthan|Sri Ganganagar": {
-          "met3_shade": 3,
-          "met3_sun": 3,
-          "met4_shade": 3,
-          "met4_sun": 4,
-          "met5_shade": 4,
-          "met5_sun": 4,
-          "met6_shade": 4,
-          "met6_sun": 4,
-          "temp": 16.8,
-          "rh": 84.0
-        },
-        "Sikkim|Gangtok": {
-          "met3_shade": 2,
-          "met3_sun": 2,
-          "met4_shade": 3,
-          "met4_sun": 3,
-          "met5_shade": 3,
-          "met5_sun": 4,
-          "met6_shade": 3,
-          "met6_sun": 4,
-          "temp": 9.9,
-          "rh": 100.0
-        },
-        "Sikkim|Soreng": {
-          "met3_shade": 2,
-          "met3_sun": 2,
-          "met4_shade": 3,
-          "met4_sun": 3,
-          "met5_shade": 3,
-          "met5_sun": 4,
-          "met6_shade": 3,
-          "met6_sun": 4,
-          "temp": 10.6,
-          "rh": 100.0
         },
         "Tamil Nadu|Ariyalur": {
           "met3_shade": 3,
@@ -4080,18 +3923,6 @@
           "temp": 17.9,
           "rh": 91.0
         },
-        "Tamil Nadu|Pudukkottai": {
-          "met3_shade": 3,
-          "met3_sun": 4,
-          "met4_shade": 3,
-          "met4_sun": 4,
-          "met5_shade": 4,
-          "met5_sun": 5,
-          "met6_shade": 4,
-          "met6_sun": 5,
-          "temp": 19.2,
-          "rh": 100.0
-        },
         "Tamil Nadu|Ranipet": {
           "met3_shade": 3,
           "met3_sun": 4,
@@ -4152,18 +3983,6 @@
           "temp": 13.2,
           "rh": 91.0
         },
-        "Tamil Nadu|Thiruninravur": {
-          "met3_shade": 3,
-          "met3_sun": 4,
-          "met4_shade": 4,
-          "met4_sun": 5,
-          "met5_shade": 5,
-          "met5_sun": 5,
-          "met6_shade": 5,
-          "met6_sun": 5,
-          "temp": 23.4,
-          "rh": 100.0
-        },
         "Tamil Nadu|Thoothukudi": {
           "met3_shade": 3,
           "met3_sun": 4,
@@ -4175,18 +3994,6 @@
           "met6_sun": 5,
           "temp": 23.6,
           "rh": 87.0
-        },
-        "Tamil Nadu|Tiruchirappalli": {
-          "met3_shade": 3,
-          "met3_sun": 4,
-          "met4_shade": 4,
-          "met4_sun": 4,
-          "met5_shade": 4,
-          "met5_sun": 5,
-          "met6_shade": 5,
-          "met6_sun": 5,
-          "temp": 20.6,
-          "rh": 100.0
         },
         "Tamil Nadu|Tiruppur": {
           "met3_shade": 3,
@@ -4223,18 +4030,6 @@
           "met6_sun": 5,
           "temp": 22.3,
           "rh": 98.0
-        },
-        "Tamil Nadu|Tiruvarur": {
-          "met3_shade": 3,
-          "met3_sun": 4,
-          "met4_shade": 4,
-          "met4_sun": 4,
-          "met5_shade": 4,
-          "met5_sun": 5,
-          "met6_shade": 5,
-          "met6_sun": 5,
-          "temp": 20.3,
-          "rh": 100.0
         },
         "Tamil Nadu|Vellore": {
           "met3_shade": 3,
@@ -4476,18 +4271,6 @@
           "temp": 21.3,
           "rh": 97.0
         },
-        "Telangana|Warangal Rural": {
-          "met3_shade": 3,
-          "met3_sun": 4,
-          "met4_shade": 4,
-          "met4_sun": 4,
-          "met5_shade": 4,
-          "met5_sun": 5,
-          "met6_shade": 5,
-          "met6_sun": 5,
-          "temp": 24.0,
-          "rh": 82.0
-        },
         "Tripura|Dhalai": {
           "met3_shade": 3,
           "met3_sun": 4,
@@ -4534,30 +4317,6 @@
           "met6_shade": 4,
           "met6_sun": 5,
           "temp": 18.3,
-          "rh": 100.0
-        },
-        "Tripura|Unakoti": {
-          "met3_shade": 3,
-          "met3_sun": 3,
-          "met4_shade": 3,
-          "met4_sun": 4,
-          "met5_shade": 4,
-          "met5_sun": 4,
-          "met6_shade": 4,
-          "met6_sun": 4,
-          "temp": 15.1,
-          "rh": 100.0
-        },
-        "Tripura|West Tripura": {
-          "met3_shade": 3,
-          "met3_sun": 4,
-          "met4_shade": 4,
-          "met4_sun": 4,
-          "met5_shade": 4,
-          "met5_sun": 5,
-          "met6_shade": 5,
-          "met6_sun": 5,
-          "temp": 20.7,
           "rh": 100.0
         },
         "Uttarakhand|Almora": {
@@ -4680,6 +4439,18 @@
           "temp": 18.0,
           "rh": 81.0
         },
+        "Uttar Pradesh|Amroha": {
+          "met3_shade": 2,
+          "met3_sun": 2,
+          "met4_shade": 3,
+          "met4_sun": 3,
+          "met5_shade": 3,
+          "met5_sun": 4,
+          "met6_shade": 4,
+          "met6_sun": 4,
+          "temp": 12.2,
+          "rh": 100.0
+        },
         "Uttar Pradesh|Ayodhya": {
           "met3_shade": 3,
           "met3_sun": 4,
@@ -4691,18 +4462,6 @@
           "met6_sun": 4,
           "temp": 19.8,
           "rh": 86.0
-        },
-        "Uttar Pradesh|Azamgarh": {
-          "met3_shade": 3,
-          "met3_sun": 3,
-          "met4_shade": 3,
-          "met4_sun": 4,
-          "met5_shade": 4,
-          "met5_sun": 4,
-          "met6_shade": 4,
-          "met6_sun": 4,
-          "temp": 18.1,
-          "rh": 100.0
         },
         "Uttar Pradesh|Ballia": {
           "met3_shade": 3,
@@ -4787,18 +4546,6 @@
           "met6_sun": 5,
           "temp": 23.0,
           "rh": 56.0
-        },
-        "Uttar Pradesh|Farrukhabad": {
-          "met3_shade": 3,
-          "met3_sun": 3,
-          "met4_shade": 3,
-          "met4_sun": 4,
-          "met5_shade": 4,
-          "met5_sun": 4,
-          "met6_shade": 4,
-          "met6_sun": 4,
-          "temp": 16.1,
-          "rh": 76.0
         },
         "Uttar Pradesh|Firozabad": {
           "met3_shade": 3,
@@ -4944,18 +4691,6 @@
           "temp": 18.1,
           "rh": 93.0
         },
-        "Uttar Pradesh|Moradabad": {
-          "met3_shade": 3,
-          "met3_sun": 3,
-          "met4_shade": 3,
-          "met4_sun": 4,
-          "met5_shade": 4,
-          "met5_sun": 4,
-          "met6_shade": 4,
-          "met6_sun": 4,
-          "temp": 15.6,
-          "rh": 94.0
-        },
         "Uttar Pradesh|Muzaffarnagar": {
           "met3_shade": 2,
           "met3_sun": 2,
@@ -5052,18 +4787,6 @@
           "temp": 17.0,
           "rh": 83.0
         },
-        "West Bengal|Howrah": {
-          "met3_shade": 3,
-          "met3_sun": 4,
-          "met4_shade": 4,
-          "met4_sun": 4,
-          "met5_shade": 4,
-          "met5_sun": 5,
-          "met6_shade": 5,
-          "met6_sun": 5,
-          "temp": 25.7,
-          "rh": 92.0
-        },
         "West Bengal|Jalpaiguri": {
           "met3_shade": 3,
           "met3_sun": 4,
@@ -5075,18 +4798,6 @@
           "met6_sun": 5,
           "temp": 17.0,
           "rh": 100.0
-        },
-        "West Bengal|Jhargram": {
-          "met3_shade": 3,
-          "met3_sun": 4,
-          "met4_shade": 4,
-          "met4_sun": 4,
-          "met5_shade": 4,
-          "met5_sun": 4,
-          "met6_shade": 4,
-          "met6_sun": 5,
-          "temp": 20.4,
-          "rh": 81.0
         },
         "West Bengal|Kalimpong": {
           "met3_shade": 2,
@@ -5183,70 +4894,11 @@
           "met6_sun": 5,
           "temp": 22.9,
           "rh": 97.0
-        },
-        "Himachal Pradesh|Lahaul And Spiti": {
-          "met3_shade": 2,
-          "met3_sun": 2,
-          "met4_shade": 2,
-          "met4_sun": 2,
-          "met5_shade": 2,
-          "met5_sun": 2,
-          "met6_shade": 3,
-          "met6_sun": 2,
-          "rh": 29.0
-        },
-        "Manipur|Kamjong": {
-          "met3_shade": 2,
-          "met3_sun": 2,
-          "met4_shade": 3,
-          "met4_sun": 3,
-          "met5_shade": 3,
-          "met5_sun": 4,
-          "met6_shade": 3,
-          "met6_sun": 4,
-          "temp": 10.4,
-          "rh": 70.0
-        },
-        "Puducherry|Mahe": {
-          "met3_shade": 3,
-          "met3_sun": 4,
-          "met4_shade": 4,
-          "met4_sun": 5,
-          "met5_shade": 5,
-          "met5_sun": 5,
-          "met6_shade": 5,
-          "met6_sun": 5,
-          "temp": 23.0,
-          "rh": 100.0
-        },
-        "Rajasthan|Nagaur": {
-          "met3_shade": 2,
-          "met3_sun": 3,
-          "met4_shade": 3,
-          "met4_sun": 4,
-          "met5_shade": 3,
-          "met5_sun": 4,
-          "met6_shade": 4,
-          "met6_sun": 4,
-          "temp": 15.4,
-          "rh": 60.0
-        },
-        "Uttar Pradesh|Amroha": {
-          "met3_shade": 2,
-          "met3_sun": 2,
-          "met4_shade": 3,
-          "met4_sun": 3,
-          "met5_shade": 3,
-          "met5_sun": 4,
-          "met6_shade": 4,
-          "met6_sun": 4,
-          "temp": 12.2,
-          "rh": 100.0
         }
       },
-      "avg_temp": 17.7,
+      "avg_temp": 17.6,
       "min_temp": -15.4,
-      "max_temp": 43.7,
+      "max_temp": 43.4,
       "avg_rh": 83.4,
       "min_rh": 6.0,
       "max_rh": 100.0
@@ -833725,70 +833377,70 @@
     },
     {
       "timestamp": "2026-03-08T04:00:00",
-      "total_stations": 781,
+      "total_stations": 1561,
       "met3_shade": {
         "zone1": 0,
-        "zone2": 67,
-        "zone3": 448,
-        "zone4": 122,
-        "zone5": 5,
-        "zone6": 1
+        "zone2": 135,
+        "zone3": 907,
+        "zone4": 243,
+        "zone5": 10,
+        "zone6": 2
       },
       "met3_sun": {
         "zone1": 0,
-        "zone2": 14,
-        "zone3": 140,
-        "zone4": 415,
-        "zone5": 72,
-        "zone6": 2
+        "zone2": 27,
+        "zone3": 292,
+        "zone4": 829,
+        "zone5": 145,
+        "zone6": 4
       },
       "met4_shade": {
         "zone1": 0,
-        "zone2": 19,
-        "zone3": 225,
-        "zone4": 359,
-        "zone5": 39,
-        "zone6": 1
+        "zone2": 42,
+        "zone3": 457,
+        "zone4": 719,
+        "zone5": 76,
+        "zone6": 3
       },
       "met4_sun": {
         "zone1": 0,
         "zone2": 0,
-        "zone3": 51,
-        "zone4": 428,
-        "zone5": 162,
-        "zone6": 2
+        "zone3": 103,
+        "zone4": 868,
+        "zone5": 322,
+        "zone6": 4
       },
       "met5_shade": {
         "zone1": 0,
         "zone2": 0,
-        "zone3": 74,
-        "zone4": 448,
-        "zone5": 119,
-        "zone6": 2
+        "zone3": 155,
+        "zone4": 895,
+        "zone5": 243,
+        "zone6": 4
       },
       "met5_sun": {
         "zone1": 0,
         "zone2": 0,
-        "zone3": 26,
-        "zone4": 312,
-        "zone5": 303,
-        "zone6": 2
+        "zone3": 53,
+        "zone4": 631,
+        "zone5": 608,
+        "zone6": 5
       },
       "met6_shade": {
         "zone1": 0,
         "zone2": 0,
-        "zone3": 31,
-        "zone4": 359,
-        "zone5": 251,
-        "zone6": 2
+        "zone3": 63,
+        "zone4": 729,
+        "zone5": 500,
+        "zone6": 5
       },
       "met6_sun": {
         "zone1": 0,
         "zone2": 0,
-        "zone3": 15,
-        "zone4": 185,
-        "zone5": 441,
-        "zone6": 2
+        "zone3": 29,
+        "zone4": 375,
+        "zone5": 888,
+        "zone6": 5
       },
       "districts": {
         "Andaman And Nicobar|Nicobar": {
@@ -833797,23 +833449,23 @@
           "met4_shade": 5,
           "met4_sun": 5,
           "met5_shade": 5,
-          "met5_sun": 5,
-          "met6_shade": 5,
-          "met6_sun": 5,
-          "temp": 30.5,
+          "met5_sun": 6,
+          "met6_shade": 6,
+          "met6_sun": 6,
+          "temp": 31.8,
           "rh": 92.0
         },
         "Andaman And Nicobar|N M Andaman": {
           "met3_shade": 3,
           "met3_sun": 4,
           "met4_shade": 4,
-          "met4_sun": 5,
+          "met4_sun": 4,
           "met5_shade": 4,
           "met5_sun": 5,
           "met6_shade": 5,
           "met6_sun": 5,
-          "temp": 22.4,
-          "rh": 94.0
+          "temp": 22.1,
+          "rh": 95.0
         },
         "Andaman And Nicobar|South Andaman": {
           "met3_shade": 3,
@@ -833824,8 +833476,8 @@
           "met5_sun": 5,
           "met6_shade": 5,
           "met6_sun": 5,
-          "temp": 22.5,
-          "rh": 87.0
+          "temp": 22.2,
+          "rh": 86.0
         },
         "Andhra Pradesh|Alluri Sitharama Raju": {
           "met3_shade": 3,
@@ -833836,8 +833488,8 @@
           "met5_sun": 4,
           "met6_shade": 4,
           "met6_sun": 5,
-          "temp": 18.3,
-          "rh": 91.0
+          "temp": 17.8,
+          "rh": 93.0
         },
         "Andhra Pradesh|Anantapur": {
           "met3_shade": 3,
@@ -833848,8 +833500,8 @@
           "met5_sun": 4,
           "met6_shade": 4,
           "met6_sun": 5,
-          "temp": 23.0,
-          "rh": 56.0
+          "temp": 22.5,
+          "rh": 58.0
         },
         "Andhra Pradesh|Bapatla": {
           "met3_shade": 3,
@@ -833877,14 +833529,14 @@
         },
         "Andhra Pradesh|Kakinada": {
           "met3_shade": 4,
-          "met3_sun": 5,
+          "met3_sun": 4,
           "met4_shade": 4,
           "met4_sun": 5,
           "met5_shade": 5,
           "met5_sun": 5,
           "met6_shade": 5,
           "met6_sun": 5,
-          "temp": 25.1,
+          "temp": 24.9,
           "rh": 100.0
         },
         "Andhra Pradesh|Konaseema": {
@@ -833896,7 +833548,7 @@
           "met5_sun": 5,
           "met6_shade": 5,
           "met6_sun": 5,
-          "temp": 22.5,
+          "temp": 22.3,
           "rh": 97.0
         },
         "Andhra Pradesh|Krishna": {
@@ -833905,11 +833557,11 @@
           "met4_shade": 4,
           "met4_sun": 4,
           "met5_shade": 4,
-          "met5_sun": 4,
+          "met5_sun": 5,
           "met6_shade": 4,
           "met6_sun": 5,
-          "temp": 27.9,
-          "rh": 43.0
+          "temp": 28.0,
+          "rh": 45.0
         },
         "Andhra Pradesh|Nellore": {
           "met3_shade": 4,
@@ -833920,7 +833572,7 @@
           "met5_sun": 5,
           "met6_shade": 5,
           "met6_sun": 5,
-          "temp": 24.7,
+          "temp": 24.5,
           "rh": 99.0
         },
         "Andhra Pradesh|Ntr": {
@@ -833944,8 +833596,8 @@
           "met5_sun": 5,
           "met6_shade": 5,
           "met6_sun": 5,
-          "temp": 23.6,
-          "rh": 86.0
+          "temp": 23.8,
+          "rh": 85.0
         },
         "Andhra Pradesh|Prakasam": {
           "met3_shade": 4,
@@ -833961,15 +833613,15 @@
         },
         "Andhra Pradesh|Srikakulam": {
           "met3_shade": 4,
-          "met3_sun": 4,
+          "met3_sun": 5,
           "met4_shade": 4,
           "met4_sun": 5,
           "met5_shade": 5,
           "met5_sun": 5,
           "met6_shade": 5,
           "met6_sun": 5,
-          "temp": 25.5,
-          "rh": 83.0
+          "temp": 25.4,
+          "rh": 91.0
         },
         "Andhra Pradesh|Visakhapatnam": {
           "met3_shade": 4,
@@ -833980,8 +833632,8 @@
           "met5_sun": 5,
           "met6_shade": 5,
           "met6_sun": 5,
-          "temp": 27.8,
-          "rh": 91.0
+          "temp": 27.1,
+          "rh": 92.0
         },
         "Andhra Pradesh|Vizianagaram": {
           "met3_shade": 4,
@@ -833993,7 +833645,7 @@
           "met6_shade": 5,
           "met6_sun": 5,
           "temp": 26.6,
-          "rh": 89.0
+          "rh": 91.0
         },
         "Andhra Pradesh|West Godavari": {
           "met3_shade": 4,
@@ -834005,7 +833657,7 @@
           "met6_shade": 5,
           "met6_sun": 5,
           "temp": 24.7,
-          "rh": 93.0
+          "rh": 94.0
         },
         "Andhra Pradesh|Ysr Kadapa": {
           "met3_shade": 3,
@@ -834016,7 +833668,7 @@
           "met5_sun": 5,
           "met6_shade": 5,
           "met6_sun": 5,
-          "temp": 23.5,
+          "temp": 23.1,
           "rh": 98.0
         },
         "Arunachal Pradesh|Anjaw": {
@@ -834040,8 +833692,8 @@
           "met5_sun": 4,
           "met6_shade": 4,
           "met6_sun": 5,
-          "temp": 22.2,
-          "rh": 70.0
+          "temp": 22.0,
+          "rh": 71.0
         },
         "Arunachal Pradesh|Dibang Valley": {
           "met3_shade": 2,
@@ -834052,8 +833704,8 @@
           "met5_sun": 4,
           "met6_shade": 4,
           "met6_sun": 4,
-          "temp": 11.7,
-          "rh": 91.0
+          "temp": 11.4,
+          "rh": 92.0
         },
         "Arunachal Pradesh|East Kameng": {
           "met3_shade": 3,
@@ -834064,7 +833716,7 @@
           "met5_sun": 4,
           "met6_shade": 4,
           "met6_sun": 4,
-          "temp": 16.5,
+          "temp": 16.7,
           "rh": 92.0
         },
         "Arunachal Pradesh|East Siang": {
@@ -834112,7 +833764,7 @@
           "met5_sun": 4,
           "met6_shade": 4,
           "met6_sun": 4,
-          "temp": 15.4,
+          "temp": 15.3,
           "rh": 100.0
         },
         "Arunachal Pradesh|Longding": {
@@ -834125,7 +833777,7 @@
           "met6_shade": 4,
           "met6_sun": 4,
           "temp": 22.2,
-          "rh": 50.0
+          "rh": 51.0
         },
         "Arunachal Pradesh|Lower Siang": {
           "met3_shade": 3,
@@ -834149,7 +833801,7 @@
           "met6_shade": 3,
           "met6_sun": 4,
           "rh": 100.0,
-          "temp": 9.8
+          "temp": 9.7
         },
         "Arunachal Pradesh|Namsai": {
           "met3_shade": 3,
@@ -834160,7 +833812,7 @@
           "met5_sun": 4,
           "met6_shade": 4,
           "met6_sun": 5,
-          "temp": 16.1,
+          "temp": 15.8,
           "rh": 100.0
         },
         "Arunachal Pradesh|Pakke Kesang": {
@@ -834172,7 +833824,7 @@
           "met5_sun": 4,
           "met6_shade": 4,
           "met6_sun": 4,
-          "temp": 12.8,
+          "temp": 12.2,
           "rh": 100.0
         },
         "Arunachal Pradesh|Papumpare": {
@@ -834182,10 +833834,10 @@
           "met4_sun": 4,
           "met5_shade": 4,
           "met5_sun": 5,
-          "met6_shade": 5,
+          "met6_shade": 4,
           "met6_sun": 5,
           "temp": 22.1,
-          "rh": 85.0
+          "rh": 84.0
         },
         "Arunachal Pradesh|Shiyomi": {
           "met3_shade": 2,
@@ -834197,7 +833849,7 @@
           "met6_shade": 4,
           "met6_sun": 4,
           "rh": 79.0,
-          "temp": 13.3
+          "temp": 13.7
         },
         "Arunachal Pradesh|Tawang": {
           "met3_shade": 2,
@@ -834209,7 +833861,7 @@
           "met6_shade": 3,
           "met6_sun": 4,
           "temp": 5.8,
-          "rh": 94.0
+          "rh": 93.0
         },
         "Arunachal Pradesh|Tirap": {
           "met3_shade": 3,
@@ -834220,7 +833872,7 @@
           "met5_sun": 5,
           "met6_shade": 5,
           "met6_sun": 5,
-          "temp": 22.2,
+          "temp": 22.3,
           "rh": 100.0
         },
         "Arunachal Pradesh|Upper Siang": {
@@ -834244,7 +833896,7 @@
           "met5_sun": 4,
           "met6_shade": 4,
           "met6_sun": 5,
-          "temp": 17.7,
+          "temp": 17.6,
           "rh": 90.0
         },
         "Arunachal Pradesh|West Kameng": {
@@ -834256,7 +833908,7 @@
           "met5_sun": 4,
           "met6_shade": 4,
           "met6_sun": 4,
-          "temp": 13.6,
+          "temp": 13.8,
           "rh": 100.0
         },
         "Arunachal Pradesh|West Siang": {
@@ -834268,7 +833920,7 @@
           "met5_sun": 4,
           "met6_shade": 4,
           "met6_sun": 5,
-          "temp": 15.8,
+          "temp": 15.9,
           "rh": 100.0
         },
         "Assam|Barpeta": {
@@ -834280,8 +833932,8 @@
           "met5_sun": 5,
           "met6_shade": 4,
           "met6_sun": 5,
-          "temp": 20.8,
-          "rh": 89.0
+          "temp": 20.2,
+          "rh": 92.0
         },
         "Assam|Bongaigaon": {
           "met3_shade": 3,
@@ -834292,7 +833944,7 @@
           "met5_sun": 5,
           "met6_shade": 5,
           "met6_sun": 5,
-          "temp": 19.9,
+          "temp": 19.8,
           "rh": 100.0
         },
         "Assam|Cachar": {
@@ -834304,8 +833956,8 @@
           "met5_sun": 4,
           "met6_shade": 4,
           "met6_sun": 5,
-          "temp": 19.0,
-          "rh": 98.0
+          "temp": 19.2,
+          "rh": 96.0
         },
         "Assam|Charaideo": {
           "met3_shade": 3,
@@ -834316,7 +833968,7 @@
           "met5_sun": 4,
           "met6_shade": 4,
           "met6_sun": 5,
-          "temp": 18.2,
+          "temp": 17.9,
           "rh": 100.0
         },
         "Assam|Darrang": {
@@ -834328,7 +833980,7 @@
           "met5_sun": 4,
           "met6_shade": 4,
           "met6_sun": 5,
-          "temp": 22.5,
+          "temp": 22.4,
           "rh": 73.0
         },
         "Assam|Dhemaji": {
@@ -834340,8 +833992,8 @@
           "met5_sun": 5,
           "met6_shade": 5,
           "met6_sun": 5,
-          "temp": 20.3,
-          "rh": 99.0
+          "temp": 20.2,
+          "rh": 100.0
         },
         "Assam|Dhubri": {
           "met3_shade": 3,
@@ -834350,9 +834002,9 @@
           "met4_sun": 4,
           "met5_shade": 4,
           "met5_sun": 5,
-          "met6_shade": 5,
+          "met6_shade": 4,
           "met6_sun": 5,
-          "temp": 19.8,
+          "temp": 19.6,
           "rh": 100.0
         },
         "Assam|Dibrugarh": {
@@ -834365,7 +834017,7 @@
           "met6_shade": 4,
           "met6_sun": 5,
           "rh": 9.0,
-          "temp": 16.8
+          "temp": 17.0
         },
         "Assam|Dima Hasao": {
           "met3_shade": 3,
@@ -834377,7 +834029,7 @@
           "met6_shade": 4,
           "met6_sun": 5,
           "temp": 21.2,
-          "rh": 68.0
+          "rh": 69.0
         },
         "Assam|Goalpara": {
           "met3_shade": 3,
@@ -834398,10 +834050,10 @@
           "met4_sun": 4,
           "met5_shade": 4,
           "met5_sun": 5,
-          "met6_shade": 5,
+          "met6_shade": 4,
           "met6_sun": 5,
-          "temp": 23.4,
-          "rh": 76.0
+          "temp": 22.7,
+          "rh": 79.0
         },
         "Assam|Hajoi": {
           "met3_shade": 3,
@@ -834412,8 +834064,8 @@
           "met5_sun": 4,
           "met6_shade": 4,
           "met6_sun": 5,
-          "temp": 21.1,
-          "rh": 73.0
+          "temp": 20.9,
+          "rh": 76.0
         },
         "Assam|Jorhat": {
           "met3_shade": 3,
@@ -834434,9 +834086,9 @@
           "met4_sun": 4,
           "met5_shade": 4,
           "met5_sun": 5,
-          "met6_shade": 4,
+          "met6_shade": 5,
           "met6_sun": 5,
-          "temp": 19.5,
+          "temp": 19.9,
           "rh": 100.0
         },
         "Assam|Kamrup Metropolitan": {
@@ -834446,9 +834098,9 @@
           "met4_sun": 4,
           "met5_shade": 4,
           "met5_sun": 5,
-          "met6_shade": 4,
+          "met6_shade": 5,
           "met6_sun": 5,
-          "temp": 19.7,
+          "temp": 19.8,
           "rh": 100.0
         },
         "Assam|Karbi Anglong": {
@@ -834460,8 +834112,8 @@
           "met5_sun": 4,
           "met6_shade": 4,
           "met6_sun": 5,
-          "temp": 18.8,
-          "rh": 84.0
+          "temp": 18.5,
+          "rh": 85.0
         },
         "Assam|Karbi Anglong(East)": {
           "met3_shade": 3,
@@ -834469,11 +834121,11 @@
           "met4_shade": 4,
           "met4_sun": 4,
           "met5_shade": 4,
-          "met5_sun": 4,
+          "met5_sun": 5,
           "met6_shade": 4,
           "met6_sun": 5,
-          "temp": 19.4,
-          "rh": 94.0
+          "temp": 19.3,
+          "rh": 95.0
         },
         "Assam|Karbi Anglong(West)": {
           "met3_shade": 3,
@@ -834493,10 +834145,10 @@
           "met4_shade": 3,
           "met4_sun": 4,
           "met5_shade": 4,
-          "met5_sun": 5,
+          "met5_sun": 4,
           "met6_shade": 4,
           "met6_sun": 5,
-          "temp": 18.8,
+          "temp": 18.7,
           "rh": 100.0
         },
         "Assam|Majuli": {
@@ -834520,8 +834172,8 @@
           "met5_sun": 5,
           "met6_shade": 4,
           "met6_sun": 5,
-          "temp": 22.4,
-          "rh": 75.0
+          "temp": 22.2,
+          "rh": 76.0
         },
         "Assam|Nagaon": {
           "met3_shade": 3,
@@ -834532,8 +834184,8 @@
           "met5_sun": 5,
           "met6_shade": 4,
           "met6_sun": 5,
-          "temp": 20.6,
-          "rh": 94.0
+          "temp": 20.4,
+          "rh": 95.0
         },
         "Assam|Nalbari": {
           "met3_shade": 3,
@@ -834563,12 +834215,12 @@
           "met3_shade": 3,
           "met3_sun": 4,
           "met4_shade": 4,
-          "met4_sun": 5,
+          "met4_sun": 4,
           "met5_shade": 4,
           "met5_sun": 5,
           "met6_shade": 5,
           "met6_sun": 5,
-          "temp": 21.8,
+          "temp": 21.6,
           "rh": 100.0
         },
         "Assam|Tamulpur": {
@@ -834578,10 +834230,10 @@
           "met4_sun": 4,
           "met5_shade": 4,
           "met5_sun": 5,
-          "met6_shade": 5,
+          "met6_shade": 4,
           "met6_sun": 5,
-          "temp": 20.3,
-          "rh": 97.0
+          "temp": 20.2,
+          "rh": 94.0
         },
         "Assam|Tinsukia": {
           "met3_shade": 3,
@@ -834592,8 +834244,8 @@
           "met5_sun": 4,
           "met6_shade": 4,
           "met6_sun": 5,
-          "temp": 20.6,
-          "rh": 80.0
+          "temp": 20.7,
+          "rh": 79.0
         },
         "Assam|Udalguri": {
           "met3_shade": 3,
@@ -834604,8 +834256,8 @@
           "met5_sun": 4,
           "met6_shade": 4,
           "met6_sun": 4,
-          "temp": 18.1,
-          "rh": 62.0
+          "temp": 17.7,
+          "rh": 63.0
         },
         "Bihar|Arwal": {
           "met3_shade": 3,
@@ -834616,19 +834268,19 @@
           "met5_sun": 5,
           "met6_shade": 5,
           "met6_sun": 5,
-          "temp": 20.1,
+          "temp": 20.0,
           "rh": 100.0
         },
         "Bihar|Aurangabad": {
           "met3_shade": 3,
           "met3_sun": 4,
-          "met4_shade": 4,
+          "met4_shade": 3,
           "met4_sun": 4,
           "met5_shade": 4,
-          "met5_sun": 5,
+          "met5_sun": 4,
           "met6_shade": 4,
           "met6_sun": 5,
-          "temp": 19.5,
+          "temp": 18.8,
           "rh": 96.0
         },
         "Bihar|Buxar": {
@@ -834640,7 +834292,7 @@
           "met5_sun": 5,
           "met6_shade": 5,
           "met6_sun": 5,
-          "temp": 21.4,
+          "temp": 21.2,
           "rh": 100.0
         },
         "Bihar|Gaya": {
@@ -834652,8 +834304,8 @@
           "met5_sun": 5,
           "met6_shade": 5,
           "met6_sun": 5,
-          "temp": 22.1,
-          "rh": 94.0
+          "temp": 21.1,
+          "rh": 97.0
         },
         "Bihar|Jehanabad": {
           "met3_shade": 3,
@@ -834662,9 +834314,9 @@
           "met4_sun": 4,
           "met5_shade": 4,
           "met5_sun": 5,
-          "met6_shade": 5,
+          "met6_shade": 4,
           "met6_sun": 5,
-          "temp": 20.8,
+          "temp": 20.7,
           "rh": 95.0
         },
         "Bihar|Kaimur": {
@@ -834676,7 +834328,7 @@
           "met5_sun": 5,
           "met6_shade": 5,
           "met6_sun": 5,
-          "temp": 23.5,
+          "temp": 23.4,
           "rh": 93.0
         },
         "Bihar|Krishnaganj": {
@@ -834688,7 +834340,7 @@
           "met5_sun": 5,
           "met6_shade": 5,
           "met6_sun": 5,
-          "temp": 22.1,
+          "temp": 22.3,
           "rh": 100.0
         },
         "Bihar|Madhepura": {
@@ -834700,7 +834352,7 @@
           "met5_sun": 5,
           "met6_shade": 5,
           "met6_sun": 5,
-          "temp": 20.2,
+          "temp": 20.3,
           "rh": 100.0
         },
         "Bihar|Madhubani": {
@@ -834712,7 +834364,7 @@
           "met5_sun": 5,
           "met6_shade": 5,
           "met6_sun": 5,
-          "temp": 20.4,
+          "temp": 20.0,
           "rh": 100.0
         },
         "Bihar|Munger": {
@@ -834724,7 +834376,7 @@
           "met5_sun": 5,
           "met6_shade": 5,
           "met6_sun": 5,
-          "temp": 21.0,
+          "temp": 20.7,
           "rh": 100.0
         },
         "Bihar|Nalanda": {
@@ -834736,7 +834388,7 @@
           "met5_sun": 5,
           "met6_shade": 5,
           "met6_sun": 5,
-          "temp": 20.1,
+          "temp": 20.2,
           "rh": 100.0
         },
         "Bihar|Patna": {
@@ -834760,7 +834412,7 @@
           "met5_sun": 5,
           "met6_shade": 5,
           "met6_sun": 5,
-          "temp": 30.7,
+          "temp": 30.6,
           "rh": 90.0
         },
         "Bihar|Saharsa": {
@@ -834772,19 +834424,19 @@
           "met5_sun": 5,
           "met6_shade": 5,
           "met6_sun": 5,
-          "temp": 21.2,
+          "temp": 21.1,
           "rh": 100.0
         },
         "Bihar|Samastipur": {
           "met3_shade": 3,
           "met3_sun": 4,
-          "met4_shade": 4,
+          "met4_shade": 3,
           "met4_sun": 4,
           "met5_shade": 4,
           "met5_sun": 5,
           "met6_shade": 4,
           "met6_sun": 5,
-          "temp": 19.4,
+          "temp": 18.9,
           "rh": 100.0
         },
         "Bihar|Sasaram": {
@@ -834808,7 +834460,7 @@
           "met5_sun": 5,
           "met6_shade": 4,
           "met6_sun": 5,
-          "temp": 18.9,
+          "temp": 19.0,
           "rh": 100.0
         },
         "Bihar|Vaishali": {
@@ -834833,7 +834485,7 @@
           "met6_shade": 4,
           "met6_sun": 5,
           "temp": 20.0,
-          "rh": 90.0
+          "rh": 89.0
         },
         "Chhattisgarh|Balod": {
           "met3_shade": 3,
@@ -834844,8 +834496,8 @@
           "met5_sun": 4,
           "met6_shade": 4,
           "met6_sun": 5,
-          "temp": 21.8,
-          "rh": 70.0
+          "temp": 21.2,
+          "rh": 71.0
         },
         "Chhattisgarh|Balrampur": {
           "met3_shade": 3,
@@ -834868,8 +834520,8 @@
           "met5_sun": 4,
           "met6_shade": 4,
           "met6_sun": 5,
-          "temp": 23.2,
-          "rh": 52.0
+          "temp": 23.1,
+          "rh": 53.0
         },
         "Chhattisgarh|Bilaspur": {
           "met3_shade": 3,
@@ -834880,7 +834532,7 @@
           "met5_sun": 4,
           "met6_shade": 4,
           "met6_sun": 5,
-          "temp": 22.4,
+          "temp": 22.5,
           "rh": 62.0
         },
         "Chhattisgarh|Janjgir Champa": {
@@ -834892,7 +834544,7 @@
           "met5_sun": 4,
           "met6_shade": 4,
           "met6_sun": 5,
-          "rh": 67.0,
+          "rh": 68.0,
           "temp": 22.5
         },
         "Chhattisgarh|Jashpur": {
@@ -834904,8 +834556,8 @@
           "met5_sun": 4,
           "met6_shade": 4,
           "met6_sun": 5,
-          "temp": 22.4,
-          "rh": 66.0
+          "temp": 22.1,
+          "rh": 67.0
         },
         "Chhattisgarh|Korba": {
           "met3_shade": 3,
@@ -834916,20 +834568,20 @@
           "met5_sun": 4,
           "met6_shade": 4,
           "met6_sun": 5,
-          "temp": 25.0,
-          "rh": 54.0
+          "temp": 24.5,
+          "rh": 57.0
         },
         "Chhattisgarh|Mahasamund": {
           "met3_shade": 3,
           "met3_sun": 4,
-          "met4_shade": 4,
+          "met4_shade": 3,
           "met4_sun": 4,
           "met5_shade": 4,
           "met5_sun": 4,
           "met6_shade": 4,
           "met6_sun": 5,
-          "temp": 20.3,
-          "rh": 70.0
+          "temp": 19.9,
+          "rh": 72.0
         },
         "Chhattisgarh|Pendra Road": {
           "met3_shade": 3,
@@ -834940,8 +834592,8 @@
           "met5_sun": 4,
           "met6_shade": 4,
           "met6_sun": 5,
-          "temp": 21.1,
-          "rh": 65.0
+          "temp": 20.9,
+          "rh": 67.0
         },
         "Chhattisgarh|Raigarh": {
           "met3_shade": 3,
@@ -834952,8 +834604,8 @@
           "met5_sun": 4,
           "met6_shade": 4,
           "met6_sun": 5,
-          "temp": 23.2,
-          "rh": 64.0
+          "temp": 23.3,
+          "rh": 63.0
         },
         "Chhattisgarh|Rajnandgaon": {
           "met3_shade": 3,
@@ -834964,11 +834616,11 @@
           "met5_sun": 4,
           "met6_shade": 4,
           "met6_sun": 5,
-          "temp": 23.4,
+          "temp": 23.6,
           "rh": 48.0
         },
         "Chhattisgarh|Sukma": {
-          "met3_shade": 4,
+          "met3_shade": 3,
           "met3_sun": 4,
           "met4_shade": 4,
           "met4_sun": 5,
@@ -834976,8 +834628,8 @@
           "met5_sun": 5,
           "met6_shade": 5,
           "met6_sun": 5,
-          "temp": 24.0,
-          "rh": 98.0
+          "temp": 23.7,
+          "rh": 99.0
         },
         "Dadra And Nagar Haveli|Dadar Nagar": {
           "met3_shade": 3,
@@ -834988,8 +834640,8 @@
           "met5_sun": 5,
           "met6_shade": 5,
           "met6_sun": 5,
-          "temp": 22.1,
-          "rh": 100.0
+          "temp": 22.6,
+          "rh": 97.0
         },
         "Daman And Diu|Daman": {
           "met3_shade": 4,
@@ -835000,20 +834652,20 @@
           "met5_sun": 5,
           "met6_shade": 5,
           "met6_sun": 5,
-          "temp": 24.0,
+          "temp": 23.9,
           "rh": 99.0
         },
         "Delhi|Delhi": {
           "met3_shade": 3,
-          "met3_sun": 4,
+          "met3_sun": 3,
           "met4_shade": 3,
           "met4_sun": 4,
           "met5_shade": 4,
           "met5_sun": 4,
           "met6_shade": 4,
           "met6_sun": 5,
-          "temp": 17.9,
-          "rh": 89.0
+          "temp": 17.7,
+          "rh": 90.0
         },
         "Delhi|East Delhi": {
           "met3_shade": 3,
@@ -835024,7 +834676,7 @@
           "met5_sun": 5,
           "met6_shade": 4,
           "met6_sun": 5,
-          "temp": 19.1,
+          "temp": 19.0,
           "rh": 99.0
         },
         "Delhi|North West Delhi": {
@@ -835048,7 +834700,7 @@
           "met5_sun": 4,
           "met6_shade": 4,
           "met6_sun": 4,
-          "temp": 17.8,
+          "temp": 17.4,
           "rh": 91.0
         },
         "Goa|North Goa": {
@@ -835056,11 +834708,11 @@
           "met3_sun": 4,
           "met4_shade": 4,
           "met4_sun": 5,
-          "met5_shade": 4,
+          "met5_shade": 5,
           "met5_sun": 5,
           "met6_shade": 5,
           "met6_sun": 5,
-          "temp": 22.7,
+          "temp": 23.7,
           "rh": 96.0
         },
         "Goa|Panaji": {
@@ -835072,8 +834724,8 @@
           "met5_sun": 5,
           "met6_shade": 4,
           "met6_sun": 5,
-          "temp": 23.1,
-          "rh": 70.0
+          "temp": 23.2,
+          "rh": 71.0
         },
         "Gujarat|Ahmedabad": {
           "met3_shade": 3,
@@ -835085,7 +834737,7 @@
           "met6_shade": 4,
           "met6_sun": 5,
           "temp": 19.0,
-          "rh": 92.0
+          "rh": 93.0
         },
         "Gujarat|Amreli": {
           "met3_shade": 3,
@@ -835096,8 +834748,8 @@
           "met5_sun": 5,
           "met6_shade": 5,
           "met6_sun": 5,
-          "temp": 24.5,
-          "rh": 70.0
+          "temp": 24.0,
+          "rh": 72.0
         },
         "Gujarat|Anand": {
           "met3_shade": 3,
@@ -835132,8 +834784,8 @@
           "met5_sun": 4,
           "met6_shade": 4,
           "met6_sun": 5,
-          "temp": 18.3,
-          "rh": 87.0
+          "temp": 17.8,
+          "rh": 90.0
         },
         "Gujarat|Bharuch": {
           "met3_shade": 3,
@@ -835144,8 +834796,8 @@
           "met5_sun": 4,
           "met6_shade": 4,
           "met6_sun": 5,
-          "temp": 22.6,
-          "rh": 66.0
+          "temp": 22.2,
+          "rh": 65.0
         },
         "Gujarat|Bhavnagar": {
           "met3_shade": 3,
@@ -835156,7 +834808,7 @@
           "met5_sun": 4,
           "met6_shade": 4,
           "met6_sun": 5,
-          "temp": 20.4,
+          "temp": 20.6,
           "rh": 82.0
         },
         "Gujarat|Botad": {
@@ -835168,7 +834820,7 @@
           "met5_sun": 4,
           "met6_shade": 4,
           "met6_sun": 5,
-          "temp": 20.8,
+          "temp": 20.6,
           "rh": 66.0
         },
         "Gujarat|Dahod": {
@@ -835180,8 +834832,8 @@
           "met5_sun": 4,
           "met6_shade": 4,
           "met6_sun": 4,
-          "temp": 18.1,
-          "rh": 66.0
+          "temp": 17.5,
+          "rh": 69.0
         },
         "Gujarat|Dang": {
           "met3_shade": 3,
@@ -835193,7 +834845,7 @@
           "met6_shade": 4,
           "met6_sun": 4,
           "temp": 17.8,
-          "rh": 79.0
+          "rh": 81.0
         },
         "Gujarat|Gandhinagar": {
           "met3_shade": 3,
@@ -835204,8 +834856,8 @@
           "met5_sun": 4,
           "met6_shade": 4,
           "met6_sun": 5,
-          "temp": 21.1,
-          "rh": 76.0
+          "temp": 20.5,
+          "rh": 78.0
         },
         "Gujarat|Gir Somnath": {
           "met3_shade": 3,
@@ -835216,7 +834868,7 @@
           "met5_sun": 5,
           "met6_shade": 5,
           "met6_sun": 5,
-          "temp": 22.8,
+          "temp": 22.7,
           "rh": 94.0
         },
         "Gujarat|Kachchh": {
@@ -835233,15 +834885,15 @@
         },
         "Gujarat|Mahesana": {
           "met3_shade": 3,
-          "met3_sun": 4,
+          "met3_sun": 3,
           "met4_shade": 3,
           "met4_sun": 4,
           "met5_shade": 4,
           "met5_sun": 4,
           "met6_shade": 4,
           "met6_sun": 5,
-          "temp": 17.9,
-          "rh": 90.0
+          "temp": 17.4,
+          "rh": 91.0
         },
         "Gujarat|Mahisagar": {
           "met3_shade": 3,
@@ -835261,11 +834913,11 @@
           "met4_shade": 4,
           "met4_sun": 4,
           "met5_shade": 4,
-          "met5_sun": 4,
+          "met5_sun": 5,
           "met6_shade": 4,
           "met6_sun": 5,
           "temp": 21.7,
-          "rh": 79.0
+          "rh": 81.0
         },
         "Gujarat|Patan": {
           "met3_shade": 3,
@@ -835276,7 +834928,7 @@
           "met5_sun": 4,
           "met6_shade": 4,
           "met6_sun": 5,
-          "temp": 19.9,
+          "temp": 19.8,
           "rh": 74.0
         },
         "Gujarat|Porbandar": {
@@ -835300,8 +834952,8 @@
           "met5_sun": 4,
           "met6_shade": 4,
           "met6_sun": 4,
-          "temp": 16.4,
-          "rh": 92.0
+          "temp": 15.9,
+          "rh": 93.0
         },
         "Gujarat|Surendranagar": {
           "met3_shade": 3,
@@ -835311,9 +834963,9 @@
           "met5_shade": 4,
           "met5_sun": 4,
           "met6_shade": 4,
-          "met6_sun": 5,
-          "temp": 22.6,
-          "rh": 55.0
+          "met6_sun": 4,
+          "temp": 23.1,
+          "rh": 50.0
         },
         "Gujarat|Vadodara": {
           "met3_shade": 3,
@@ -835325,7 +834977,7 @@
           "met6_shade": 4,
           "met6_sun": 5,
           "temp": 22.8,
-          "rh": 61.0
+          "rh": 64.0
         },
         "Haryana|Charkhi Dadri": {
           "met3_shade": 3,
@@ -835335,9 +834987,9 @@
           "met5_shade": 4,
           "met5_sun": 4,
           "met6_shade": 4,
-          "met6_sun": 5,
-          "temp": 19.0,
-          "rh": 77.0
+          "met6_sun": 4,
+          "temp": 18.9,
+          "rh": 75.0
         },
         "Haryana|Gurgaon": {
           "met3_shade": 3,
@@ -835360,7 +835012,7 @@
           "met5_sun": 4,
           "met6_shade": 4,
           "met6_sun": 4,
-          "temp": 15.3,
+          "temp": 15.1,
           "rh": 99.0
         },
         "Haryana|Mewat": {
@@ -835384,8 +835036,8 @@
           "met5_sun": 4,
           "met6_shade": 4,
           "met6_sun": 5,
-          "temp": 18.3,
-          "rh": 82.0
+          "temp": 18.2,
+          "rh": 83.0
         },
         "Haryana|Panipat": {
           "met3_shade": 3,
@@ -835396,7 +835048,7 @@
           "met5_sun": 4,
           "met6_shade": 4,
           "met6_sun": 5,
-          "temp": 17.5,
+          "temp": 17.1,
           "rh": 99.0
         },
         "Haryana|Rohtak": {
@@ -835408,22 +835060,46 @@
           "met5_sun": 4,
           "met6_shade": 4,
           "met6_sun": 5,
-          "temp": 18.1,
+          "temp": 18.3,
           "rh": 99.0
         },
         "Haryana|Sirsa": {
           "met3_shade": 3,
-          "met3_sun": 4,
+          "met3_sun": 3,
           "met4_shade": 3,
           "met4_sun": 4,
           "met5_shade": 4,
           "met5_sun": 4,
           "met6_shade": 4,
           "met6_sun": 5,
-          "temp": 17.8,
+          "temp": 17.6,
           "rh": 100.0
         },
         "Haryana|Sonipat": {
+          "met3_shade": 2,
+          "met3_sun": 3,
+          "met4_shade": 3,
+          "met4_sun": 4,
+          "met5_shade": 3,
+          "met5_sun": 4,
+          "met6_shade": 4,
+          "met6_sun": 4,
+          "temp": 14.2,
+          "rh": 100.0
+        },
+        "Haryana|Yamunanagar": {
+          "met3_shade": 3,
+          "met3_sun": 4,
+          "met4_shade": 4,
+          "met4_sun": 4,
+          "met5_shade": 4,
+          "met5_sun": 5,
+          "met6_shade": 4,
+          "met6_sun": 5,
+          "temp": 19.6,
+          "rh": 100.0
+        },
+        "Himachal Pradesh|Bilaspur": {
           "met3_shade": 3,
           "met3_sun": 3,
           "met4_shade": 3,
@@ -835435,30 +835111,6 @@
           "temp": 14.4,
           "rh": 100.0
         },
-        "Haryana|Yamunanagar": {
-          "met3_shade": 3,
-          "met3_sun": 4,
-          "met4_shade": 4,
-          "met4_sun": 4,
-          "met5_shade": 4,
-          "met5_sun": 5,
-          "met6_shade": 5,
-          "met6_sun": 5,
-          "temp": 19.8,
-          "rh": 100.0
-        },
-        "Himachal Pradesh|Bilaspur": {
-          "met3_shade": 3,
-          "met3_sun": 3,
-          "met4_shade": 3,
-          "met4_sun": 4,
-          "met5_shade": 4,
-          "met5_sun": 4,
-          "met6_shade": 4,
-          "met6_sun": 4,
-          "temp": 14.9,
-          "rh": 100.0
-        },
         "Himachal Pradesh|Hamirpur": {
           "met3_shade": 3,
           "met3_sun": 4,
@@ -835468,8 +835120,8 @@
           "met5_sun": 5,
           "met6_shade": 4,
           "met6_sun": 5,
-          "temp": 20.5,
-          "rh": 92.0
+          "temp": 20.4,
+          "rh": 93.0
         },
         "Himachal Pradesh|Lahaul And Spiti": {
           "met3_shade": 2,
@@ -835488,11 +835140,11 @@
           "met3_sun": 3,
           "met4_shade": 3,
           "met4_sun": 4,
-          "met5_shade": 4,
+          "met5_shade": 3,
           "met5_sun": 4,
           "met6_shade": 4,
           "met6_sun": 4,
-          "temp": 15.1,
+          "temp": 14.4,
           "rh": 100.0
         },
         "Himachal Pradesh|Solan": {
@@ -835516,7 +835168,7 @@
           "met5_sun": 3,
           "met6_shade": 3,
           "met6_sun": 3,
-          "temp": 2.9,
+          "temp": 2.5,
           "rh": 91.0
         },
         "Jammu And Kashmir|Badgam": {
@@ -835528,8 +835180,8 @@
           "met5_sun": 3,
           "met6_shade": 3,
           "met6_sun": 4,
-          "temp": 5.9,
-          "rh": 85.0
+          "temp": 5.8,
+          "rh": 86.0
         },
         "Jammu And Kashmir|Bandipora": {
           "met3_shade": 2,
@@ -835540,7 +835192,7 @@
           "met5_sun": 3,
           "met6_shade": 3,
           "met6_sun": 4,
-          "temp": 5.7,
+          "temp": 5.2,
           "rh": 100.0
         },
         "Jammu And Kashmir|Baramulla": {
@@ -835552,20 +835204,20 @@
           "met5_sun": 3,
           "met6_shade": 3,
           "met6_sun": 3,
-          "temp": 3.0,
-          "rh": 68.0
+          "temp": 2.4,
+          "rh": 67.0
         },
         "Jammu And Kashmir|Doda": {
-          "met3_shade": 3,
+          "met3_shade": 2,
           "met3_sun": 3,
           "met4_shade": 3,
           "met4_sun": 4,
-          "met5_shade": 4,
+          "met5_shade": 3,
           "met5_sun": 4,
           "met6_shade": 4,
           "met6_sun": 4,
-          "temp": 16.3,
-          "rh": 45.0
+          "temp": 14.9,
+          "rh": 50.0
         },
         "Jammu And Kashmir|Ganderbal": {
           "met3_shade": 2,
@@ -835576,7 +835228,7 @@
           "met5_sun": 3,
           "met6_shade": 3,
           "met6_sun": 3,
-          "temp": 3.1,
+          "temp": 2.9,
           "rh": 100.0
         },
         "Jammu And Kashmir|Jammu": {
@@ -835593,14 +835245,14 @@
         },
         "Jammu And Kashmir|Kathua": {
           "met3_shade": 3,
-          "met3_sun": 4,
+          "met3_sun": 3,
           "met4_shade": 3,
           "met4_sun": 4,
           "met5_shade": 4,
           "met5_sun": 4,
           "met6_shade": 4,
           "met6_sun": 5,
-          "temp": 18.0,
+          "temp": 17.5,
           "rh": 100.0
         },
         "Jammu And Kashmir|Kishtwar": {
@@ -835612,8 +835264,8 @@
           "met5_sun": 4,
           "met6_shade": 4,
           "met6_sun": 4,
-          "temp": 12.3,
-          "rh": 66.0
+          "temp": 12.7,
+          "rh": 64.0
         },
         "Jammu And Kashmir|Kulgam": {
           "met3_shade": 2,
@@ -835624,20 +835276,20 @@
           "met5_sun": 4,
           "met6_shade": 3,
           "met6_sun": 4,
-          "temp": 10.4,
-          "rh": 75.0
+          "temp": 10.1,
+          "rh": 76.0
         },
         "Jammu And Kashmir|Kupwara": {
           "met3_shade": 2,
           "met3_sun": 3,
-          "met4_shade": 3,
+          "met4_shade": 2,
           "met4_sun": 3,
           "met5_shade": 3,
           "met5_sun": 3,
           "met6_shade": 3,
           "met6_sun": 4,
-          "temp": 6.9,
-          "rh": 91.0
+          "temp": 5.9,
+          "rh": 94.0
         },
         "Jammu And Kashmir|Poonch": {
           "met3_shade": 2,
@@ -835648,8 +835300,8 @@
           "met5_sun": 4,
           "met6_shade": 4,
           "met6_sun": 4,
-          "temp": 12.7,
-          "rh": 40.0
+          "temp": 12.8,
+          "rh": 39.0
         },
         "Jammu And Kashmir|Pulwama": {
           "met3_shade": 2,
@@ -835673,7 +835325,7 @@
           "met6_shade": 4,
           "met6_sun": 4,
           "temp": 12.3,
-          "rh": 78.0
+          "rh": 76.0
         },
         "Jammu And Kashmir|Ramban": {
           "met3_shade": 2,
@@ -835684,7 +835336,7 @@
           "met5_sun": 4,
           "met6_shade": 4,
           "met6_sun": 4,
-          "temp": 15.1,
+          "temp": 14.8,
           "rh": 63.0
         },
         "Jammu And Kashmir|Reasi": {
@@ -835696,7 +835348,7 @@
           "met5_sun": 4,
           "met6_shade": 4,
           "met6_sun": 5,
-          "temp": 17.2,
+          "temp": 16.9,
           "rh": 100.0
         },
         "Jammu And Kashmir|Samba": {
@@ -835707,8 +835359,8 @@
           "met5_shade": 4,
           "met5_sun": 4,
           "met6_shade": 4,
-          "met6_sun": 4,
-          "temp": 16.0,
+          "met6_sun": 5,
+          "temp": 16.3,
           "rh": 96.0
         },
         "Jammu And Kashmir|Shopian": {
@@ -835780,7 +835432,7 @@
           "met5_sun": 5,
           "met6_shade": 5,
           "met6_sun": 5,
-          "temp": 21.2,
+          "temp": 21.1,
           "rh": 100.0
         },
         "Jharkhand|Latehar": {
@@ -835792,8 +835444,8 @@
           "met5_sun": 4,
           "met6_shade": 4,
           "met6_sun": 5,
-          "temp": 19.1,
-          "rh": 88.0
+          "temp": 19.3,
+          "rh": 86.0
         },
         "Jharkhand|Saraikela": {
           "met3_shade": 3,
@@ -835804,7 +835456,7 @@
           "met5_sun": 5,
           "met6_shade": 5,
           "met6_sun": 5,
-          "temp": 21.7,
+          "temp": 21.4,
           "rh": 100.0
         },
         "Jharkhand|Simdega": {
@@ -835814,22 +835466,22 @@
           "met4_sun": 4,
           "met5_shade": 4,
           "met5_sun": 5,
-          "met6_shade": 4,
+          "met6_shade": 5,
           "met6_sun": 5,
-          "temp": 24.1,
-          "rh": 71.0
+          "temp": 24.0,
+          "rh": 73.0
         },
         "Karnataka|Bagalkot": {
           "met3_shade": 3,
-          "met3_sun": 4,
+          "met3_sun": 3,
           "met4_shade": 3,
           "met4_sun": 4,
           "met5_shade": 4,
           "met5_sun": 4,
           "met6_shade": 4,
           "met6_sun": 4,
-          "temp": 19.9,
-          "rh": 58.0
+          "temp": 18.6,
+          "rh": 59.0
         },
         "Karnataka|Bangalore Rural": {
           "met3_shade": 3,
@@ -835853,7 +835505,7 @@
           "met6_shade": 4,
           "met6_sun": 4,
           "temp": 22.5,
-          "rh": 52.0
+          "rh": 53.0
         },
         "Karnataka|Bellary": {
           "met3_shade": 3,
@@ -835865,7 +835517,7 @@
           "met6_shade": 4,
           "met6_sun": 4,
           "temp": 21.9,
-          "rh": 43.0
+          "rh": 45.0
         },
         "Karnataka|Bijapur": {
           "met3_shade": 3,
@@ -835876,20 +835528,20 @@
           "met5_sun": 4,
           "met6_shade": 4,
           "met6_sun": 4,
-          "temp": 20.4,
-          "rh": 40.0
+          "temp": 20.0,
+          "rh": 47.0
         },
         "Karnataka|Chikballapur": {
           "met3_shade": 3,
-          "met3_sun": 3,
+          "met3_sun": 4,
           "met4_shade": 3,
           "met4_sun": 4,
           "met5_shade": 4,
           "met5_sun": 4,
           "met6_shade": 4,
           "met6_sun": 4,
-          "temp": 17.1,
-          "rh": 88.0
+          "temp": 19.3,
+          "rh": 71.0
         },
         "Karnataka|Chikmagalur": {
           "met3_shade": 3,
@@ -835900,20 +835552,20 @@
           "met5_sun": 5,
           "met6_shade": 5,
           "met6_sun": 5,
-          "temp": 21.1,
+          "temp": 20.9,
           "rh": 100.0
         },
         "Karnataka|Chitradurga": {
           "met3_shade": 3,
-          "met3_sun": 3,
+          "met3_sun": 4,
           "met4_shade": 3,
           "met4_sun": 4,
           "met5_shade": 4,
           "met5_sun": 4,
           "met6_shade": 4,
           "met6_sun": 4,
-          "temp": 18.5,
-          "rh": 60.0
+          "temp": 18.9,
+          "rh": 62.0
         },
         "Karnataka|Dakshina Kannada": {
           "met3_shade": 4,
@@ -835924,20 +835576,20 @@
           "met5_sun": 5,
           "met6_shade": 5,
           "met6_sun": 5,
-          "temp": 25.7,
+          "temp": 25.6,
           "rh": 100.0
         },
         "Karnataka|Gadag": {
           "met3_shade": 3,
           "met3_sun": 4,
           "met4_shade": 4,
-          "met4_sun": 5,
+          "met4_sun": 4,
           "met5_shade": 4,
           "met5_sun": 5,
           "met6_shade": 5,
           "met6_sun": 5,
-          "temp": 22.8,
-          "rh": 91.0
+          "temp": 22.5,
+          "rh": 92.0
         },
         "Karnataka|Gulbarga": {
           "met3_shade": 3,
@@ -835948,8 +835600,8 @@
           "met5_sun": 4,
           "met6_shade": 4,
           "met6_sun": 4,
-          "temp": 19.8,
-          "rh": 43.0
+          "temp": 19.6,
+          "rh": 45.0
         },
         "Karnataka|Hassan": {
           "met3_shade": 3,
@@ -835972,8 +835624,8 @@
           "met5_sun": 4,
           "met6_shade": 4,
           "met6_sun": 5,
-          "temp": 19.1,
-          "rh": 89.0
+          "temp": 18.7,
+          "rh": 90.0
         },
         "Karnataka|Koppal": {
           "met3_shade": 4,
@@ -835984,8 +835636,8 @@
           "met5_sun": 4,
           "met6_shade": 4,
           "met6_sun": 5,
-          "temp": 27.9,
-          "rh": 35.0
+          "temp": 27.6,
+          "rh": 36.0
         },
         "Karnataka|Mandya": {
           "met3_shade": 3,
@@ -835996,7 +835648,7 @@
           "met5_sun": 5,
           "met6_shade": 5,
           "met6_sun": 5,
-          "temp": 22.4,
+          "temp": 22.1,
           "rh": 100.0
         },
         "Karnataka|Ramanagara": {
@@ -836008,8 +835660,8 @@
           "met5_sun": 4,
           "met6_shade": 4,
           "met6_sun": 4,
-          "temp": 19.4,
-          "rh": 52.0
+          "temp": 19.5,
+          "rh": 60.0
         },
         "Karnataka|Shivamogga": {
           "met3_shade": 3,
@@ -836020,7 +835672,7 @@
           "met5_sun": 5,
           "met6_shade": 5,
           "met6_sun": 5,
-          "temp": 21.1,
+          "temp": 21.3,
           "rh": 100.0
         },
         "Karnataka|Tumkur": {
@@ -836032,8 +835684,8 @@
           "met5_sun": 4,
           "met6_shade": 4,
           "met6_sun": 4,
-          "temp": 19.5,
-          "rh": 57.0
+          "temp": 19.3,
+          "rh": 58.0
         },
         "Kerala|Alappuzha": {
           "met3_shade": 4,
@@ -836044,19 +835696,19 @@
           "met5_sun": 5,
           "met6_shade": 5,
           "met6_sun": 5,
-          "temp": 26.2,
+          "temp": 26.1,
           "rh": 100.0
         },
         "Kerala|Ernakulam": {
           "met3_shade": 4,
           "met3_sun": 5,
-          "met4_shade": 5,
+          "met4_shade": 4,
           "met4_sun": 5,
           "met5_shade": 5,
           "met5_sun": 5,
           "met6_shade": 5,
           "met6_sun": 5,
-          "temp": 25.3,
+          "temp": 25.1,
           "rh": 100.0
         },
         "Kerala|Idukki": {
@@ -836068,19 +835720,19 @@
           "met5_sun": 5,
           "met6_shade": 5,
           "met6_sun": 5,
-          "temp": 20.3,
+          "temp": 20.2,
           "rh": 100.0
         },
         "Kerala|Kannur": {
           "met3_shade": 4,
           "met3_sun": 5,
-          "met4_shade": 4,
+          "met4_shade": 5,
           "met4_sun": 5,
           "met5_shade": 5,
           "met5_sun": 5,
           "met6_shade": 5,
           "met6_sun": 5,
-          "temp": 25.5,
+          "temp": 25.3,
           "rh": 100.0
         },
         "Kerala|Kasaragod": {
@@ -836128,7 +835780,7 @@
           "met5_sun": 5,
           "met6_shade": 5,
           "met6_sun": 5,
-          "temp": 23.6,
+          "temp": 23.5,
           "rh": 100.0
         },
         "Kerala|Malappuram": {
@@ -836141,7 +835793,7 @@
           "met6_shade": 5,
           "met6_sun": 5,
           "temp": 26.3,
-          "rh": 92.0
+          "rh": 93.0
         },
         "Kerala|Palakkad": {
           "met3_shade": 4,
@@ -836152,7 +835804,7 @@
           "met5_sun": 5,
           "met6_shade": 5,
           "met6_sun": 5,
-          "temp": 24.9,
+          "temp": 24.8,
           "rh": 100.0
         },
         "Kerala|Pathanamthitta": {
@@ -836170,13 +835822,13 @@
         "Kerala|Thiruvananthapuram": {
           "met3_shade": 4,
           "met3_sun": 5,
-          "met4_shade": 5,
+          "met4_shade": 4,
           "met4_sun": 5,
           "met5_shade": 5,
           "met5_sun": 5,
           "met6_shade": 5,
           "met6_sun": 5,
-          "temp": 25.3,
+          "temp": 25.2,
           "rh": 100.0
         },
         "Kerala|Thrissur": {
@@ -836224,8 +835876,8 @@
           "met5_sun": 3,
           "met6_shade": 3,
           "met6_sun": 3,
-          "temp": 3.7,
-          "rh": 63.0
+          "temp": 3.8,
+          "rh": 64.0
         },
         "Madhya Pradesh|Agar": {
           "met3_shade": 3,
@@ -836236,8 +835888,8 @@
           "met5_sun": 4,
           "met6_shade": 4,
           "met6_sun": 4,
-          "temp": 23.0,
-          "rh": 36.0
+          "temp": 23.4,
+          "rh": 35.0
         },
         "Madhya Pradesh|Anuppur": {
           "met3_shade": 3,
@@ -836260,8 +835912,8 @@
           "met5_sun": 4,
           "met6_shade": 4,
           "met6_sun": 4,
-          "temp": 17.0,
-          "rh": 70.0
+          "temp": 16.5,
+          "rh": 74.0
         },
         "Madhya Pradesh|Bhopal": {
           "met3_shade": 3,
@@ -836272,8 +835924,8 @@
           "met5_sun": 4,
           "met6_shade": 4,
           "met6_sun": 4,
-          "temp": 16.5,
-          "rh": 86.0
+          "temp": 16.3,
+          "rh": 85.0
         },
         "Madhya Pradesh|Bhopal ": {
           "met3_shade": 3,
@@ -836284,20 +835936,20 @@
           "met5_sun": 4,
           "met6_shade": 4,
           "met6_sun": 4,
-          "temp": 24.1,
-          "rh": 41.0
+          "temp": 23.9,
+          "rh": 42.0
         },
         "Madhya Pradesh|Datia": {
           "met3_shade": 3,
-          "met3_sun": 4,
+          "met3_sun": 3,
           "met4_shade": 3,
           "met4_sun": 4,
           "met5_shade": 4,
           "met5_sun": 4,
           "met6_shade": 4,
           "met6_sun": 5,
-          "temp": 17.8,
-          "rh": 93.0
+          "temp": 17.5,
+          "rh": 94.0
         },
         "Madhya Pradesh|Dewas": {
           "met3_shade": 3,
@@ -836308,8 +835960,8 @@
           "met5_sun": 4,
           "met6_shade": 4,
           "met6_sun": 4,
-          "temp": 22.7,
-          "rh": 37.0
+          "temp": 21.9,
+          "rh": 40.0
         },
         "Madhya Pradesh|Dhar": {
           "met3_shade": 3,
@@ -836320,8 +835972,8 @@
           "met5_sun": 4,
           "met6_shade": 4,
           "met6_sun": 4,
-          "temp": 21.9,
-          "rh": 35.0
+          "temp": 21.4,
+          "rh": 37.0
         },
         "Madhya Pradesh|Hoshangabad": {
           "met3_shade": 2,
@@ -836332,7 +835984,7 @@
           "met5_sun": 4,
           "met6_shade": 4,
           "met6_sun": 4,
-          "temp": 12.6,
+          "temp": 12.5,
           "rh": 100.0
         },
         "Madhya Pradesh|Mandsaur": {
@@ -836344,8 +835996,8 @@
           "met5_sun": 4,
           "met6_shade": 4,
           "met6_sun": 4,
-          "temp": 13.9,
-          "rh": 77.0
+          "temp": 14.1,
+          "rh": 76.0
         },
         "Madhya Pradesh|Morena": {
           "met3_shade": 3,
@@ -836356,7 +836008,7 @@
           "met5_sun": 4,
           "met6_shade": 4,
           "met6_sun": 5,
-          "temp": 18.6,
+          "temp": 18.3,
           "rh": 84.0
         },
         "Madhya Pradesh|Narsinghpur": {
@@ -836368,7 +836020,7 @@
           "met5_sun": 4,
           "met6_shade": 4,
           "met6_sun": 4,
-          "temp": 17.7,
+          "temp": 17.5,
           "rh": 86.0
         },
         "Madhya Pradesh|Neemuch": {
@@ -836380,8 +836032,8 @@
           "met5_sun": 4,
           "met6_shade": 4,
           "met6_sun": 4,
-          "temp": 19.3,
-          "rh": 56.0
+          "temp": 18.8,
+          "rh": 58.0
         },
         "Madhya Pradesh|Niwari": {
           "met3_shade": 3,
@@ -836392,8 +836044,8 @@
           "met5_sun": 4,
           "met6_shade": 4,
           "met6_sun": 5,
-          "temp": 19.5,
-          "rh": 79.0
+          "temp": 19.4,
+          "rh": 78.0
         },
         "Madhya Pradesh|Rajgarh": {
           "met3_shade": 2,
@@ -836404,8 +836056,8 @@
           "met5_sun": 4,
           "met6_shade": 4,
           "met6_sun": 4,
-          "temp": 14.7,
-          "rh": 67.0
+          "temp": 14.6,
+          "rh": 68.0
         },
         "Madhya Pradesh|Sagar": {
           "met3_shade": 3,
@@ -836416,19 +836068,19 @@
           "met5_sun": 4,
           "met6_shade": 4,
           "met6_sun": 4,
-          "temp": 17.6,
-          "rh": 61.0
+          "temp": 17.2,
+          "rh": 62.0
         },
         "Madhya Pradesh|Satna": {
           "met3_shade": 3,
-          "met3_sun": 4,
+          "met3_sun": 3,
           "met4_shade": 3,
           "met4_sun": 4,
           "met5_shade": 4,
           "met5_sun": 4,
           "met6_shade": 4,
           "met6_sun": 5,
-          "temp": 18.0,
+          "temp": 17.7,
           "rh": 98.0
         },
         "Madhya Pradesh|Sehore": {
@@ -836440,8 +836092,8 @@
           "met5_sun": 4,
           "met6_shade": 4,
           "met6_sun": 4,
-          "temp": 15.8,
-          "rh": 75.0
+          "temp": 15.7,
+          "rh": 77.0
         },
         "Madhya Pradesh|Shajapur": {
           "met3_shade": 2,
@@ -836452,7 +836104,7 @@
           "met5_sun": 4,
           "met6_shade": 4,
           "met6_sun": 4,
-          "temp": 14.5,
+          "temp": 14.2,
           "rh": 85.0
         },
         "Madhya Pradesh|Shivpuri": {
@@ -836464,8 +836116,8 @@
           "met5_sun": 4,
           "met6_shade": 4,
           "met6_sun": 4,
-          "temp": 20.4,
-          "rh": 61.0
+          "temp": 20.3,
+          "rh": 58.0
         },
         "Madhya Pradesh|Ujjain": {
           "met3_shade": 3,
@@ -836476,19 +836128,19 @@
           "met5_sun": 4,
           "met6_shade": 4,
           "met6_sun": 4,
-          "temp": 16.4,
-          "rh": 80.0
+          "temp": 16.1,
+          "rh": 82.0
         },
         "Madhya Pradesh|Vidisha": {
           "met3_shade": 3,
-          "met3_sun": 4,
+          "met3_sun": 3,
           "met4_shade": 3,
           "met4_sun": 4,
           "met5_shade": 4,
           "met5_sun": 4,
           "met6_shade": 4,
           "met6_sun": 4,
-          "temp": 18.5,
+          "temp": 18.1,
           "rh": 65.0
         },
         "Maharashtra|Akola": {
@@ -836500,8 +836152,8 @@
           "met5_sun": 4,
           "met6_shade": 4,
           "met6_sun": 4,
-          "temp": 21.6,
-          "rh": 41.0
+          "temp": 21.4,
+          "rh": 42.0
         },
         "Maharashtra|Beed": {
           "met3_shade": 3,
@@ -836513,7 +836165,7 @@
           "met6_shade": 4,
           "met6_sun": 4,
           "temp": 19.7,
-          "rh": 53.0
+          "rh": 52.0
         },
         "Maharashtra|Buldhana": {
           "met3_shade": 3,
@@ -836524,8 +836176,8 @@
           "met5_sun": 4,
           "met6_shade": 4,
           "met6_sun": 4,
-          "temp": 24.6,
-          "rh": 21.0
+          "temp": 24.5,
+          "rh": 22.0
         },
         "Maharashtra|Chandrapur": {
           "met3_shade": 3,
@@ -836536,8 +836188,8 @@
           "met5_sun": 4,
           "met6_shade": 4,
           "met6_sun": 5,
-          "temp": 22.6,
-          "rh": 58.0
+          "temp": 22.5,
+          "rh": 59.0
         },
         "Maharashtra|Hingoli": {
           "met3_shade": 3,
@@ -836548,8 +836200,8 @@
           "met5_sun": 4,
           "met6_shade": 4,
           "met6_sun": 4,
-          "temp": 20.3,
-          "rh": 42.0
+          "temp": 19.8,
+          "rh": 45.0
         },
         "Maharashtra|Kolhapur": {
           "met3_shade": 3,
@@ -836566,14 +836218,14 @@
         "Maharashtra|Mumbai Suburban": {
           "met3_shade": 4,
           "met3_sun": 5,
-          "met4_shade": 4,
+          "met4_shade": 5,
           "met4_sun": 5,
           "met5_shade": 5,
           "met5_sun": 5,
           "met6_shade": 5,
           "met6_sun": 5,
-          "temp": 25.8,
-          "rh": 93.0
+          "temp": 25.4,
+          "rh": 99.0
         },
         "Maharashtra|Mumbai City": {
           "met3_shade": 4,
@@ -836596,7 +836248,7 @@
           "met5_sun": 4,
           "met6_shade": 4,
           "met6_sun": 5,
-          "temp": 25.5,
+          "temp": 25.6,
           "rh": 39.0
         },
         "Maharashtra|Nanded": {
@@ -836608,8 +836260,8 @@
           "met5_sun": 4,
           "met6_shade": 4,
           "met6_sun": 4,
-          "temp": 21.6,
-          "rh": 44.0
+          "temp": 21.3,
+          "rh": 48.0
         },
         "Maharashtra|Nandurbar": {
           "met3_shade": 3,
@@ -836620,8 +836272,8 @@
           "met5_sun": 4,
           "met6_shade": 4,
           "met6_sun": 4,
-          "temp": 20.2,
-          "rh": 62.0
+          "temp": 19.9,
+          "rh": 63.0
         },
         "Maharashtra|Nashik": {
           "met3_shade": 3,
@@ -836632,8 +836284,8 @@
           "met5_sun": 4,
           "met6_shade": 4,
           "met6_sun": 5,
-          "temp": 22.2,
-          "rh": 57.0
+          "temp": 21.9,
+          "rh": 58.0
         },
         "Maharashtra|Palghar": {
           "met3_shade": 3,
@@ -836641,10 +836293,10 @@
           "met4_shade": 3,
           "met4_sun": 4,
           "met5_shade": 4,
-          "met5_sun": 5,
+          "met5_sun": 4,
           "met6_shade": 4,
           "met6_sun": 5,
-          "temp": 24.5,
+          "temp": 24.3,
           "rh": 100.0
         },
         "Maharashtra|Pune": {
@@ -836656,8 +836308,8 @@
           "met5_sun": 4,
           "met6_shade": 4,
           "met6_sun": 4,
-          "temp": 22.1,
-          "rh": 45.0
+          "temp": 21.8,
+          "rh": 49.0
         },
         "Maharashtra|Raigad": {
           "met3_shade": 3,
@@ -836680,7 +836332,7 @@
           "met5_sun": 5,
           "met6_shade": 5,
           "met6_sun": 5,
-          "temp": 19.0,
+          "temp": 18.8,
           "rh": 100.0
         },
         "Maharashtra|Sangli": {
@@ -836722,14 +836374,14 @@
         "Maharashtra|Solapur": {
           "met3_shade": 3,
           "met3_sun": 4,
-          "met4_shade": 4,
+          "met4_shade": 3,
           "met4_sun": 4,
           "met5_shade": 4,
           "met5_sun": 4,
           "met6_shade": 4,
           "met6_sun": 4,
-          "temp": 21.8,
-          "rh": 41.0
+          "temp": 20.7,
+          "rh": 45.0
         },
         "Maharashtra|Wardha": {
           "met3_shade": 3,
@@ -836740,20 +836392,20 @@
           "met5_sun": 4,
           "met6_shade": 4,
           "met6_sun": 4,
-          "temp": 23.3,
-          "rh": 41.0
+          "temp": 23.0,
+          "rh": 42.0
         },
         "Maharashtra|Yavatmal": {
           "met3_shade": 3,
-          "met3_sun": 4,
+          "met3_sun": 3,
           "met4_shade": 3,
           "met4_sun": 4,
           "met5_shade": 4,
           "met5_sun": 4,
           "met6_shade": 4,
           "met6_sun": 4,
-          "temp": 19.1,
-          "rh": 52.0
+          "temp": 18.4,
+          "rh": 55.0
         },
         "Manipur|Chandel": {
           "met3_shade": 3,
@@ -836764,7 +836416,7 @@
           "met5_sun": 4,
           "met6_shade": 4,
           "met6_sun": 4,
-          "temp": 15.3,
+          "temp": 15.0,
           "rh": 100.0
         },
         "Manipur|Kamjong": {
@@ -836773,11 +836425,11 @@
           "met4_shade": 3,
           "met4_sun": 3,
           "met5_shade": 3,
-          "met5_sun": 4,
+          "met5_sun": 3,
           "met6_shade": 3,
           "met6_sun": 4,
-          "temp": 9.8,
-          "rh": 84.0
+          "temp": 9.4,
+          "rh": 79.0
         },
         "Manipur|Kangpokpi": {
           "met3_shade": 3,
@@ -836796,11 +836448,11 @@
           "met3_sun": 3,
           "met4_shade": 3,
           "met4_sun": 4,
-          "met5_shade": 4,
+          "met5_shade": 3,
           "met5_sun": 4,
           "met6_shade": 4,
           "met6_sun": 4,
-          "temp": 14.8,
+          "temp": 14.4,
           "rh": 100.0
         },
         "Manipur|Senapati": {
@@ -836829,14 +836481,14 @@
         },
         "Manipur|Ukhrul": {
           "met3_shade": 3,
-          "met3_sun": 4,
+          "met3_sun": 3,
           "met4_shade": 3,
           "met4_sun": 4,
           "met5_shade": 4,
           "met5_sun": 4,
           "met6_shade": 4,
           "met6_sun": 5,
-          "temp": 18.4,
+          "temp": 17.7,
           "rh": 100.0
         },
         "Meghalaya|East Garo Hills": {
@@ -836848,7 +836500,7 @@
           "met5_sun": 4,
           "met6_shade": 4,
           "met6_sun": 4,
-          "temp": 15.9,
+          "temp": 15.7,
           "rh": 84.0
         },
         "Meghalaya|East Khasi Hills": {
@@ -836860,8 +836512,8 @@
           "met5_sun": 4,
           "met6_shade": 4,
           "met6_sun": 4,
-          "temp": 17.0,
-          "rh": 69.0
+          "temp": 16.5,
+          "rh": 71.0
         },
         "Meghalaya|Jaintia Hills": {
           "met3_shade": 3,
@@ -836872,8 +836524,8 @@
           "met5_sun": 4,
           "met6_shade": 4,
           "met6_sun": 4,
-          "temp": 15.8,
-          "rh": 84.0
+          "temp": 15.5,
+          "rh": 86.0
         },
         "Meghalaya|North Garo Hills": {
           "met3_shade": 3,
@@ -836896,7 +836548,7 @@
           "met5_sun": 5,
           "met6_shade": 4,
           "met6_sun": 5,
-          "temp": 19.0,
+          "temp": 18.9,
           "rh": 99.0
         },
         "Meghalaya|South West Garo Hills": {
@@ -836908,7 +836560,7 @@
           "met5_sun": 4,
           "met6_shade": 4,
           "met6_sun": 5,
-          "temp": 18.1,
+          "temp": 18.4,
           "rh": 99.0
         },
         "Meghalaya|West Garo Hills": {
@@ -836920,7 +836572,7 @@
           "met5_sun": 4,
           "met6_shade": 4,
           "met6_sun": 5,
-          "temp": 23.0,
+          "temp": 22.8,
           "rh": 65.0
         },
         "Meghalaya|West Khasi Hills": {
@@ -836956,7 +836608,7 @@
           "met5_sun": 5,
           "met6_shade": 4,
           "met6_sun": 5,
-          "temp": 18.9,
+          "temp": 18.8,
           "rh": 100.0
         },
         "Mizoram|Khawzawl": {
@@ -836968,7 +836620,7 @@
           "met5_sun": 4,
           "met6_shade": 4,
           "met6_sun": 4,
-          "temp": 15.3,
+          "temp": 14.8,
           "rh": 99.0
         },
         "Mizoram|Kolasib": {
@@ -836980,8 +836632,8 @@
           "met5_sun": 5,
           "met6_shade": 4,
           "met6_sun": 5,
-          "temp": 21.6,
-          "rh": 84.0
+          "temp": 21.4,
+          "rh": 83.0
         },
         "Mizoram|Lawngtlai": {
           "met3_shade": 3,
@@ -837004,7 +836656,7 @@
           "met5_sun": 5,
           "met6_shade": 5,
           "met6_sun": 5,
-          "temp": 20.1,
+          "temp": 19.9,
           "rh": 100.0
         },
         "Mizoram|Saiha": {
@@ -837016,8 +836668,8 @@
           "met5_sun": 4,
           "met6_shade": 4,
           "met6_sun": 4,
-          "temp": 16.1,
-          "rh": 79.0
+          "temp": 16.0,
+          "rh": 78.0
         },
         "Nagaland|Kiphire": {
           "met3_shade": 3,
@@ -837028,8 +836680,8 @@
           "met5_sun": 4,
           "met6_shade": 4,
           "met6_sun": 4,
-          "temp": 15.5,
-          "rh": 84.0
+          "temp": 15.4,
+          "rh": 85.0
         },
         "Nagaland|Kohima": {
           "met3_shade": 3,
@@ -837046,14 +836698,14 @@
         "Nagaland|Longleng": {
           "met3_shade": 3,
           "met3_sun": 4,
-          "met4_shade": 3,
+          "met4_shade": 4,
           "met4_sun": 4,
           "met5_shade": 4,
           "met5_sun": 4,
           "met6_shade": 4,
           "met6_sun": 4,
-          "temp": 20.3,
-          "rh": 56.0
+          "temp": 20.8,
+          "rh": 53.0
         },
         "Nagaland|Peren": {
           "met3_shade": 3,
@@ -837077,7 +836729,7 @@
           "met6_shade": 4,
           "met6_sun": 4,
           "temp": 17.5,
-          "rh": 72.0
+          "rh": 73.0
         },
         "Odisha|Balangir": {
           "met3_shade": 3,
@@ -837088,7 +836740,7 @@
           "met5_sun": 5,
           "met6_shade": 5,
           "met6_sun": 5,
-          "temp": 22.0,
+          "temp": 21.9,
           "rh": 100.0
         },
         "Odisha|Balasore": {
@@ -837100,7 +836752,7 @@
           "met5_sun": 5,
           "met6_shade": 5,
           "met6_sun": 5,
-          "temp": 24.2,
+          "temp": 23.9,
           "rh": 100.0
         },
         "Odisha|Ganjam": {
@@ -837124,19 +836776,19 @@
           "met5_sun": 5,
           "met6_shade": 5,
           "met6_sun": 5,
-          "temp": 21.2,
+          "temp": 21.1,
           "rh": 99.0
         },
         "Odisha|Mayurbhanj": {
           "met3_shade": 4,
-          "met3_sun": 5,
+          "met3_sun": 4,
           "met4_shade": 4,
           "met4_sun": 5,
           "met5_shade": 5,
           "met5_sun": 5,
           "met6_shade": 5,
           "met6_sun": 5,
-          "temp": 24.3,
+          "temp": 24.2,
           "rh": 100.0
         },
         "Odisha|Nuapada": {
@@ -837148,8 +836800,8 @@
           "met5_sun": 4,
           "met6_shade": 4,
           "met6_sun": 4,
-          "temp": 21.2,
-          "rh": 60.0
+          "temp": 21.1,
+          "rh": 61.0
         },
         "Odisha|Puri": {
           "met3_shade": 4,
@@ -837160,19 +836812,19 @@
           "met5_sun": 4,
           "met6_shade": 4,
           "met6_sun": 5,
-          "temp": 25.5,
+          "temp": 25.4,
           "rh": 51.0
         },
         "Odisha|Rayagada": {
           "met3_shade": 4,
-          "met3_sun": 5,
+          "met3_sun": 4,
           "met4_shade": 4,
           "met4_sun": 5,
           "met5_shade": 5,
           "met5_sun": 5,
           "met6_shade": 5,
           "met6_sun": 5,
-          "temp": 24.8,
+          "temp": 24.2,
           "rh": 100.0
         },
         "Odisha|Sambalpur": {
@@ -837184,7 +836836,7 @@
           "met5_sun": 5,
           "met6_shade": 5,
           "met6_sun": 5,
-          "temp": 24.4,
+          "temp": 24.5,
           "rh": 87.0
         },
         "Odisha|Sonepur": {
@@ -837244,7 +836896,7 @@
           "met5_sun": 4,
           "met6_shade": 4,
           "met6_sun": 4,
-          "temp": 19.4,
+          "temp": 19.3,
           "rh": 9.0
         },
         "Punjab|Firozpur": {
@@ -837256,7 +836908,7 @@
           "met5_sun": 4,
           "met6_shade": 4,
           "met6_sun": 5,
-          "temp": 17.1,
+          "temp": 17.0,
           "rh": 99.0
         },
         "Punjab|Hoshiarpur": {
@@ -837266,9 +836918,9 @@
           "met4_sun": 4,
           "met5_shade": 4,
           "met5_sun": 5,
-          "met6_shade": 4,
+          "met6_shade": 5,
           "met6_sun": 5,
-          "temp": 19.7,
+          "temp": 20.2,
           "rh": 100.0
         },
         "Punjab|Muktsar": {
@@ -837281,7 +836933,7 @@
           "met6_shade": 4,
           "met6_sun": 5,
           "temp": 23.1,
-          "rh": 66.0
+          "rh": 67.0
         },
         "Punjab|Pathankot": {
           "met3_shade": 3,
@@ -837292,8 +836944,8 @@
           "met5_sun": 4,
           "met6_shade": 4,
           "met6_sun": 5,
-          "temp": 20.6,
-          "rh": 83.0
+          "temp": 20.1,
+          "rh": 87.0
         },
         "Punjab|Rupnagar": {
           "met3_shade": 3,
@@ -837301,10 +836953,10 @@
           "met4_shade": 3,
           "met4_sun": 4,
           "met5_shade": 4,
-          "met5_sun": 5,
+          "met5_sun": 4,
           "met6_shade": 4,
           "met6_sun": 5,
-          "temp": 19.1,
+          "temp": 18.7,
           "rh": 100.0
         },
         "Rajasthan|Ajmer": {
@@ -837316,8 +836968,8 @@
           "met5_sun": 4,
           "met6_shade": 4,
           "met6_sun": 4,
-          "temp": 15.9,
-          "rh": 76.0
+          "temp": 15.7,
+          "rh": 80.0
         },
         "Rajasthan|Bikaner": {
           "met3_shade": 3,
@@ -837328,8 +836980,8 @@
           "met5_sun": 4,
           "met6_shade": 4,
           "met6_sun": 4,
-          "temp": 17.7,
-          "rh": 53.0
+          "temp": 17.5,
+          "rh": 56.0
         },
         "Rajasthan|Churu": {
           "met3_shade": 3,
@@ -837340,8 +836992,8 @@
           "met5_sun": 4,
           "met6_shade": 4,
           "met6_sun": 4,
-          "temp": 19.5,
-          "rh": 56.0
+          "temp": 19.6,
+          "rh": 55.0
         },
         "Rajasthan|Dausa": {
           "met3_shade": 3,
@@ -837352,8 +837004,8 @@
           "met5_sun": 4,
           "met6_shade": 4,
           "met6_sun": 4,
-          "temp": 14.8,
-          "rh": 98.0
+          "temp": 15.8,
+          "rh": 96.0
         },
         "Rajasthan|Ganganagar": {
           "met3_shade": 6,
@@ -837365,7 +837017,7 @@
           "met6_shade": 6,
           "met6_sun": 6,
           "temp": 38.0,
-          "rh": 76.0
+          "rh": 77.0
         },
         "Rajasthan|Jaisalmer": {
           "met3_shade": 3,
@@ -837376,20 +837028,20 @@
           "met5_sun": 4,
           "met6_shade": 4,
           "met6_sun": 4,
-          "temp": 19.1,
-          "rh": 52.0
+          "temp": 18.8,
+          "rh": 53.0
         },
         "Rajasthan|Jalore": {
           "met3_shade": 3,
           "met3_sun": 4,
-          "met4_shade": 4,
+          "met4_shade": 3,
           "met4_sun": 4,
           "met5_shade": 4,
           "met5_sun": 4,
           "met6_shade": 4,
           "met6_sun": 4,
-          "temp": 20.4,
-          "rh": 59.0
+          "temp": 19.5,
+          "rh": 63.0
         },
         "Rajasthan|Jhunjhunu": {
           "met3_shade": 3,
@@ -837400,8 +837052,8 @@
           "met5_sun": 4,
           "met6_shade": 4,
           "met6_sun": 4,
-          "temp": 16.6,
-          "rh": 66.0
+          "temp": 16.5,
+          "rh": 67.0
         },
         "Rajasthan|Jodhpur": {
           "met3_shade": 3,
@@ -837411,9 +837063,9 @@
           "met5_shade": 4,
           "met5_sun": 4,
           "met6_shade": 4,
-          "met6_sun": 4,
-          "temp": 20.6,
-          "rh": 65.0
+          "met6_sun": 5,
+          "temp": 20.4,
+          "rh": 66.0
         },
         "Rajasthan|Pali": {
           "met3_shade": 3,
@@ -837424,7 +837076,7 @@
           "met5_sun": 4,
           "met6_shade": 4,
           "met6_sun": 4,
-          "temp": 21.4,
+          "temp": 21.2,
           "rh": 51.0
         },
         "Rajasthan|Pratapgarh": {
@@ -837448,7 +837100,7 @@
           "met5_sun": 4,
           "met6_shade": 4,
           "met6_sun": 4,
-          "temp": 15.1,
+          "temp": 14.7,
           "rh": 72.0
         },
         "Rajasthan|Sirohi": {
@@ -837460,8 +837112,8 @@
           "met5_sun": 4,
           "met6_shade": 4,
           "met6_sun": 4,
-          "temp": 15.3,
-          "rh": 56.0
+          "temp": 14.6,
+          "rh": 60.0
         },
         "Sikkim|Soreng": {
           "met3_shade": 2,
@@ -837472,7 +837124,7 @@
           "met5_sun": 4,
           "met6_shade": 4,
           "met6_sun": 4,
-          "temp": 13.9,
+          "temp": 13.8,
           "rh": 94.0
         },
         "Tamil Nadu|Ariyalur": {
@@ -837485,7 +837137,7 @@
           "met6_shade": 5,
           "met6_sun": 5,
           "temp": 23.2,
-          "rh": 96.0
+          "rh": 94.0
         },
         "Tamil Nadu|Chengalpattu": {
           "met3_shade": 3,
@@ -837496,7 +837148,7 @@
           "met5_sun": 5,
           "met6_shade": 5,
           "met6_sun": 5,
-          "temp": 22.8,
+          "temp": 22.4,
           "rh": 97.0
         },
         "Tamil Nadu|Chennai": {
@@ -837508,7 +837160,7 @@
           "met5_sun": 5,
           "met6_shade": 5,
           "met6_sun": 5,
-          "temp": 24.9,
+          "temp": 24.8,
           "rh": 90.0
         },
         "Tamil Nadu|Coimbatore": {
@@ -837520,8 +837172,8 @@
           "met5_sun": 4,
           "met6_shade": 4,
           "met6_sun": 4,
-          "temp": 15.4,
-          "rh": 65.0
+          "temp": 15.3,
+          "rh": 67.0
         },
         "Tamil Nadu|Cuddalore": {
           "met3_shade": 3,
@@ -837532,8 +837184,8 @@
           "met5_sun": 5,
           "met6_shade": 5,
           "met6_sun": 5,
-          "temp": 23.5,
-          "rh": 90.0
+          "temp": 23.3,
+          "rh": 92.0
         },
         "Tamil Nadu|Dharmapuri": {
           "met3_shade": 3,
@@ -837544,8 +837196,8 @@
           "met5_sun": 5,
           "met6_shade": 5,
           "met6_sun": 5,
-          "temp": 23.0,
-          "rh": 86.0
+          "temp": 22.9,
+          "rh": 87.0
         },
         "Tamil Nadu|Dindigul": {
           "met3_shade": 4,
@@ -837581,7 +837233,7 @@
           "met6_shade": 5,
           "met6_sun": 5,
           "temp": 23.4,
-          "rh": 94.0
+          "rh": 93.0
         },
         "Tamil Nadu|Kanyakumari": {
           "met3_shade": 3,
@@ -837604,8 +837256,8 @@
           "met5_sun": 4,
           "met6_shade": 4,
           "met6_sun": 5,
-          "temp": 19.1,
-          "rh": 94.0
+          "temp": 18.8,
+          "rh": 97.0
         },
         "Tamil Nadu|Nagapattinam": {
           "met3_shade": 4,
@@ -837641,7 +837293,7 @@
           "met6_shade": 4,
           "met6_sun": 5,
           "temp": 20.5,
-          "rh": 89.0
+          "rh": 90.0
         },
         "Tamil Nadu|Pudukkottai": {
           "met3_shade": 3,
@@ -837676,10 +837328,22 @@
           "met5_sun": 5,
           "met6_shade": 5,
           "met6_sun": 5,
-          "temp": 24.9,
-          "rh": 74.0
+          "temp": 24.7,
+          "rh": 75.0
         },
         "Tamil Nadu|Sivaganga": {
+          "met3_shade": 4,
+          "met3_sun": 4,
+          "met4_shade": 4,
+          "met4_sun": 5,
+          "met5_shade": 5,
+          "met5_sun": 5,
+          "met6_shade": 5,
+          "met6_sun": 5,
+          "temp": 23.8,
+          "rh": 95.0
+        },
+        "Tamil Nadu|Tenkasi": {
           "met3_shade": 3,
           "met3_sun": 4,
           "met4_shade": 4,
@@ -837688,10 +837352,10 @@
           "met5_sun": 5,
           "met6_shade": 5,
           "met6_sun": 5,
-          "temp": 23.5,
-          "rh": 96.0
+          "temp": 23.7,
+          "rh": 98.0
         },
-        "Tamil Nadu|Tenkasi": {
+        "Tamil Nadu|Thanjavur": {
           "met3_shade": 4,
           "met3_sun": 4,
           "met4_shade": 4,
@@ -837703,18 +837367,6 @@
           "temp": 23.9,
           "rh": 100.0
         },
-        "Tamil Nadu|Thanjavur": {
-          "met3_shade": 4,
-          "met3_sun": 4,
-          "met4_shade": 4,
-          "met4_sun": 5,
-          "met5_shade": 5,
-          "met5_sun": 5,
-          "met6_shade": 5,
-          "met6_sun": 5,
-          "temp": 24.0,
-          "rh": 100.0
-        },
         "Tamil Nadu|The Nilgiris": {
           "met3_shade": 2,
           "met3_sun": 3,
@@ -837724,8 +837376,8 @@
           "met5_sun": 4,
           "met6_shade": 4,
           "met6_sun": 4,
-          "temp": 14.7,
-          "rh": 70.0
+          "temp": 14.8,
+          "rh": 68.0
         },
         "Tamil Nadu|Thoothukudi": {
           "met3_shade": 4,
@@ -837737,7 +837389,7 @@
           "met6_shade": 5,
           "met6_sun": 5,
           "temp": 25.5,
-          "rh": 90.0
+          "rh": 89.0
         },
         "Tamil Nadu|Tiruchirappalli": {
           "met3_shade": 3,
@@ -837748,7 +837400,7 @@
           "met5_sun": 5,
           "met6_shade": 5,
           "met6_sun": 5,
-          "temp": 23.7,
+          "temp": 23.6,
           "rh": 98.0
         },
         "Tamil Nadu|Tirunelveli": {
@@ -837772,7 +837424,7 @@
           "met5_sun": 5,
           "met6_shade": 5,
           "met6_sun": 5,
-          "temp": 22.8,
+          "temp": 22.5,
           "rh": 99.0
         },
         "Tamil Nadu|Tiruvannamalai": {
@@ -837784,20 +837436,20 @@
           "met5_sun": 5,
           "met6_shade": 5,
           "met6_sun": 5,
-          "temp": 22.9,
-          "rh": 100.0
+          "temp": 22.8,
+          "rh": 99.0
         },
         "Tamil Nadu|Vellore": {
           "met3_shade": 3,
           "met3_sun": 4,
-          "met4_shade": 3,
+          "met4_shade": 4,
           "met4_sun": 4,
           "met5_shade": 4,
           "met5_sun": 4,
           "met6_shade": 4,
           "met6_sun": 4,
           "temp": 20.3,
-          "rh": 54.0
+          "rh": 57.0
         },
         "Tamil Nadu|Virudhunagar": {
           "met3_shade": 3,
@@ -837808,8 +837460,8 @@
           "met5_sun": 5,
           "met6_shade": 5,
           "met6_sun": 5,
-          "temp": 22.6,
-          "rh": 88.0
+          "temp": 22.7,
+          "rh": 92.0
         },
         "Telangana|Hanumakonda": {
           "met3_shade": 3,
@@ -837844,8 +837496,8 @@
           "met5_sun": 5,
           "met6_shade": 4,
           "met6_sun": 5,
-          "temp": 22.7,
-          "rh": 76.0
+          "temp": 23.0,
+          "rh": 78.0
         },
         "Telangana|Khammam": {
           "met3_shade": 4,
@@ -837857,7 +837509,7 @@
           "met6_shade": 5,
           "met6_sun": 5,
           "temp": 23.8,
-          "rh": 96.0
+          "rh": 98.0
         },
         "Telangana|Kumuram Bheem Asifabad ": {
           "met3_shade": 3,
@@ -837880,7 +837532,7 @@
           "met5_sun": 5,
           "met6_shade": 5,
           "met6_sun": 5,
-          "temp": 24.5,
+          "temp": 24.3,
           "rh": 100.0
         },
         "Telangana|Mahbubnagar": {
@@ -837892,8 +837544,8 @@
           "met5_sun": 4,
           "met6_shade": 4,
           "met6_sun": 4,
-          "temp": 23.2,
-          "rh": 40.0
+          "temp": 23.0,
+          "rh": 42.0
         },
         "Telangana|Medak": {
           "met3_shade": 3,
@@ -837916,8 +837568,8 @@
           "met5_sun": 4,
           "met6_shade": 4,
           "met6_sun": 5,
-          "temp": 23.6,
-          "rh": 59.0
+          "temp": 23.5,
+          "rh": 60.0
         },
         "Telangana|Nalgonda": {
           "met3_shade": 4,
@@ -837928,7 +837580,7 @@
           "met5_sun": 5,
           "met6_shade": 5,
           "met6_sun": 5,
-          "temp": 25.4,
+          "temp": 25.5,
           "rh": 72.0
         },
         "Telangana|Nirmal ": {
@@ -837940,8 +837592,8 @@
           "met5_sun": 4,
           "met6_shade": 4,
           "met6_sun": 5,
-          "temp": 24.1,
-          "rh": 52.0
+          "temp": 24.6,
+          "rh": 51.0
         },
         "Telangana|Peddapalli": {
           "met3_shade": 3,
@@ -837964,8 +837616,8 @@
           "met5_sun": 4,
           "met6_shade": 4,
           "met6_sun": 5,
-          "temp": 22.3,
-          "rh": 64.0
+          "temp": 22.5,
+          "rh": 65.0
         },
         "Telangana|Ranga Reddy": {
           "met3_shade": 3,
@@ -837976,8 +837628,8 @@
           "met5_sun": 4,
           "met6_shade": 4,
           "met6_sun": 5,
-          "temp": 19.3,
-          "rh": 73.0
+          "temp": 19.4,
+          "rh": 74.0
         },
         "Telangana|Sangareddy": {
           "met3_shade": 3,
@@ -837988,8 +837640,8 @@
           "met5_sun": 4,
           "met6_shade": 4,
           "met6_sun": 4,
-          "temp": 20.9,
-          "rh": 44.0
+          "temp": 20.8,
+          "rh": 45.0
         },
         "Telangana|Siddipet": {
           "met3_shade": 3,
@@ -838000,8 +837652,8 @@
           "met5_sun": 5,
           "met6_shade": 4,
           "met6_sun": 5,
-          "temp": 23.8,
-          "rh": 70.0
+          "temp": 23.7,
+          "rh": 71.0
         },
         "Telangana|Suryapet": {
           "met3_shade": 4,
@@ -838012,8 +837664,8 @@
           "met5_sun": 5,
           "met6_shade": 5,
           "met6_sun": 5,
-          "temp": 24.6,
-          "rh": 86.0
+          "temp": 24.4,
+          "rh": 87.0
         },
         "Telangana|Vikarabad": {
           "met3_shade": 3,
@@ -838024,8 +837676,8 @@
           "met5_sun": 4,
           "met6_shade": 4,
           "met6_sun": 4,
-          "temp": 19.0,
-          "rh": 60.0
+          "temp": 19.1,
+          "rh": 62.0
         },
         "Telangana|Wanaparthy": {
           "met3_shade": 3,
@@ -838072,7 +837724,7 @@
           "met5_sun": 5,
           "met6_shade": 5,
           "met6_sun": 5,
-          "temp": 21.4,
+          "temp": 21.2,
           "rh": 100.0
         },
         "Tripura|North Tripura": {
@@ -838084,7 +837736,7 @@
           "met5_sun": 5,
           "met6_shade": 5,
           "met6_sun": 5,
-          "temp": 20.2,
+          "temp": 21.0,
           "rh": 100.0
         },
         "Tripura|Sipahijala": {
@@ -838096,7 +837748,7 @@
           "met5_sun": 5,
           "met6_shade": 5,
           "met6_sun": 5,
-          "temp": 21.4,
+          "temp": 21.3,
           "rh": 100.0
         },
         "Tripura|South Tripura": {
@@ -838108,7 +837760,7 @@
           "met5_sun": 5,
           "met6_shade": 5,
           "met6_sun": 5,
-          "temp": 20.1,
+          "temp": 20.2,
           "rh": 100.0
         },
         "Tripura|Unakoti": {
@@ -838144,7 +837796,7 @@
           "met5_sun": 4,
           "met6_shade": 4,
           "met6_sun": 4,
-          "temp": 11.2,
+          "temp": 10.8,
           "rh": 100.0
         },
         "Uttarakhand|Dehradun": {
@@ -838156,7 +837808,7 @@
           "met5_sun": 5,
           "met6_shade": 4,
           "met6_sun": 5,
-          "rh": 87.0,
+          "rh": 88.0,
           "temp": 19.1
         },
         "Uttarakhand|Haridwar": {
@@ -838168,8 +837820,8 @@
           "met5_sun": 4,
           "met6_shade": 4,
           "met6_sun": 4,
-          "temp": 19.6,
-          "rh": 9.0
+          "temp": 19.5,
+          "rh": 11.0
         },
         "Uttarakhand|Nainital": {
           "met3_shade": 3,
@@ -838180,7 +837832,7 @@
           "met5_sun": 4,
           "met6_shade": 4,
           "met6_sun": 4,
-          "temp": 14.5,
+          "temp": 14.3,
           "rh": 100.0
         },
         "Uttarakhand|Pauri Garhwal": {
@@ -838192,8 +837844,8 @@
           "met5_sun": 4,
           "met6_shade": 4,
           "met6_sun": 4,
-          "temp": 19.4,
-          "rh": 88.0
+          "temp": 19.2,
+          "rh": 89.0
         },
         "Uttarakhand|Rudraprayag": {
           "met3_shade": 3,
@@ -838204,7 +837856,7 @@
           "met5_sun": 4,
           "met6_shade": 4,
           "met6_sun": 5,
-          "temp": 19.1,
+          "temp": 18.9,
           "rh": 86.0
         },
         "Uttarakhand|Tehri Garhwal": {
@@ -838216,20 +837868,20 @@
           "met5_sun": 4,
           "met6_shade": 4,
           "met6_sun": 5,
-          "temp": 17.7,
-          "rh": 90.0
+          "temp": 17.6,
+          "rh": 88.0
         },
         "Uttarakhand|Udham Singh Nagar": {
           "met3_shade": 3,
           "met3_sun": 4,
-          "met4_shade": 4,
+          "met4_shade": 3,
           "met4_sun": 4,
           "met5_shade": 4,
-          "met5_sun": 5,
+          "met5_sun": 4,
           "met6_shade": 4,
           "met6_sun": 5,
-          "temp": 19.3,
-          "rh": 95.0
+          "temp": 18.5,
+          "rh": 99.0
         },
         "Uttar Pradesh|Agra": {
           "met3_shade": 3,
@@ -838240,8 +837892,8 @@
           "met5_sun": 4,
           "met6_shade": 4,
           "met6_sun": 5,
-          "temp": 20.0,
-          "rh": 88.0
+          "temp": 19.9,
+          "rh": 89.0
         },
         "Uttar Pradesh|Aligarh": {
           "met3_shade": 4,
@@ -838252,8 +837904,8 @@
           "met5_sun": 5,
           "met6_shade": 5,
           "met6_sun": 5,
-          "temp": 24.2,
-          "rh": 99.0
+          "temp": 24.1,
+          "rh": 100.0
         },
         "Uttar Pradesh|Ambedkar Nagar": {
           "met3_shade": 3,
@@ -838264,7 +837916,7 @@
           "met5_sun": 5,
           "met6_shade": 5,
           "met6_sun": 5,
-          "temp": 20.5,
+          "temp": 20.3,
           "rh": 99.0
         },
         "Uttar Pradesh|Amethi": {
@@ -838288,7 +837940,7 @@
           "met5_sun": 5,
           "met6_shade": 5,
           "met6_sun": 5,
-          "temp": 21.6,
+          "temp": 21.5,
           "rh": 90.0
         },
         "Uttar Pradesh|Ballia": {
@@ -838300,7 +837952,7 @@
           "met5_sun": 5,
           "met6_shade": 5,
           "met6_sun": 5,
-          "temp": 20.9,
+          "temp": 21.0,
           "rh": 99.0
         },
         "Uttar Pradesh|Banda": {
@@ -838318,13 +837970,13 @@
         "Uttar Pradesh|Barabanki": {
           "met3_shade": 3,
           "met3_sun": 4,
-          "met4_shade": 4,
+          "met4_shade": 3,
           "met4_sun": 4,
           "met5_shade": 4,
           "met5_sun": 5,
           "met6_shade": 4,
           "met6_sun": 5,
-          "temp": 19.4,
+          "temp": 19.1,
           "rh": 100.0
         },
         "Uttar Pradesh|Bareilly": {
@@ -838336,7 +837988,7 @@
           "met5_sun": 4,
           "met6_shade": 4,
           "met6_sun": 5,
-          "temp": 18.1,
+          "temp": 18.6,
           "rh": 100.0
         },
         "Uttar Pradesh|Bulandshahar": {
@@ -838348,7 +838000,7 @@
           "met5_sun": 4,
           "met6_shade": 4,
           "met6_sun": 5,
-          "temp": 17.6,
+          "temp": 17.3,
           "rh": 96.0
         },
         "Uttar Pradesh|Etawah": {
@@ -838372,7 +838024,7 @@
           "met5_sun": 4,
           "met6_shade": 4,
           "met6_sun": 5,
-          "temp": 18.0,
+          "temp": 18.1,
           "rh": 100.0
         },
         "Uttar Pradesh|Gautam Buddha Nagar": {
@@ -838384,7 +838036,7 @@
           "met5_sun": 4,
           "met6_shade": 4,
           "met6_sun": 5,
-          "temp": 17.0,
+          "temp": 16.9,
           "rh": 99.0
         },
         "Uttar Pradesh|Ghaziabad": {
@@ -838397,7 +838049,7 @@
           "met6_shade": 4,
           "met6_sun": 5,
           "temp": 16.5,
-          "rh": 99.0
+          "rh": 100.0
         },
         "Uttar Pradesh|Hapur": {
           "met3_shade": 3,
@@ -838408,7 +838060,7 @@
           "met5_sun": 4,
           "met6_shade": 4,
           "met6_sun": 5,
-          "temp": 16.8,
+          "temp": 16.7,
           "rh": 100.0
         },
         "Uttar Pradesh|Hardoi": {
@@ -838420,19 +838072,19 @@
           "met5_sun": 5,
           "met6_shade": 4,
           "met6_sun": 5,
-          "temp": 19.2,
+          "temp": 19.0,
           "rh": 100.0
         },
         "Uttar Pradesh|Kashganj": {
           "met3_shade": 3,
           "met3_sun": 4,
-          "met4_shade": 3,
+          "met4_shade": 4,
           "met4_sun": 4,
           "met5_shade": 4,
           "met5_sun": 5,
           "met6_shade": 4,
           "met6_sun": 5,
-          "temp": 18.9,
+          "temp": 19.4,
           "rh": 100.0
         },
         "Uttar Pradesh|Kushinagar": {
@@ -838441,10 +838093,10 @@
           "met4_shade": 3,
           "met4_sun": 4,
           "met5_shade": 4,
-          "met5_sun": 5,
+          "met5_sun": 4,
           "met6_shade": 4,
           "met6_sun": 5,
-          "temp": 18.8,
+          "temp": 18.7,
           "rh": 100.0
         },
         "Uttar Pradesh|Lucknow": {
@@ -838456,7 +838108,7 @@
           "met5_sun": 5,
           "met6_shade": 4,
           "met6_sun": 5,
-          "temp": 21.4,
+          "temp": 21.3,
           "rh": 88.0
         },
         "Uttar Pradesh|Mainpuri": {
@@ -838468,7 +838120,7 @@
           "met5_sun": 5,
           "met6_shade": 4,
           "met6_sun": 5,
-          "temp": 18.8,
+          "temp": 19.0,
           "rh": 100.0
         },
         "Uttar Pradesh|Mathura": {
@@ -838480,7 +838132,7 @@
           "met5_sun": 4,
           "met6_shade": 4,
           "met6_sun": 4,
-          "temp": 15.5,
+          "temp": 15.4,
           "rh": 100.0
         },
         "Uttar Pradesh|Mirzapur": {
@@ -838492,7 +838144,7 @@
           "met5_sun": 5,
           "met6_shade": 5,
           "met6_sun": 5,
-          "temp": 21.1,
+          "temp": 20.9,
           "rh": 100.0
         },
         "Uttar Pradesh|Muzaffarnagar": {
@@ -838504,7 +838156,7 @@
           "met5_sun": 4,
           "met6_shade": 4,
           "met6_sun": 5,
-          "temp": 17.4,
+          "temp": 17.3,
           "rh": 100.0
         },
         "Uttar Pradesh|Pratapgarh": {
@@ -838516,7 +838168,7 @@
           "met5_sun": 5,
           "met6_shade": 5,
           "met6_sun": 5,
-          "temp": 21.1,
+          "temp": 20.9,
           "rh": 100.0
         },
         "Uttar Pradesh|Raebareli": {
@@ -838528,7 +838180,7 @@
           "met5_sun": 5,
           "met6_shade": 4,
           "met6_sun": 5,
-          "temp": 19.5,
+          "temp": 19.3,
           "rh": 100.0
         },
         "West Bengal|Alipurduar": {
@@ -838540,7 +838192,7 @@
           "met5_sun": 5,
           "met6_shade": 4,
           "met6_sun": 5,
-          "temp": 21.7,
+          "temp": 21.6,
           "rh": 88.0
         },
         "West Bengal|Asansol": {
@@ -838552,7 +838204,7 @@
           "met5_sun": 4,
           "met6_shade": 4,
           "met6_sun": 5,
-          "temp": 23.2,
+          "temp": 23.1,
           "rh": 62.0
         },
         "West Bengal|Cooch Behar": {
@@ -838564,7 +838216,7 @@
           "met5_sun": 5,
           "met6_shade": 5,
           "met6_sun": 5,
-          "temp": 25.4,
+          "temp": 25.3,
           "rh": 100.0
         },
         "West Bengal|Darjeeling": {
@@ -838576,8 +838228,8 @@
           "met5_sun": 5,
           "met6_shade": 5,
           "met6_sun": 5,
-          "temp": 22.0,
-          "rh": 88.0
+          "temp": 22.1,
+          "rh": 87.0
         },
         "West Bengal|East Burdwan": {
           "met3_shade": 3,
@@ -838600,7 +838252,7 @@
           "met5_sun": 5,
           "met6_shade": 5,
           "met6_sun": 5,
-          "temp": 26.8,
+          "temp": 26.7,
           "rh": 91.0
         },
         "West Bengal|Jalpaiguri": {
@@ -838623,9 +838275,9 @@
           "met5_shade": 4,
           "met5_sun": 4,
           "met6_shade": 4,
-          "met6_sun": 5,
-          "temp": 17.8,
-          "rh": 84.0
+          "met6_sun": 4,
+          "temp": 18.2,
+          "rh": 82.0
         },
         "West Bengal|Kolkata": {
           "met3_shade": 4,
@@ -838643,12 +838295,12 @@
           "met3_shade": 3,
           "met3_sun": 4,
           "met4_shade": 4,
-          "met4_sun": 5,
+          "met4_sun": 4,
           "met5_shade": 4,
           "met5_sun": 5,
           "met6_shade": 5,
           "met6_sun": 5,
-          "temp": 20.9,
+          "temp": 21.0,
           "rh": 97.0
         },
         "West Bengal|Nadia": {
@@ -838677,14 +838329,14 @@
         },
         "West Bengal|North Twenty Four Parganas": {
           "met3_shade": 4,
-          "met3_sun": 5,
+          "met3_sun": 4,
           "met4_shade": 4,
           "met4_sun": 5,
           "met5_shade": 5,
           "met5_sun": 5,
           "met6_shade": 5,
           "met6_sun": 5,
-          "temp": 24.8,
+          "temp": 24.7,
           "rh": 95.0
         },
         "West Bengal|South Dinajpur": {
@@ -838696,7 +838348,7 @@
           "met5_sun": 5,
           "met6_shade": 5,
           "met6_sun": 5,
-          "temp": 20.5,
+          "temp": 20.7,
           "rh": 100.0
         },
         "West Bengal|South Twenty Four Parganas": {
@@ -838710,12 +838362,84 @@
           "met6_sun": 5,
           "temp": 22.9,
           "rh": 97.0
+        },
+        "Arunachal Pradesh|Siang": {
+          "met3_shade": 3,
+          "met3_sun": 4,
+          "met4_shade": 3,
+          "met4_sun": 4,
+          "met5_shade": 4,
+          "met5_sun": 4,
+          "met6_shade": 4,
+          "met6_sun": 5,
+          "temp": 17.8,
+          "rh": 100.0
+        },
+        "Mizoram|Champhai": {
+          "met3_shade": 3,
+          "met3_sun": 3,
+          "met4_shade": 3,
+          "met4_sun": 4,
+          "met5_shade": 3,
+          "met5_sun": 4,
+          "met6_shade": 4,
+          "met6_sun": 4,
+          "temp": 14.3,
+          "rh": 100.0
+        },
+        "Rajasthan|Nagaur": {
+          "met3_shade": 3,
+          "met3_sun": 3,
+          "met4_shade": 3,
+          "met4_sun": 4,
+          "met5_shade": 3,
+          "met5_sun": 4,
+          "met6_shade": 4,
+          "met6_sun": 4,
+          "temp": 15.9,
+          "rh": 53.0
+        },
+        "Rajasthan|Sri Ganganagar": {
+          "met3_shade": 3,
+          "met3_sun": 4,
+          "met4_shade": 4,
+          "met4_sun": 4,
+          "met5_shade": 4,
+          "met5_sun": 4,
+          "met6_shade": 4,
+          "met6_sun": 5,
+          "temp": 21.5,
+          "rh": 67.0
+        },
+        "Uttar Pradesh|Amroha": {
+          "met3_shade": 3,
+          "met3_sun": 3,
+          "met4_shade": 3,
+          "met4_sun": 4,
+          "met5_shade": 4,
+          "met5_sun": 4,
+          "met6_shade": 4,
+          "met6_sun": 5,
+          "temp": 17.7,
+          "rh": 100.0
+        },
+        "Uttar Pradesh|Bijnor": {
+          "met3_shade": 3,
+          "met3_sun": 4,
+          "met4_shade": 3,
+          "met4_sun": 4,
+          "met5_shade": 4,
+          "met5_sun": 4,
+          "met6_shade": 4,
+          "met6_sun": 5,
+          "temp": 18.7,
+          "rh": 100.0
         }
       },
       "avg_temp": 20.2,
-      "min_temp": 0.2,
+      "min_temp": 0.1,
       "max_temp": 38.0,
-      "avg_rh": 83.2,
+      "avg_rh": 83.4,
       "min_rh": 9.0,
       "max_rh": 100.0
     }
