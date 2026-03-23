@@ -5161,7 +5161,12 @@ print(hazardous[['DISTRICT', 'STATE', 'EHI_350 (in shade °C)']])</code></pre>
                                     lon: lon
                                 };
 
-                                document.getElementById('forecast-district-select').value = districtName;
+                                // Resolve GeoJSON name to canonical india_districts.json name for the select
+                                const stateDistricts = window.indiaDistrictsData && window.indiaDistrictsData.states[currentSelectedState]
+                                    ? window.indiaDistrictsData.states[currentSelectedState].districts
+                                    : null;
+                                const canonicalName = stateDistricts ? (findDistrictKey(districtName, stateDistricts) || districtName) : districtName;
+                                document.getElementById('forecast-district-select').value = canonicalName;
                                 loadForecast();
                             } catch (err) {
                                 console.error('District click error:', err);
@@ -5672,6 +5677,21 @@ print(hazardous[['DISTRICT', 'STATE', 'EHI_350 (in shade °C)']])</code></pre>
                 .trim();
         }
 
+        // Levenshtein distance for fuzzy district name matching
+        function levenshtein(s1, s2) {
+            if (s1 === s2) return 0;
+            if (s1.length < s2.length) { const t = s1; s1 = s2; s2 = t; }
+            let prev = Array.from({length: s2.length + 1}, (_, i) => i);
+            for (let i = 0; i < s1.length; i++) {
+                const curr = [i + 1];
+                for (let j = 0; j < s2.length; j++) {
+                    curr.push(Math.min(prev[j + 1] + 1, curr[j] + 1, prev[j] + (s1[i] !== s2[j] ? 1 : 0)));
+                }
+                prev = curr;
+            }
+            return prev[s2.length];
+        }
+
         // Find the best matching key in stateData.districts for a given GeoJSON district name
         function findDistrictKey(districtName, stateDistricts) {
             if (!districtName || !stateDistricts) return null;
@@ -5687,7 +5707,15 @@ print(hazardous[['DISTRICT', 'STATE', 'EHI_350 (in shade °C)']])</code></pre>
                 const keyNorm = normalizeDistrictName(key);
                 if (norm.includes(keyNorm) || keyNorm.includes(norm)) return key;
             }
-            return null;
+            // Fuzzy edit-distance match (handles transliteration variants)
+            let bestKey = null, bestDist = Infinity;
+            for (const key of Object.keys(stateDistricts)) {
+                const d = levenshtein(norm, normalizeDistrictName(key));
+                if (d < bestDist) { bestDist = d; bestKey = key; }
+            }
+            // Accept if within 3 edits (or ~30% of name length for longer names)
+            const maxDist = Math.max(3, Math.floor(norm.length * 0.3));
+            return bestDist <= maxDist ? bestKey : null;
         }
 
         // Forecast map variables
