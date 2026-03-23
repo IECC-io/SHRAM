@@ -73,20 +73,24 @@ def fetch_forecast_openmeteo(lat, lon, days=3):
         f"&apikey={OPENMETEO_API_KEY}"
     )
 
-    try:
-        response = requests.get(url, timeout=30)
-        data = response.json()
+    for attempt in range(3):
+        try:
+            response = requests.get(url, timeout=60)
+            data = response.json()
 
-        if 'hourly' in data:
-            return data
-        elif 'error' in data:
-            print(f"API error for ({lat}, {lon}): {data.get('reason', 'Unknown error')}")
-            return None
-        else:
-            return None
-    except Exception as e:
-        print(f"Error fetching forecast ({lat}, {lon}): {e}")
-        return None
+            if 'hourly' in data:
+                return data
+            elif 'error' in data:
+                print(f"API error for ({lat}, {lon}): {data.get('reason', 'Unknown error')}")
+                return None
+            else:
+                return None
+        except Exception as e:
+            if attempt < 2:
+                time.sleep(2 ** attempt)  # 1s, 2s backoff
+            else:
+                print(f"Error fetching forecast ({lat}, {lon}): {e}")
+                return None
 
 
 def weather_code_to_condition(code):
