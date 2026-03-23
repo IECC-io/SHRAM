@@ -416,6 +416,7 @@ def generate_grid_data():
             'state': state_name,
             'temp': weather['temp'],
             'rh': weather['rh'],
+            'sw': None,  # filled in after nighttime check below
             'data': {}
         }
 
@@ -438,6 +439,7 @@ def generate_grid_data():
         # Get actual shortwave irradiance; force to 0 at night
         sw_raw = weather.get('sw')
         sw_actual = (sw_raw if sw_raw is not None else 0) if not is_nighttime else 0
+        point_data['sw'] = round(sw_actual) if sw_actual else 0
 
         # Compute for all MET levels using SW-based lookup
         for met in [3, 4, 5, 6]:
