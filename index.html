@@ -5066,8 +5066,7 @@ print(hazardous[['DISTRICT', 'STATE', 'EHI_350 (in shade °C)']])</code></pre>
                             fillColor: '#2d637f',
                             fillOpacity: isCurrentState ? 0 : 0.2,  // Hide fill for current state (districts will show)
                             color: '#2d637f',
-                            weight: isCurrentState ? 0 : 1,
-                            interactive: !isCurrentState  // Don't intercept clicks for current state
+                            weight: isCurrentState ? 0 : 1
                         };
                     },
                     onEachFeature: function(feature, layer) {
@@ -5090,6 +5089,9 @@ print(hazardous[['DISTRICT', 'STATE', 'EHI_350 (in shade °C)']])</code></pre>
                             layer.on('mouseout', function() {
                                 layer.setStyle({ fillOpacity: 0.2 });
                             });
+                        } else {
+                            // Current state — disable mouse interaction so clicks pass through to district layer
+                            layer.options.interactive = false;
                         }
                     }
                 }).addTo(forecastMap);
