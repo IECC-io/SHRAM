@@ -32,8 +32,8 @@ def Le(T):
 # Thermoregulatory parameters (used for heat exchange and regulation in the human body)
 sigma = 5.67e-8  # Stefan-Boltzmann constant in W/m^2/K^4
 epsilon = 0.97   # Emissivity of the surface (reflectivity of heat)
-M = 83.6         # Mass of an average US adult in kg
-H = 1.69         # Height of an average US adult in m
+M = 65           # Mass of average Indian adults in kg (PLoS ONE, 2021)
+H = 1.64         # Height of average Indian adults in m (PLoS ONE, 2021)
 A = 0.202 * (M**0.425) * (H**0.725)  # DuBois formula for surface area in m^2
 cpc = 3492.      # Specific heat capacity of the body core in J/kg/K
 C = M * cpc / A  # Heat capacity of the body core in J/K

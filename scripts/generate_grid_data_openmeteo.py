@@ -191,7 +191,7 @@ def fetch_weather_batch_openmeteo(points, batch_size=50, max_retries=3):
             f"{OPENMETEO_BASE_URL}"
             f"?latitude={lats}"
             f"&longitude={lons}"
-            f"&current=temperature_2m,relative_humidity_2m"
+            f"&current=temperature_2m,relative_humidity_2m,shortwave_radiation"
             f"&daily=sunrise,sunset"
             f"&timezone=Asia/Kolkata"
             f"&apikey={OPENMETEO_API_KEY}"
@@ -215,6 +215,7 @@ def fetch_weather_batch_openmeteo(points, batch_size=50, max_retries=3):
                             batch_results.append({
                                 'temp': loc_data['current'].get('temperature_2m'),
                                 'rh': loc_data['current'].get('relative_humidity_2m'),
+                                'sw': loc_data['current'].get('shortwave_radiation'),
                                 'sunrise': sunrise_str,
                                 'sunset': sunset_str
                             })
@@ -228,6 +229,7 @@ def fetch_weather_batch_openmeteo(points, batch_size=50, max_retries=3):
                     batch_results = [{
                         'temp': data['current'].get('temperature_2m'),
                         'rh': data['current'].get('relative_humidity_2m'),
+                        'sw': data['current'].get('shortwave_radiation'),
                         'sunrise': sunrise_str,
                         'sunset': sunset_str
                     }]
@@ -258,13 +260,17 @@ def fetch_weather_batch_openmeteo(points, batch_size=50, max_retries=3):
     return all_weather
 
 
-def compute_ehi_and_zone(temp_c, rh_percent, met_level, sun_condition):
-    """Compute EHI and zone for given conditions using lookup tables."""
+def compute_ehi_and_zone(temp_c, rh_percent, met_level, sw):
+    """Compute EHI and zone for given conditions using SW-based lookup tables.
+
+    Args:
+        sw: Shortwave irradiance in W/m². Use 0 for shade/nighttime.
+    """
     if temp_c is None or rh_percent is None:
         return None, 0
 
     try:
-        ehi, zone = lookup.get_ehi_zone(temp_c, rh_percent, met_level, sun_condition)
+        ehi, zone = lookup.get_ehi_zone(temp_c, rh_percent, met_level, sw=sw)
         return ehi, zone
     except Exception as e:
         print(f"Error looking up EHI: {e}")
@@ -429,25 +435,29 @@ def generate_grid_data():
             # Fallback to fixed cutoff if sunrise/sunset unavailable
             is_nighttime = current_minutes < 360 or current_minutes >= 1080
 
-        # Compute for all MET levels and sun conditions
+        # Get actual shortwave irradiance; force to 0 at night
+        sw_raw = weather.get('sw')
+        sw_actual = (sw_raw if sw_raw is not None else 0) if not is_nighttime else 0
+
+        # Compute for all MET levels using SW-based lookup
         for met in [3, 4, 5, 6]:
             point_data['data'][f'met{met}'] = {}
 
-            # Always compute shade first
-            shade_ehi, shade_zone = compute_ehi_and_zone(weather['temp'], weather['rh'], met, 'shade')
+            # Shade always uses SW=0
+            shade_ehi, shade_zone = compute_ehi_and_zone(weather['temp'], weather['rh'], met, sw=0)
             point_data['data'][f'met{met}']['shade'] = {
                 'ehi': round(shade_ehi, 1) if shade_ehi is not None else None,
                 'zone': shade_zone
             }
 
-            # For sun: if nighttime, use shade values; otherwise compute normally
+            # Sun: if nighttime, use shade values; otherwise use actual SW
             if is_nighttime:
                 point_data['data'][f'met{met}']['sun'] = {
                     'ehi': round(shade_ehi, 1) if shade_ehi is not None else None,
                     'zone': shade_zone
                 }
             else:
-                sun_ehi, sun_zone = compute_ehi_and_zone(weather['temp'], weather['rh'], met, 'sun')
+                sun_ehi, sun_zone = compute_ehi_and_zone(weather['temp'], weather['rh'], met, sw=sw_actual)
                 point_data['data'][f'met{met}']['sun'] = {
                     'ehi': round(sun_ehi, 1) if sun_ehi is not None else None,
                     'zone': sun_zone

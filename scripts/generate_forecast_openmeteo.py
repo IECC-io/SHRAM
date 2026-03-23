@@ -42,13 +42,18 @@ MET_LEVELS = {
 }
 
 
-def compute_ehi_and_zone(temp_c, rh_percent, met_level, sun_condition):
-    """Compute EHI and zone for given conditions using lookup tables."""
+def compute_ehi_and_zone(temp_c, rh_percent, met_level, sw):
+    """Compute EHI and zone for given conditions using lookup tables.
+
+    Args:
+        sw: Shortwave irradiance in W/m². Use 0 for shade/nighttime.
+            Snapped to nearest of [0, 200, 400, 600, 800, 1000].
+    """
     if temp_c is None or rh_percent is None:
         return None, 0
 
     try:
-        ehi, zone = lookup.get_ehi_zone(temp_c, rh_percent, met_level, sun_condition)
+        ehi, zone = lookup.get_ehi_zone(temp_c, rh_percent, met_level, sw=sw)
         return ehi, zone
     except Exception as e:
         print(f"Error looking up EHI: {e}")
@@ -61,7 +66,7 @@ def fetch_forecast_openmeteo(lat, lon, days=3):
         f"{OPENMETEO_BASE_URL}"
         f"?latitude={lat}"
         f"&longitude={lon}"
-        f"&hourly=temperature_2m,relative_humidity_2m,weather_code"
+        f"&hourly=temperature_2m,relative_humidity_2m,weather_code,shortwave_radiation"
         f"&daily=temperature_2m_max,temperature_2m_min,weather_code,sunrise,sunset"
         f"&timezone=Asia/Kolkata"
         f"&forecast_days={days}"
@@ -125,6 +130,7 @@ def process_forecast_data(data, met_levels=[3, 4, 5, 6]):
     temps = hourly.get('temperature_2m', [])
     humidities = hourly.get('relative_humidity_2m', [])
     weather_codes = hourly.get('weather_code', [])
+    sw_values = hourly.get('shortwave_radiation', [])
 
     # Build sunrise/sunset lookup by date from daily data
     # Open-Meteo returns these as "2026-03-23T06:23" strings
@@ -163,32 +169,38 @@ def process_forecast_data(data, met_levels=[3, 4, 5, 6]):
             # Fallback to fixed cutoff if sunrise/sunset unavailable
             is_nighttime = hour_of_day >= 18 or hour_of_day < 6
 
+        # Get actual shortwave irradiance for this hour
+        sw_raw = sw_values[i] if i < len(sw_values) else None
+        # Nighttime: SW forced to 0 regardless of API value
+        sw_actual = (sw_raw if sw_raw is not None else 0) if not is_nighttime else 0
+
         hour_info = {
             'time': time_str.replace('T', ' '),
             'temp_c': temps[i] if i < len(temps) else None,
             'humidity': humidities[i] if i < len(humidities) else None,
             'condition': weather_code_to_condition(weather_codes[i]) if i < len(weather_codes) else 'Unknown',
             'is_night': is_nighttime,
+            'sw': round(sw_actual) if sw_actual else 0,
             'data': {}
         }
 
-        # Compute EHI for all MET levels and sun conditions
+        # Compute EHI for all MET levels using SW-based lookup
         for met in met_levels:
             hour_info['data'][f'met{met}'] = {}
 
-            # Always compute shade first
+            # Shade always uses SW=0
             shade_ehi, shade_zone = compute_ehi_and_zone(
                 hour_info['temp_c'],
                 hour_info['humidity'],
                 met,
-                'shade'
+                sw=0
             )
             hour_info['data'][f'met{met}']['shade'] = {
                 'ehi': round(shade_ehi, 1) if shade_ehi is not None else None,
                 'zone': shade_zone
             }
 
-            # For sun: if nighttime, use shade values; otherwise compute normally
+            # Sun: if nighttime, use shade values; otherwise use actual SW
             if is_nighttime:
                 hour_info['data'][f'met{met}']['sun'] = {
                     'ehi': round(shade_ehi, 1) if shade_ehi is not None else None,
@@ -199,7 +211,7 @@ def process_forecast_data(data, met_levels=[3, 4, 5, 6]):
                     hour_info['temp_c'],
                     hour_info['humidity'],
                     met,
-                    'sun'
+                    sw=sw_actual
                 )
                 hour_info['data'][f'met{met}']['sun'] = {
                     'ehi': round(sun_ehi, 1) if sun_ehi is not None else None,

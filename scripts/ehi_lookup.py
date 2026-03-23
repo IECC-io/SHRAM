@@ -4,15 +4,31 @@ EHI Lookup Table Module
 Provides fast EHI and zone lookups using pre-computed tables.
 No scipy or NumbaMinpack dependencies - just JSON files.
 
+Tables are keyed by MET level and shortwave irradiance (SW in W/m²).
+SW=0 corresponds to shade; higher SW values represent increasing solar load.
+
 Usage:
     from ehi_lookup import EHILookup
 
     lookup = EHILookup()
+    # SW-based lookup (new interface):
+    ehi, zone = lookup.get_ehi_zone(temp_c=35.0, rh_percent=80, met_level=4, sw=400)
+    # Legacy sun_condition interface still supported:
     ehi, zone = lookup.get_ehi_zone(temp_c=35.0, rh_percent=80, met_level=4, sun='shade')
 """
 
 import json
 import os
+
+# Available SW irradiance levels in W/m²
+SW_LEVELS = [0, 200, 400, 600, 800, 1000]
+
+def snap_sw(sw_value):
+    """Snap a SW irradiance value to the nearest available table level."""
+    if sw_value is None or sw_value <= 0:
+        return 0
+    return min(SW_LEVELS, key=lambda x: abs(x - sw_value))
+
 
 class EHILookup:
     """Fast EHI lookup using pre-computed tables."""
@@ -47,22 +63,23 @@ class EHILookup:
     def _load_tables(self):
         """Load all lookup tables into memory."""
         met_levels = [3, 4, 5, 6]
-        sun_conditions = ['shade', 'sun']
+        loaded = 0
 
         for met in met_levels:
-            for sun in sun_conditions:
-                key = f"met{met}_{sun}"
+            for sw in SW_LEVELS:
+                key = f"met{met}_sw{sw}"
                 filepath = os.path.join(self.tables_dir, f"ehi_{key}.json")
 
                 if os.path.exists(filepath):
                     with open(filepath, 'r') as f:
                         self.tables[key] = json.load(f)
+                    loaded += 1
                 else:
                     print(f"Warning: Table not found: {filepath}")
 
-        print(f"Loaded {len(self.tables)} EHI lookup tables")
+        print(f"Loaded {loaded} EHI lookup tables")
 
-    def get_ehi_zone(self, temp_c, rh_percent, met_level, sun):
+    def get_ehi_zone(self, temp_c, rh_percent, met_level, sw=None, sun=None):
         """
         Get EHI and zone from lookup tables.
 
@@ -70,12 +87,25 @@ class EHILookup:
             temp_c: Temperature in Celsius
             rh_percent: Relative humidity in percent (0-100)
             met_level: MET level (3, 4, 5, or 6)
-            sun: Sun condition ('shade' or 'sun')
+            sw: Shortwave irradiance in W/m² (preferred). Snapped to nearest of
+                [0, 200, 400, 600, 800, 1000].
+            sun: Legacy sun condition ('shade' or 'sun'). If provided and sw is
+                 None, maps shade→SW=0, sun→SW=800.
 
         Returns:
             (ehi, zone) tuple where ehi is in Celsius and zone is 1-6
         """
-        key = f"met{met_level}_{sun}"
+        # Resolve SW level
+        if sw is not None:
+            sw_level = snap_sw(sw)
+        elif sun == 'shade':
+            sw_level = 0
+        elif sun == 'sun':
+            sw_level = 800
+        else:
+            sw_level = 0
+
+        key = f"met{met_level}_sw{sw_level}"
 
         if key not in self.tables:
             raise ValueError(f"No table loaded for {key}")
@@ -136,7 +166,7 @@ def get_lookup():
         _lookup_instance = EHILookup()
     return _lookup_instance
 
-def lookup_ehi_zone(temp_c, rh_percent, met_level, sun):
+def lookup_ehi_zone(temp_c, rh_percent, met_level, sw=None, sun=None):
     """
     Convenience function to look up EHI and zone.
 
@@ -144,12 +174,13 @@ def lookup_ehi_zone(temp_c, rh_percent, met_level, sun):
         temp_c: Temperature in Celsius
         rh_percent: Relative humidity in percent (0-100)
         met_level: MET level (3, 4, 5, or 6)
-        sun: Sun condition ('shade' or 'sun')
+        sw: Shortwave irradiance in W/m² (preferred)
+        sun: Legacy sun condition ('shade' or 'sun')
 
     Returns:
         (ehi, zone) tuple
     """
-    return get_lookup().get_ehi_zone(temp_c, rh_percent, met_level, sun)
+    return get_lookup().get_ehi_zone(temp_c, rh_percent, met_level, sw=sw, sun=sun)
 
 
 # Also export constants used by other modules
@@ -160,14 +191,22 @@ if __name__ == '__main__':
     # Test the lookup
     lookup = EHILookup()
 
-    test_cases = [
+    print("\nTest lookups (SW-based):")
+    test_cases_sw = [
+        (30, 50, 3, 0),
+        (35, 80, 4, 400),
+        (40, 90, 5, 800),
+        (45, 70, 6, 1000),
+    ]
+    for temp, rh, met, sw in test_cases_sw:
+        ehi, zone = lookup.get_ehi_zone(temp, rh, met, sw=sw)
+        print(f"  T={temp}°C, RH={rh}%, MET={met}, SW={sw}: EHI={ehi}°C, Zone={zone}")
+
+    print("\nTest lookups (legacy sun/shade):")
+    test_cases_legacy = [
         (30, 50, 3, 'shade'),
         (35, 80, 4, 'sun'),
-        (40, 90, 5, 'shade'),
-        (45, 70, 6, 'sun'),
     ]
-
-    print("\nTest lookups:")
-    for temp, rh, met, sun in test_cases:
-        ehi, zone = lookup.get_ehi_zone(temp, rh, met, sun)
+    for temp, rh, met, sun in test_cases_legacy:
+        ehi, zone = lookup.get_ehi_zone(temp, rh, met, sun=sun)
         print(f"  T={temp}°C, RH={rh}%, MET={met}, {sun}: EHI={ehi}°C, Zone={zone}")
