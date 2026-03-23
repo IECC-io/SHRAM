@@ -1,4 +1,4 @@
-name: Live Map — IMD Stations (Hourly)
+name: Dashboard Alerts — IMD Stations (Hourly)
 
 on:
   schedule:
