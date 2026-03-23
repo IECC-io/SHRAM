@@ -1,4 +1,4 @@
-name: Update Live Map Data
+name: Live Map — IMD Stations (Hourly)
 
 on:
   schedule:

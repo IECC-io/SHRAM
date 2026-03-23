@@ -1,4 +1,4 @@
-name: Update Live Map Grid Data (Hourly)
+name: Live Map — Open-Meteo Grid (Hourly)
 
 on:
   schedule:
