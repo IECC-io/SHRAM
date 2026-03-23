@@ -5921,6 +5921,7 @@ print(hazardous[['DISTRICT', 'STATE', 'EHI_350 (in shade °C)']])</code></pre>
                 const chartLabels = [];
                 const chartData = [];
                 const chartColors = [];
+                const chartMeta = []; // Extra per-point data for tooltip
                 const isDayLabel = []; // Track which indices are day labels (for bold styling)
 
                 forecast.forEach((day, dayIndex) => {
@@ -5957,6 +5958,14 @@ print(hazardous[['DISTRICT', 'STATE', 'EHI_350 (in shade °C)']])</code></pre>
                             chartData.push(zone);
                             chartColors.push(getZoneColor(rawZoneInt)); // Keep original zone for color
                             isDayLabel.push(isDay);
+                            chartMeta.push({
+                                temp: hourData.temp_c,
+                                rh: hourData.humidity,
+                                sw: hourData.sw,
+                                ehi: metData ? metData[sunCondition].ehi : null,
+                                zone: zone,
+                                hour: hour
+                            });
                         }
                     });
                 });
@@ -6026,6 +6035,7 @@ print(hazardous[['DISTRICT', 'STATE', 'EHI_350 (in shade °C)']])</code></pre>
                     data: {
                         labels: chartLabels,
                         isDayLabel: isDayLabel, // Custom property for styling
+                        chartMeta: chartMeta, // Custom property for tooltip
                         datasets: [{
                             label: 'EHI Zone',
                             data: chartData,
@@ -6049,10 +6059,21 @@ print(hazardous[['DISTRICT', 'STATE', 'EHI_350 (in shade °C)']])</code></pre>
                             },
                             tooltip: {
                                 callbacks: {
+                                    title: function(contexts) {
+                                        const idx = contexts[0].dataIndex;
+                                        const meta = contexts[0].chart.data.chartMeta[idx];
+                                        const zoneNames = { 1: 'Zone 1 — Cold stress', 2: 'Zone 2 — Comfort', 3: 'Zone 3 — Caution', 4: 'Zone 4 — Danger', 5: 'Zone 5 — Extreme danger', 6: 'Zone 6 — Fatal' };
+                                        return zoneNames[meta.zone] || `Zone ${meta.zone}`;
+                                    },
                                     label: function(context) {
-                                        const level = context.raw;
-                                        const labels = { 1: 'Zone 1', 2: 'Zone 2', 3: 'Zone 3', 4: 'Zone 4', 5: 'Zone 5', 6: 'Zone 6' };
-                                        return labels[level] || '';
+                                        const idx = context.dataIndex;
+                                        const meta = context.chart.data.chartMeta[idx];
+                                        const lines = [];
+                                        if (meta.temp != null) lines.push(`Temp: ${meta.temp.toFixed(1)}°C`);
+                                        if (meta.rh != null) lines.push(`Humidity: ${meta.rh}%`);
+                                        if (meta.sw != null) lines.push(`Solar: ${meta.sw} W/m²`);
+                                        if (meta.ehi != null) lines.push(`EHI: ${meta.ehi.toFixed(1)}°C`);
+                                        return lines;
                                     }
                                 }
                             }
