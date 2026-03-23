@@ -5091,10 +5091,21 @@ print(hazardous[['DISTRICT', 'STATE', 'EHI_350 (in shade °C)']])</code></pre>
                             });
                         } else {
                             // Current state — disable mouse interaction so clicks pass through to district layer
-                            layer.options.interactive = false;
+                            layer.on('add', function() {
+                                const el = layer.getElement ? layer.getElement() : null;
+                                if (el) el.style.pointerEvents = 'none';
+                            });
                         }
                     }
                 }).addTo(forecastMap);
+
+                // Also disable pointer events on current state polygon after layer is added
+                statesLayer.eachLayer(function(l) {
+                    if (l.feature && l.feature.properties.name === stateName) {
+                        const el = l.getElement ? l.getElement() : null;
+                        if (el) el.style.pointerEvents = 'none';
+                    }
+                });
             }
 
             // Load district GeoJSON for this state
