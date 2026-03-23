@@ -1017,6 +1017,7 @@
                     state: point.state,        // State name
                     temp: point.temp,
                     rh: point.rh,
+                    sw: point.sw,
                     ehi: conditionData.ehi,
                     zone: conditionData.zone,
                     trend: trend
@@ -1128,6 +1129,10 @@
                         <div class="tooltip-row">
                             <label>Humidity</label>
                             <value>${object.rh}%</value>
+                        </div>
+                        <div class="tooltip-row">
+                            <label>Solar</label>
+                            <value>${object.sw !== undefined && object.sw !== null ? object.sw + ' W/m²' : 'N/A'}</value>
                         </div>
                         <div class="tooltip-row">
                             <label>EHI</label>
