@@ -62,7 +62,7 @@ def fetch_forecast_openmeteo(lat, lon, days=3):
         f"?latitude={lat}"
         f"&longitude={lon}"
         f"&hourly=temperature_2m,relative_humidity_2m,weather_code"
-        f"&daily=temperature_2m_max,temperature_2m_min,weather_code"
+        f"&daily=temperature_2m_max,temperature_2m_min,weather_code,sunrise,sunset"
         f"&timezone=Asia/Kolkata"
         f"&forecast_days={days}"
         f"&apikey={OPENMETEO_API_KEY}"
@@ -126,6 +126,21 @@ def process_forecast_data(data, met_levels=[3, 4, 5, 6]):
     humidities = hourly.get('relative_humidity_2m', [])
     weather_codes = hourly.get('weather_code', [])
 
+    # Build sunrise/sunset lookup by date from daily data
+    # Open-Meteo returns these as "2026-03-23T06:23" strings
+    sunrise_sunset = {}
+    daily_dates = daily.get('time', [])
+    for j, d in enumerate(daily_dates):
+        sunrise_str = daily.get('sunrise', [None] * len(daily_dates))[j]
+        sunset_str = daily.get('sunset', [None] * len(daily_dates))[j]
+        if sunrise_str and sunset_str:
+            # Extract just the hour:minute portion
+            sunrise_hm = sunrise_str.split('T')[1] if 'T' in sunrise_str else sunrise_str
+            sunset_hm = sunset_str.split('T')[1] if 'T' in sunset_str else sunset_str
+            sunrise_minutes = int(sunrise_hm.split(':')[0]) * 60 + int(sunrise_hm.split(':')[1])
+            sunset_minutes = int(sunset_hm.split(':')[0]) * 60 + int(sunset_hm.split(':')[1])
+            sunrise_sunset[d] = (sunrise_minutes, sunset_minutes)
+
     # Group hours by date
     days_data = {}
     for i, time_str in enumerate(times):
@@ -136,9 +151,17 @@ def process_forecast_data(data, met_levels=[3, 4, 5, 6]):
                 'hours': []
             }
 
-        # Extract hour from time string to determine day/night
+        # Determine nighttime using actual sunrise/sunset for this location and date
         hour_of_day = int(time_str.split('T')[1].split(':')[0])
-        is_nighttime = hour_of_day >= 18 or hour_of_day < 6
+        minute_of_day = int(time_str.split('T')[1].split(':')[1]) if len(time_str.split('T')[1].split(':')) > 1 else 0
+        current_minutes = hour_of_day * 60 + minute_of_day
+
+        if date in sunrise_sunset:
+            sunrise_min, sunset_min = sunrise_sunset[date]
+            is_nighttime = current_minutes < sunrise_min or current_minutes >= sunset_min
+        else:
+            # Fallback to fixed cutoff if sunrise/sunset unavailable
+            is_nighttime = hour_of_day >= 18 or hour_of_day < 6
 
         hour_info = {
             'time': time_str.replace('T', ' '),

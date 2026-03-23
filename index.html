@@ -3683,6 +3683,7 @@ print(hazardous[['DISTRICT', 'STATE', 'EHI_350 (in shade °C)']])</code></pre>
         // Track nighttime state for each section
         let nighttimeStates = {
             current: false,
+            forecast: false,
             last24h: false
         };
 
@@ -5489,6 +5490,7 @@ print(hazardous[['DISTRICT', 'STATE', 'EHI_350 (in shade °C)']])</code></pre>
 
                 // Handle nighttime mode - disable sun button if nighttime
                 handleNighttimeMode(data.is_nighttime, 'current');
+                handleNighttimeMode(data.is_nighttime, 'forecast');
 
                 // Populate state dropdowns
                 populateStateDropdowns(data.alerts);

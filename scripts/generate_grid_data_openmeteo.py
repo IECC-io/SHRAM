@@ -192,6 +192,7 @@ def fetch_weather_batch_openmeteo(points, batch_size=50, max_retries=3):
             f"?latitude={lats}"
             f"&longitude={lons}"
             f"&current=temperature_2m,relative_humidity_2m"
+            f"&daily=sunrise,sunset"
             f"&timezone=Asia/Kolkata"
             f"&apikey={OPENMETEO_API_KEY}"
         )
@@ -208,18 +209,27 @@ def fetch_weather_batch_openmeteo(points, batch_size=50, max_retries=3):
                     batch_results = []
                     for j, loc_data in enumerate(data):
                         if 'current' in loc_data:
+                            # Extract today's sunrise/sunset (first entry in daily arrays)
+                            sunrise_str = loc_data.get('daily', {}).get('sunrise', [None])[0]
+                            sunset_str = loc_data.get('daily', {}).get('sunset', [None])[0]
                             batch_results.append({
                                 'temp': loc_data['current'].get('temperature_2m'),
-                                'rh': loc_data['current'].get('relative_humidity_2m')
+                                'rh': loc_data['current'].get('relative_humidity_2m'),
+                                'sunrise': sunrise_str,
+                                'sunset': sunset_str
                             })
                         else:
                             batch_results.append(None)
                     break  # Success
                 elif 'current' in data:
                     # Single location
+                    sunrise_str = data.get('daily', {}).get('sunrise', [None])[0]
+                    sunset_str = data.get('daily', {}).get('sunset', [None])[0]
                     batch_results = [{
                         'temp': data['current'].get('temperature_2m'),
-                        'rh': data['current'].get('relative_humidity_2m')
+                        'rh': data['current'].get('relative_humidity_2m'),
+                        'sunrise': sunrise_str,
+                        'sunset': sunset_str
                     }]
                     break  # Success
                 else:
@@ -347,11 +357,9 @@ def generate_grid_data():
     ist = pytz.timezone('Asia/Kolkata')
     now = datetime.now(ist)
 
-    # Check if it's nighttime (6pm-6am IST) - no sun exposure at night
-    current_hour = now.hour
-    is_nighttime = current_hour >= 18 or current_hour < 6
-    if is_nighttime:
-        print(f"Nighttime detected ({now.strftime('%I:%M %p IST')}) - sun values will equal shade values")
+    # Current time in minutes since midnight (IST) for sunrise/sunset comparison
+    current_minutes = now.hour * 60 + now.minute
+    print(f"Current time: {now.strftime('%I:%M %p IST')} ({current_minutes} min since midnight)")
 
     # Calculate data quality metrics
     final_failed = sum(1 for w in weather_data if w is None)
@@ -365,7 +373,7 @@ def generate_grid_data():
             'resolution_deg': GRID_CONFIG['resolution'],
             'met_levels': [3, 4, 5, 6],
             'sun_conditions': ['shade', 'sun'],
-            'is_nighttime': is_nighttime,
+            'is_nighttime': current_minutes < 360 or current_minutes >= 1080,  # fallback for metadata
             'data_source': 'Open-Meteo',
             'data_quality': data_quality,
             'api_failures': failed_count,
@@ -405,6 +413,22 @@ def generate_grid_data():
             'data': {}
         }
 
+        # Determine nighttime using actual sunrise/sunset for this point
+        sunrise_str = weather.get('sunrise')
+        sunset_str = weather.get('sunset')
+        if sunrise_str and sunset_str:
+            try:
+                sr_hm = sunrise_str.split('T')[1] if 'T' in sunrise_str else sunrise_str
+                ss_hm = sunset_str.split('T')[1] if 'T' in sunset_str else sunset_str
+                sr_min = int(sr_hm.split(':')[0]) * 60 + int(sr_hm.split(':')[1])
+                ss_min = int(ss_hm.split(':')[0]) * 60 + int(ss_hm.split(':')[1])
+                is_nighttime = current_minutes < sr_min or current_minutes >= ss_min
+            except Exception:
+                is_nighttime = current_minutes < 360 or current_minutes >= 1080
+        else:
+            # Fallback to fixed cutoff if sunrise/sunset unavailable
+            is_nighttime = current_minutes < 360 or current_minutes >= 1080
+
         # Compute for all MET levels and sun conditions
         for met in [3, 4, 5, 6]:
             point_data['data'][f'met{met}'] = {}
@@ -418,13 +442,11 @@ def generate_grid_data():
 
             # For sun: if nighttime, use shade values; otherwise compute normally
             if is_nighttime:
-                # Nighttime: sun = shade (no solar radiation at night)
                 point_data['data'][f'met{met}']['sun'] = {
                     'ehi': round(shade_ehi, 1) if shade_ehi is not None else None,
                     'zone': shade_zone
                 }
             else:
-                # Daytime: compute sun exposure normally
                 sun_ehi, sun_zone = compute_ehi_and_zone(weather['temp'], weather['rh'], met, 'sun')
                 point_data['data'][f'met{met}']['sun'] = {
                     'ehi': round(sun_ehi, 1) if sun_ehi is not None else None,
