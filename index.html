@@ -5579,12 +5579,15 @@ print(hazardous[['DISTRICT', 'STATE', 'EHI_350 (in shade °C)']])</code></pre>
                 `;
 
                 // Update Zone 6 floating banner - use GLOBAL zone 6 data
-                // Check for Zone 6 across ALL MET levels and sun conditions
+                // At night, only check shade conditions (no solar load)
+                const isNight = data.is_nighttime;
                 const globalZone6 = data.alerts.filter(a =>
-                    a["Zone_3_shade"] === "Zone 6" || a["Zone_3_sun"] === "Zone 6" ||
-                    a["Zone_4_shade"] === "Zone 6" || a["Zone_4_sun"] === "Zone 6" ||
-                    a["Zone_5_shade"] === "Zone 6" || a["Zone_5_sun"] === "Zone 6" ||
-                    a["Zone_6_shade"] === "Zone 6" || a["Zone_6_sun"] === "Zone 6"
+                    a["Zone_3_shade"] === "Zone 6" || a["Zone_4_shade"] === "Zone 6" ||
+                    a["Zone_5_shade"] === "Zone 6" || a["Zone_6_shade"] === "Zone 6" ||
+                    (!isNight && (
+                        a["Zone_3_sun"] === "Zone 6" || a["Zone_4_sun"] === "Zone 6" ||
+                        a["Zone_5_sun"] === "Zone 6" || a["Zone_6_sun"] === "Zone 6"
+                    ))
                 );
                 if (globalZone6.length > 0) {
                     const marqueeItems = globalZone6.map(a => `${a.DISTRICT}, ${a.STATE}`).join(' | ');
