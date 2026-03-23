@@ -5658,6 +5658,32 @@ print(hazardous[['DISTRICT', 'STATE', 'EHI_350 (in shade °C)']])</code></pre>
         window.indiaDistrictsData = null;
         let forecastChart = null;
 
+        // Normalize a district name for fuzzy matching
+        function normalizeDistrictName(name) {
+            return name.toLowerCase()
+                .replace(/\(.*?\)/g, '')       // remove parentheses and contents
+                .replace(/[^a-z0-9]/g, '')     // remove non-alphanumeric
+                .trim();
+        }
+
+        // Find the best matching key in stateData.districts for a given GeoJSON district name
+        function findDistrictKey(districtName, stateDistricts) {
+            if (!districtName || !stateDistricts) return null;
+            // Exact match first
+            if (stateDistricts[districtName]) return districtName;
+            // Normalized match
+            const norm = normalizeDistrictName(districtName);
+            for (const key of Object.keys(stateDistricts)) {
+                if (normalizeDistrictName(key) === norm) return key;
+            }
+            // Partial match: one contains the other
+            for (const key of Object.keys(stateDistricts)) {
+                const keyNorm = normalizeDistrictName(key);
+                if (norm.includes(keyNorm) || keyNorm.includes(norm)) return key;
+            }
+            return null;
+        }
+
         // Forecast map variables
         let forecastMap = null;
         let statesLayer = null;
@@ -5814,9 +5840,10 @@ print(hazardous[['DISTRICT', 'STATE', 'EHI_350 (in shade °C)']])</code></pre>
                 };
             }
 
-            // Use specific district
-            const districtData = stateData.districts[selectedDistrict];
-            if (districtData) {
+            // Use specific district (with fuzzy name matching)
+            const districtKey = findDistrictKey(selectedDistrict, stateData.districts);
+            if (districtKey) {
+                const districtData = stateData.districts[districtKey];
                 return {
                     name: selectedDistrict.replace(/_/g, ' '),
                     lat: districtData.lat,
@@ -5898,8 +5925,11 @@ print(hazardous[['DISTRICT', 'STATE', 'EHI_350 (in shade °C)']])</code></pre>
                     throw new Error(`No forecast data for ${selectedState}`);
                 }
 
-                if (selectedDistrict && selectedDistrict !== '' && stateData.districts[selectedDistrict]) {
-                    locationForecast = stateData.districts[selectedDistrict].forecast;
+                const districtKey = selectedDistrict && selectedDistrict !== 'all'
+                    ? findDistrictKey(selectedDistrict, stateData.districts)
+                    : null;
+                if (districtKey) {
+                    locationForecast = stateData.districts[districtKey].forecast;
                     locationName = `${selectedDistrict.replace(/_/g, ' ')}, ${selectedState.replace(/_/g, ' ')}`;
                 } else if (stateData.capital) {
                     locationForecast = stateData.capital.forecast;
