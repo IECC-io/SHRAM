@@ -1,4 +1,4 @@
-name: India AWS Logger
+name: IMD Weather Logger — Dashboard & Trends (30 min)
 
 on:
   schedule:
