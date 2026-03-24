@@ -4959,7 +4959,7 @@ print(hazardous[['DISTRICT', 'STATE', 'EHI_350 (in shade °C)']])</code></pre>
 
             // Load states GeoJSON
             try {
-                const response = await fetch('geojson/india_states.geojson');
+                const response = await fetch(`${location.origin}/geojson/india_states.geojson`);
                 if (!response.ok) throw new Error('Could not load states GeoJSON');
                 statesGeoJSON = await response.json();
                 showAllStates();
@@ -5111,7 +5111,7 @@ print(hazardous[['DISTRICT', 'STATE', 'EHI_350 (in shade °C)']])</code></pre>
             // Load district GeoJSON for this state
             try {
                 const geoJSONName = getGeoJSONStateName(stateName);
-                const response = await fetch(`geojson/${geoJSONName}_districts.geojson`);
+                const response = await fetch(`${location.origin}/geojson/${geoJSONName}_districts.geojson`);
 
                 if (!response.ok) {
                     throw new Error(`GeoJSON not found for ${stateName}`);
