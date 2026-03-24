@@ -3337,10 +3337,7 @@ print(hazardous[['DISTRICT', 'STATE', 'EHI_350 (in shade °C)']])</code></pre>
             if (stateSelect) {
                 stateSelect.value = stateName;
                 // Reset district to 'all' (will use capital)
-                const districtSelect = document.getElementById('forecast-district-select');
-                if (districtSelect) {
-                    districtSelect.value = 'all';
-                }
+                currentSelectedDistrict = 'all';
             }
 
             // Scroll to the forecast section
@@ -5047,6 +5044,7 @@ print(hazardous[['DISTRICT', 'STATE', 'EHI_350 (in shade °C)']])</code></pre>
             const label = document.getElementById('selected-location-label');
 
             currentSelectedState = stateName;
+            currentSelectedDistrict = 'all';
             document.getElementById('forecast-state-select').value = stateName;
 
             instruction.innerHTML = `<i class="fas fa-map-marker-alt"></i> Click on a district in <strong>${stateName.replace(/_/g, ' ')}</strong>:`;
@@ -5177,7 +5175,7 @@ print(hazardous[['DISTRICT', 'STATE', 'EHI_350 (in shade °C)']])</code></pre>
                                     ? window.indiaDistrictsData.states[currentSelectedState].districts
                                     : null;
                                 const canonicalName = stateDistricts ? (findDistrictKey(districtName, stateDistricts) || districtName) : districtName;
-                                document.getElementById('forecast-district-select').value = canonicalName;
+                                currentSelectedDistrict = canonicalName;
                                 loadForecast();
                             } catch (err) {
                                 console.error('District click error:', err);
@@ -5735,6 +5733,7 @@ print(hazardous[['DISTRICT', 'STATE', 'EHI_350 (in shade °C)']])</code></pre>
         let districtLayer = null;
         let selectedDistrictCoords = null;
         let currentSelectedState = null;
+        let currentSelectedDistrict = 'all';
         let statesGeoJSON = null;
 
         // Load districts data on startup
@@ -5849,7 +5848,7 @@ print(hazardous[['DISTRICT', 'STATE', 'EHI_350 (in shade °C)']])</code></pre>
             }
 
             const selectedState = document.getElementById('forecast-state-select').value;
-            const selectedDistrict = document.getElementById('forecast-district-select').value;
+            const selectedDistrict = currentSelectedDistrict;
 
             console.log('getForecastLocation: state=', selectedState, ', district=', selectedDistrict);
 
@@ -5959,7 +5958,7 @@ print(hazardous[['DISTRICT', 'STATE', 'EHI_350 (in shade °C)']])</code></pre>
                 const days = forecastDays;  // Use selected forecast days (1, 3, or 7)
 
                 // Get selected state and district
-                const selectedDistrict = document.getElementById('forecast-district-select').value;
+                const selectedDistrict = currentSelectedDistrict;
 
                 // Find forecast for the selected location
                 let locationForecast = null;
@@ -6593,7 +6592,7 @@ print(hazardous[['DISTRICT', 'STATE', 'EHI_350 (in shade °C)']])</code></pre>
                             if (label) {
                                 label.textContent = `Selected: ${district.replace(/_/g, ' ')}`;
                             }
-                            document.getElementById('forecast-district-select').value = district;
+                                                currentSelectedDistrict = district;
 
                             // Set to 7-day forecast (matching the weekly email)
                             setForecastDays(7);
