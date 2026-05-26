@@ -3699,6 +3699,16 @@ print(hazardous[['DISTRICT', 'STATE', 'EHI_350 (in shade °C)']])</code></pre>
 
             if (!sunBtn || !shadeBtn) return;
 
+            // Forecast tile shows future daytime peaks, so its sun button is
+            // always usable — never disable it for nighttime.
+            if (section === 'forecast') {
+                sunBtn.disabled = false;
+                sunBtn.style.opacity = '1';
+                sunBtn.style.cursor = 'pointer';
+                sunBtn.title = '';
+                return;
+            }
+
             if (isNighttime) {
                 // Disable sun button during nighttime
                 sunBtn.disabled = true;
@@ -3720,8 +3730,9 @@ print(hazardous[['DISTRICT', 'STATE', 'EHI_350 (in shade °C)']])</code></pre>
         }
 
         function setShade(section, isShade) {
-            // Prevent switching to sun during nighttime for current section
-            if (!isShade && nighttimeStates[section]) {
+            // Prevent switching to sun during nighttime — except the forecast
+            // tile, whose sun button is always usable.
+            if (!isShade && nighttimeStates[section] && section !== 'forecast') {
                 return; // Don't allow sun selection during nighttime
             }
 
