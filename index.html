@@ -2371,7 +2371,7 @@
                         <p id="current-location-summary" class="location-summary" style="display: none; text-align: center; font-size: 0.85rem; color: #666; margin-top: 0.75rem; font-style: italic;"></p>
                     </div>
 
-                    <p style="text-align: center; font-size: 0.85rem; color: #999; margin-top: 1.5rem; font-style: italic;">EHI-N* zones computed from IMD station observations</p>
+                    <p style="text-align: center; font-size: 0.85rem; color: #999; margin-top: 1.5rem; font-style: italic;">EHI-N* zones computed from Open-Meteo conditions on a 0.25&deg; grid, aggregated by district</p>
                 </div>
 
                 <!-- RIGHT: Forecast -->
@@ -5440,11 +5440,96 @@
             // Update mobile location summary (shown under tiles on mobile)
             const locationSummary = document.getElementById('current-location-summary');
             if (locationSummary) {
-                locationSummary.textContent = `${filteredAlerts.length} stations in ${locationText} across ${totalDistricts} districts`;
+                locationSummary.textContent = `${filteredAlerts.length} districts in alert in ${locationText}`;
                 locationSummary.style.display = window.innerWidth <= 768 ? 'block' : 'none';
             }
 
             // Note: Zone 6 banner is NOT updated here - it stays global (set in loadLiveData)
+        }
+
+        // Aggregate the Open-Meteo grid (grid_data.json) to one row per
+        // district, taking the worst zone across that district's cells for each
+        // MET/sun combination, and reporting the conditions from whichever cell
+        // produced that worst zone. The panel previously read the IMD station
+        // scrape (latest_alerts.json, ~790 stations); the grid gives continuous
+        // 0.25-degree coverage and the same source the live map uses.
+        //
+        // Aggregating rather than listing cells matters because a district spans
+        // several cells (~6 on average), so a raw cell list repeats district
+        // names and makes "locations" ambiguous.
+        function gridToAlertRows(grid) {
+            const METS = [3, 4, 5, 6];
+            const CONDS = ['shade', 'sun'];
+            const tidy = v => (v || '').replace(/_/g, ' ');
+            const byDistrict = new Map();
+
+            (grid.points || []).forEach(p => {
+                if (!p.district) return;
+                const key = `${p.state}|${p.district}`;
+                let rec = byDistrict.get(key);
+                if (!rec) {
+                    rec = {
+                        DISTRICT: tidy(p.district),
+                        STATE: tidy(p.state),
+                        cells: 0,
+                        worst: 0,
+                        'LOGGED_AT (IST)': grid.metadata && grid.metadata.generated_at_ist
+                    };
+                    byDistrict.set(key, rec);
+                }
+                rec.cells += 1;
+
+                METS.forEach(m => CONDS.forEach(c => {
+                    const cell = ((p.data || {})[`met${m}`] || {})[c];
+                    if (!cell || cell.zone == null) return;
+                    const zKey = `Zone_${m}_${c}`;
+                    const prev = rec[zKey] ? parseInt(rec[zKey].replace('Zone ', ''), 10) : 0;
+                    if (cell.zone > prev) {
+                        rec[zKey] = `Zone ${cell.zone}`;
+                        rec[`EHI_${m}_${c}`] = cell.ehi;
+                        // Report the conditions behind this district's worst
+                        // zone at the MET/sun level the tiles display.
+                        if (m === 6 && c === 'sun' || cell.zone > rec.worst) {
+                            rec.TEMP = p.temp;
+                            rec.RH = p.rh;
+                            rec.LAT = p.lat;
+                            rec.LON = p.lon;
+                        }
+                    }
+                    if (cell.zone > rec.worst) rec.worst = cell.zone;
+                }));
+            });
+
+            const rows = [];
+            const zoneCounts = {};
+            METS.forEach(m => CONDS.forEach(c => {
+                for (let z = 1; z <= 6; z++) zoneCounts[`met${m}_${c}_zone${z}`] = 0;
+            }));
+
+            byDistrict.forEach(rec => {
+                METS.forEach(m => CONDS.forEach(c => {
+                    const v = rec[`Zone_${m}_${c}`];
+                    if (v) zoneCounts[`met${m}_${c}_${v.toLowerCase().replace(' ', '')}`]++;
+                }));
+                rec.STATION = `${rec.DISTRICT}, ${rec.STATE}`;
+                rec['EHI (in shade \u00b0C)'] = rec['EHI_3_shade'];
+                rec['Light Work Heat Stress Zone'] = rec['Zone_3_shade'];
+                rec['EHI_350 (in shade \u00b0C)'] = rec['EHI_6_shade'];
+                rec['Hard Labor Heat Stress Zone'] = rec['Zone_6_shade'];
+                if (rec.worst >= 5) rows.push(rec);
+            });
+
+            return {
+                timestamp: (grid.metadata && grid.metadata.generated_at) || new Date().toISOString(),
+                total_stations: byDistrict.size,
+                alert_count: rows.length,
+                zone_counts: zoneCounts,
+                is_nighttime: !!(grid.metadata && grid.metadata.is_nighttime),
+                zone_6_count: zoneCounts['met6_shade_zone6'] || 0,
+                zone_5_count: zoneCounts['met6_shade_zone5'] || 0,
+                zone_4_count: zoneCounts['met6_shade_zone4'] || 0,
+                alerts: rows
+            };
         }
 
         async function loadLiveData() {
@@ -5452,12 +5537,12 @@
                 // Try local file first (for local development), then fall back to GitHub Pages
                 let response;
                 try {
-                    response = await fetch('weather_logs/latest_alerts.json');
+                    response = await fetch('grid_data.json');
                     if (!response.ok) throw new Error('Local file not found');
                 } catch (e) {
-                    response = await fetch('https://iecc-io.github.io/SHRAM/weather_logs/latest_alerts.json');
+                    response = await fetch('https://iecc-io.github.io/SHRAM/grid_data.json');
                 }
-                const data = await response.json();
+                const data = gridToAlertRows(await response.json());
 
                 // Store data globally for filtering
                 allAlertsData = data;
@@ -5503,6 +5588,9 @@
                 const zone5 = data.alerts.filter(a => a[zoneCol] === "Zone 5");
                 const alertCount = zone6.length + zone5.length;
                 const totalDistricts = countUniqueDistricts([...zone6, ...zone5]);
+                // Rows are one per district now, so a district count would just
+                // repeat the first tile; show the state spread instead.
+                const statesAffected = new Set([...zone6, ...zone5].map(a => a.STATE)).size;
 
                 // Summary is set by global-timestamp, so just clear live-status-summary
                 document.getElementById('live-status-summary').innerHTML = '';
@@ -5518,11 +5606,11 @@
                 document.getElementById('status-grid').innerHTML = `
                     <div class="stat-box">
                         <div class="stat-number" style="font-size: 1.8rem;">${alertCount}</div>
-                        <div class="stat-label" style="font-size: 0.85rem;">Stations in Alert (Zone 5 & 6)</div>
+                        <div class="stat-label" style="font-size: 0.85rem;">Districts in Alert (Zone 5 & 6)</div>
                     </div>
                     <div class="stat-box">
-                        <div class="stat-number" style="font-size: 1.8rem;">${totalDistricts}</div>
-                        <div class="stat-label" style="font-size: 0.85rem;">Districts with Alerts</div>
+                        <div class="stat-number" style="font-size: 1.8rem;">${statesAffected}</div>
+                        <div class="stat-label" style="font-size: 0.85rem;">States Affected</div>
                     </div>
                     <div class="stat-box hoverable" style="background: linear-gradient(135deg, #7B1FA2 0%, #6A1B9A 100%); padding: 1rem; cursor: pointer; border-color: #7B1FA2;" onclick="switchTab(event, 'about')">
                         <div class="stat-number" style="font-size: 1.8rem;">${zone6.length}</div>
@@ -5584,10 +5672,20 @@
                     }).join('');
 
                     const numStates = Object.keys(stateGroups).length;
-                    const marqueeItems = globalZone6.map(a => `${a.DISTRICT}, ${a.STATE}`).join(' | ');
+                    // Scroll by state with a district count, rather than listing
+                    // every district: in a real heatwave the district list runs to
+                    // dozens of entries and takes minutes to cycle. The expanded
+                    // banner still shows the full district list per state on hover.
+                    const z6ByState = {};
+                    globalZone6.forEach(a => {
+                        z6ByState[a.STATE] = (z6ByState[a.STATE] || 0) + 1;
+                    });
+                    const marqueeItems = Object.keys(z6ByState).sort()
+                        .map(st => `${st} (${z6ByState[st]} ${z6ByState[st] === 1 ? 'district' : 'districts'})`)
+                        .join('  \u00b7  ');
 
                     const bannerHtml = `
-                        <strong style="font-size: 1.4rem;"><i class="fas fa-exclamation-triangle"></i> ZONE 6 DETECTED (${globalZone6.length} districts in ${numStates} states)</strong><br>
+                        <strong style="font-size: 1.4rem;"><i class="fas fa-exclamation-triangle"></i> ZONE 6 DETECTED (${globalZone6.length} ${globalZone6.length === 1 ? 'district' : 'districts'} in ${numStates} ${numStates === 1 ? 'state' : 'states'})</strong><br>
                         <span style="font-size: 1rem; font-weight: 600;">Hover over state for districts. Click to view forecast.</span>
                         <div class="banner-states-list">
                             ${statesList}
