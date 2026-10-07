@@ -847,11 +847,11 @@
             <div class="stats-grid">
                 <div class="stat-box zone6">
                     <div class="stat-number" id="zone6-count">0</div>
-                    <div class="stat-label">Zone 6 Locations</div>
+                    <div class="stat-label">Zone 6 Districts</div>
                 </div>
                 <div class="stat-box zone5">
                     <div class="stat-number" id="zone5-count">0</div>
-                    <div class="stat-label">Zone 5 Locations</div>
+                    <div class="stat-label">Zone 5 Districts</div>
                 </div>
             </div>
             <div class="trend-summary" id="trend-summary" style="display: none;">
@@ -1513,6 +1513,13 @@
             let zone6Count = 0;
             const alerts = [];
 
+            // Count districts, not grid cells: a district spans ~6 cells, so a
+            // raw cell count is not a number anyone can act on. Each district is
+            // counted at its worst zone across its cells, matching how the
+            // dashboard aggregates. The alert list below stays cell-level so the
+            // map can still place every point.
+            const worstByDistrict = new Map();
+
             precomputedData.points.forEach(point => {
                 const conditionData = point.data[metKey]?.[currentSun];
                 if (!conditionData) return;
@@ -1520,8 +1527,10 @@
                 const zone = conditionData.zone;
                 const ehi = conditionData.ehi;
 
-                if (zone === 5) zone5Count++;
-                if (zone === 6) zone6Count++;
+                if (point.district) {
+                    const key = `${point.state}|${point.district}`;
+                    if (zone > (worstByDistrict.get(key) || 0)) worstByDistrict.set(key, zone);
+                }
                 if (zone >= 5) {
                     alerts.push({
                         lat: point.lat,
@@ -1535,6 +1544,11 @@
                         zone
                     });
                 }
+            });
+
+            worstByDistrict.forEach(z => {
+                if (z === 5) zone5Count++;
+                if (z === 6) zone6Count++;
             });
 
             document.getElementById('zone5-count').textContent = zone5Count;

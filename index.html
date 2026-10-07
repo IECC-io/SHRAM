@@ -5702,18 +5702,13 @@
                     document.getElementById('zone6-banner').classList.add('show');
 
                 } else {
-                    // Show teal IECC advisory banner
-                    const bannerHtml = `
-                        <strong style="font-size: 1.2rem;"><i class="fas fa-info-circle"></i> Heat Stress Advisory</strong><br>
-                        <span style="font-size: 1rem;">No hazardous (Zone 6) heat stress alerts at this time. Learn more about the Extended Heat Index (EHI) methodology:</span><br>
-                        <a href="https://iecc.gspp.berkeley.edu/resources/visualizations/national-advisory-on-the-extended-heatindex-350-ehi-350/" target="_blank" style="color: white; font-weight: 700; text-decoration: underline; font-size: 1rem; margin-top: 0.5rem; display: inline-block;">
-                            <i class="fas fa-external-link-alt"></i> See EHI Advisory from IECC
-                        </a>
-                    `;
-                    document.getElementById('zone6-banner-content').innerHTML = bannerHtml;
-                    document.getElementById('zone6-banner').style.background = 'var(--shram-teal)';
-                    document.getElementById('zone6-banner').style.boxShadow = '0 4px 20px rgba(0, 109, 119, 0.4)';
-                    document.getElementById('zone6-banner').classList.add('show');
+                    // No Zone 6 anywhere: hide the banner entirely rather than
+                    // showing an advisory. A permanent bar trains people to ignore
+                    // it, which costs us attention when there is a real alert.
+                    // Clear the content div only: the minimize button is a
+                    // sibling inside #zone6-banner and must survive.
+                    document.getElementById('zone6-banner-content').innerHTML = '';
+                    document.getElementById('zone6-banner').classList.remove('show');
                 }
             } catch (error) {
                 console.error('Error loading live data:', error);
