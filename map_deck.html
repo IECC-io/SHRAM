@@ -1574,20 +1574,51 @@
                 return (b.ehi || 0) - (a.ehi || 0);
             });
 
+            // One entry per district. A district spans several grid cells, so the
+            // raw cell list repeats district names; keeping the first occurrence
+            // after the sort above means each district is represented by its
+            // worst cell, and clicking it flies to that cell. Cells with no
+            // district (offshore, unmatched) are kept individually.
+            const cellsInAlert = new Map();
+            alerts.forEach(a => {
+                if (!a.district) return;
+                const key = `${a.state}|${a.district}`;
+                cellsInAlert.set(key, (cellsInAlert.get(key) || 0) + 1);
+            });
+            const seenDistricts = new Set();
+            const districtAlerts = alerts.filter(a => {
+                if (!a.district) return true;
+                const key = `${a.state}|${a.district}`;
+                if (seenDistricts.has(key)) return false;
+                seenDistricts.add(key);
+                a.cellCount = cellsInAlert.get(key);
+                return true;
+            });
+
             const alertList = document.getElementById('alert-list');
-            if (alerts.length === 0) {
+            if (districtAlerts.length === 0) {
                 alertList.innerHTML = '<p class="status-text">No Zone 5 or 6 alerts currently.</p>';
             } else {
                 // Show all alerts (scrollable) with trend indicators
-                alertList.innerHTML = alerts.map(a => {
+                // The tiles above count districts; this list also carries cells
+                // that matched no district (offshore, or outside the polygons),
+                // so note them rather than letting the totals silently disagree.
+                const unmatched = districtAlerts.filter(a => !a.district).length;
+                const noteHtml = unmatched > 0
+                    ? `<p class="status-text" style="font-size: 10px; margin-bottom: 6px;">Includes ${unmatched} grid ${unmatched === 1 ? 'cell' : 'cells'} outside mapped districts, shown by coordinates.</p>`
+                    : '';
+                alertList.innerHTML = noteHtml + districtAlerts.map(a => {
                     // Build display name: prefer district/state, fall back to location
+                    // Grid names carry underscores (Dima_Hasao, Dakshina_Kannada)
+                    // because they come straight from the district GeoJSON.
+                    const tidy = v => (v || '').replace(/_/g, ' ');
                     let displayName;
                     if (a.district && a.state) {
-                        displayName = `${a.district}, ${a.state}`;
+                        displayName = `${tidy(a.district)}, ${tidy(a.state)}`;
                     } else if (a.district) {
-                        displayName = a.district;
+                        displayName = tidy(a.district);
                     } else if (a.location) {
-                        displayName = a.location;
+                        displayName = tidy(a.location);
                     } else {
                         displayName = `${a.lat.toFixed(2)}°N, ${a.lon.toFixed(2)}°E`;
                     }
@@ -1595,7 +1626,7 @@
                     <div class="alert-item zone${a.zone}" onclick="flyTo(${a.lat}, ${a.lon})">
                         <div class="district">${displayName}${getTrendIndicator(a.lat, a.lon)}</div>
                         <div class="details">
-                            ${a.temp}°C, ${a.rh}% RH | EHI: ${a.ehi !== null ? a.ehi.toFixed(1) : 'N/A'}°C | Zone ${a.zone}
+                            ${a.temp}°C, ${a.rh}% RH | EHI: ${a.ehi !== null ? a.ehi.toFixed(1) : 'N/A'}°C | Zone ${a.zone}${a.cellCount > 1 ? ` | ${a.cellCount} cells in alert` : ''}
                         </div>
                     </div>
                 `}).join('');

@@ -31,6 +31,11 @@ jobs:
           cd ${{ github.workspace }}
           python scripts/generate_grid_data_openmeteo.py
 
+      - name: Append grid snapshot to rolling history
+        run: |
+          cd ${{ github.workspace }}
+          python scripts/append_grid_history.py
+
       - name: Send Zone 6 alerts to subscribers
         env:
           GMAIL_ADDRESS: ${{ secrets.GMAIL_ADDRESS }}
