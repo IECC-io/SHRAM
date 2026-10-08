@@ -1224,7 +1224,7 @@
 
                 // Update timestamp display
                 document.getElementById('data-timestamp').innerHTML =
-                    `<i class="fas fa-clock"></i> ${precomputedData.metadata.generated_at_ist}`;
+                    `<i class="fas fa-clock"></i> ${gridValidTimeIST(precomputedData.metadata)}`;
 
                 // During nighttime, disable sun button (sun = shade anyway)
                 const sunBtn = document.getElementById('sun-btn');
@@ -1513,6 +1513,21 @@
                 return '<span class="trend-indicator improving"><i class="fas fa-arrow-down"></i></span>';
             }
             return '';
+        }
+
+
+        // Show the hour the data is FOR, not when the run fetched it. Look-ahead
+        // files carry valid_time; a file fetched at 04:17 but valid for 05:00
+        // should read 05:00, which is what the dashboard shows. Falls back to
+        // generated_at_ist for the plain grid_data.json snapshot.
+        function gridValidTimeIST(meta) {
+            if (!meta) return '';
+            if (meta.valid_time) {
+                return new Date(meta.valid_time).toLocaleString('en-IN', {
+                    timeZone: 'Asia/Calcutta', dateStyle: 'medium', timeStyle: 'short'
+                }) + ' IST';
+            }
+            return meta.generated_at_ist || '';
         }
 
         // Update sidebar with alert counts
