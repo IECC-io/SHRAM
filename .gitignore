@@ -37,6 +37,7 @@ Thumbs.db
 !grid_data.json
 !grid_data_prev.json
 !weather_logs/*.json
+!weather_logs/grid_hours/*.json
 !geojson/*.json
 !lookup_tables/*.json
 *credentials*.json
