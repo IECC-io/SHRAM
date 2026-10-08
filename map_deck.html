@@ -1208,7 +1208,18 @@
             document.getElementById('loading-status').textContent = 'Loading pre-computed data...';
 
             try {
-                const response = await fetch('grid_data.json');
+                // Prefer the look-ahead file for the current IST hour; see
+                // fetchGridForNow() in index.html for why. Falls back to
+                // grid_data.json so a missing hour is handled by the existing
+                // staleness display rather than failing.
+                const _p = new Intl.DateTimeFormat('en-CA', {
+                    timeZone: 'Asia/Kolkata', year: 'numeric', month: '2-digit',
+                    day: '2-digit', hour: '2-digit', hour12: false
+                }).formatToParts(new Date());
+                const _g = t => _p.find(x => x.type === t).value;
+                const _stamp = _g('year') + _g('month') + _g('day') + String(_g('hour')).padStart(2, '0');
+                let response = await fetch(`weather_logs/grid_hours/grid_${_stamp}.json`);
+                if (!response.ok) response = await fetch('grid_data.json');
                 precomputedData = await response.json();
 
                 // Update timestamp display

@@ -5354,6 +5354,9 @@
             const zone5Count = filteredAlerts.filter(a => a["Hard Labor Heat Stress Zone"] === "Zone 5").length;
             const zone4Count = filteredAlerts.filter(a => a["Hard Labor Heat Stress Zone"] === "Zone 4").length;
             const totalDistricts = countUniqueDistricts(filteredAlerts);
+            // Rows are one per district, so a district count repeats the first
+            // tile; show the state spread instead, as the All-India tiles do.
+            const statesAffectedFiltered = new Set(filteredAlerts.map(a => a.STATE)).size;
 
             // Update display
             const locationText = selectedState === 'all' ? 'All India' :
@@ -5384,11 +5387,11 @@
                 document.getElementById('global-timestamp').innerHTML = `<strong>Last Updated: ${formattedTimestamp} IST</strong>`;
             }
 
-            document.getElementById('live-status-summary').innerHTML = `
-                <p style="text-align: center; font-size: 1.2rem; color: #333;">
-                    <strong>${filteredAlerts.length}</strong> stations in <strong>${locationText}</strong> across <strong>${totalDistricts}</strong> districts
-                </p>
-            `;
+            // Removed: this read "<n> stations in <place> across <m> districts",
+            // which described the IMD station feed. Rows are now one per district
+            // from the Open-Meteo grid, so both numbers are identical and the
+            // tiles below already state the district count.
+            document.getElementById('live-status-summary').innerHTML = '';
 
             // Get zone-specific districts for tooltips
             const zone6 = filteredAlerts.filter(a => a["Hard Labor Heat Stress Zone"] === "Zone 6");
@@ -5409,11 +5412,11 @@
             document.getElementById('status-grid').innerHTML = `
                 <div class="stat-box">
                     <div class="stat-number" style="font-size: 1.8rem;">${filteredAlerts.length}</div>
-                    <div class="stat-label" style="font-size: 0.85rem;">Total Alerts</div>
+                    <div class="stat-label" style="font-size: 0.85rem;">Districts in Alert (Zone 5 &amp; 6)</div>
                 </div>
                 <div class="stat-box">
-                    <div class="stat-number" style="font-size: 1.8rem;">${totalDistricts}</div>
-                    <div class="stat-label" style="font-size: 0.85rem;">Districts Affected</div>
+                    <div class="stat-number" style="font-size: 1.8rem;">${statesAffectedFiltered}</div>
+                    <div class="stat-label" style="font-size: 0.85rem;">States Affected</div>
                 </div>
                 <div class="stat-box hoverable" style="background: linear-gradient(135deg, #7B1FA2 0%, #6A1B9A 100%); padding: 1rem; cursor: pointer; border-color: #7B1FA2;" onclick="switchTab(event, 'about')">
                     <div class="stat-number" style="font-size: 1.8rem;">${zone6Count}</div>
@@ -5440,11 +5443,53 @@
             // Update mobile location summary (shown under tiles on mobile)
             const locationSummary = document.getElementById('current-location-summary');
             if (locationSummary) {
-                locationSummary.textContent = `${filteredAlerts.length} districts in alert in ${locationText}`;
+                // Mobile only: the tiles stack and the location is not otherwise
+                // visible there, so this names the place being shown.
+                locationSummary.textContent = locationText;
                 locationSummary.style.display = window.innerWidth <= 768 ? 'block' : 'none';
             }
 
             // Note: Zone 6 banner is NOT updated here - it stays global (set in loadLiveData)
+        }
+
+
+        // Fetch the grid for the hour we are actually in.
+        //
+        // Each run writes FORECAST_HOURS of look-ahead files to
+        // weather_logs/grid_hours/, because Open-Meteo charges per location
+        // rather than per hour. GitHub Actions fires the hourly cron only about
+        // 20% of the time (median gap 5.4 h, worst 9.6 h observed), so without
+        // look-ahead the page often shows data several hours old. With it, a
+        // late run still has the current hour on disk.
+        //
+        // Falls back to grid_data.json when no hour matches, which leaves the
+        // existing stale warning to do its job rather than silently serving
+        // something from hours ago.
+        async function fetchGridForNow() {
+            const base = 'weather_logs/grid_hours';
+            const remote = 'https://iecc-io.github.io/SHRAM';
+            const parts = new Intl.DateTimeFormat('en-CA', {
+                timeZone: 'Asia/Kolkata', year: 'numeric', month: '2-digit',
+                day: '2-digit', hour: '2-digit', hour12: false
+            }).formatToParts(new Date());
+            const part = t => parts.find(p => p.type === t).value;
+            const stamp = part('year') + part('month') + part('day')
+                + String(part('hour')).padStart(2, '0');
+
+            for (const url of [`${base}/grid_${stamp}.json`,
+                               `${remote}/${base}/grid_${stamp}.json`]) {
+                try {
+                    const r = await fetch(url);
+                    if (r.ok) return await r.json();
+                } catch (e) { /* fall through */ }
+            }
+            for (const url of ['grid_data.json', `${remote}/grid_data.json`]) {
+                try {
+                    const r = await fetch(url);
+                    if (r.ok) return await r.json();
+                } catch (e) { /* fall through */ }
+            }
+            throw new Error('No grid data available');
         }
 
         // Aggregate the Open-Meteo grid (grid_data.json) to one row per
@@ -5520,7 +5565,13 @@
             });
 
             return {
-                timestamp: (grid.metadata && grid.metadata.generated_at) || new Date().toISOString(),
+                // Look-ahead files carry valid_time: the hour the data is FOR,
+                // which is what staleness should be measured against. Without
+                // this, a file fetched hours ago but valid for the current hour
+                // would be flagged stale. Falls back to generated_at for the
+                // plain grid_data.json snapshot.
+                timestamp: (grid.metadata && (grid.metadata.valid_time || grid.metadata.generated_at))
+                           || new Date().toISOString(),
                 total_stations: byDistrict.size,
                 alert_count: rows.length,
                 zone_counts: zoneCounts,
@@ -5535,14 +5586,7 @@
         async function loadLiveData() {
             try {
                 // Try local file first (for local development), then fall back to GitHub Pages
-                let response;
-                try {
-                    response = await fetch('grid_data.json');
-                    if (!response.ok) throw new Error('Local file not found');
-                } catch (e) {
-                    response = await fetch('https://iecc-io.github.io/SHRAM/grid_data.json');
-                }
-                const data = gridToAlertRows(await response.json());
+                const data = gridToAlertRows(await fetchGridForNow());
 
                 // Store data globally for filtering
                 allAlertsData = data;
