@@ -57,9 +57,26 @@ def district_zone_counts(points):
     return counts, by_state, len(worst)
 
 
-def main():
+def load_current_grid():
+    """Prefer the look-ahead file for the current IST hour.
+
+    grid_data.json carries generated_at (when the run fetched) but no
+    valid_time (the hour the data is for), so recording from it stamps the
+    history with 04:17 while the dashboard and map show 04:00 for the same
+    data. The look-ahead files carry both, so the three panels agree.
+    """
+    from zoneinfo import ZoneInfo
+    stamp = datetime.now(ZoneInfo('Asia/Kolkata')).strftime('%Y%m%d%H')
+    hourly = os.path.join(ROOT, 'weather_logs', 'grid_hours', f'grid_{stamp}.json')
+    if os.path.exists(hourly):
+        with open(hourly) as fh:
+            return json.load(fh)
     with open(GRID) as fh:
-        grid = json.load(fh)
+        return json.load(fh)
+
+
+def main():
+    grid = load_current_grid()
 
     counts, by_state, n_districts = district_zone_counts(grid.get('points', []))
 
@@ -81,7 +98,11 @@ def main():
                  if k.startswith('met6_sun_zone') and k[-1] in '56')
 
     entry = {
-        'timestamp': grid['metadata'].get('generated_at'),
+        # The hour the data is FOR, not when the run fetched it, matching the
+        # dashboard and the live map. grid_data.json carries no valid_time, so
+        # fall back to generated_at for that case.
+        'timestamp': (grid['metadata'].get('valid_time')
+                      or grid['metadata'].get('generated_at')),
         'total_districts': n_districts,
         'alert_count': alerts,
         'zone_counts': counts,
@@ -113,7 +134,7 @@ def main():
         json.dump(history, fh, separators=(',', ':'))
 
     print(f"grid_24h.json: {len(rows)} entries, latest "
-          f"{grid['metadata'].get('generated_at_ist')} "
+          f"{entry['timestamp'][:16]} "
           f"({n_districts} districts, {alerts} in Zone 5/6 at EHI-6*)")
 
 
