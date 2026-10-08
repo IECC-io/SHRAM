@@ -594,9 +594,6 @@ def manage_historical_data(repo_root, current_file):
             print(f"    ⚠ {filename} not available yet (need {hours_ago}h of data, have {len(history)-1}h)")
 
 
-if __name__ == '__main__':
-    generate_grid_data()
-
 
 def write_hourly_files(points, weather_data, point_districts, repo_root, base_meta):
     """Write one grid file per look-ahead hour.
@@ -721,3 +718,7 @@ def _is_night_at(minutes_of_day, weather):
         except (IndexError, ValueError):
             pass
     return minutes_of_day < 360 or minutes_of_day >= 1080
+
+
+if __name__ == '__main__':
+    generate_grid_data()
