@@ -29,6 +29,12 @@ OPENMETEO_API_KEY = 'lTfTNEkGgK34jXrq'
 OPENMETEO_BASE_URL = 'https://customer-api.open-meteo.com/v1/forecast'
 
 # Grid configuration - 0.25° resolution for higher detail
+# Hours of look-ahead fetched per run. Open-Meteo bills per location, and a
+# request stays at 1.0 calls/location for anything under two weeks, so 12 hours
+# costs exactly what 1 hour does. The workflow runs every 6 h, leaving 6 h of
+# overlap: a single missed run still leaves the current hour covered.
+FORECAST_HOURS = 12
+
 GRID_CONFIG = {
     'lat_min': 7.0,
     'lat_max': 37.0,
@@ -192,6 +198,8 @@ def fetch_weather_batch_openmeteo(points, batch_size=50, max_retries=3):
             f"?latitude={lats}"
             f"&longitude={lons}"
             f"&current=temperature_2m,relative_humidity_2m,shortwave_radiation"
+            f"&hourly=temperature_2m,relative_humidity_2m,shortwave_radiation"
+            f"&forecast_hours={FORECAST_HOURS}"
             f"&daily=sunrise,sunset"
             f"&timezone=Asia/Kolkata"
             f"&apikey={OPENMETEO_API_KEY}"
@@ -217,7 +225,8 @@ def fetch_weather_batch_openmeteo(points, batch_size=50, max_retries=3):
                                 'rh': loc_data['current'].get('relative_humidity_2m'),
                                 'sw': loc_data['current'].get('shortwave_radiation'),
                                 'sunrise': sunrise_str,
-                                'sunset': sunset_str
+                                'sunset': sunset_str,
+                                'hourly': loc_data.get('hourly')
                             })
                         else:
                             batch_results.append(None)
@@ -231,7 +240,8 @@ def fetch_weather_batch_openmeteo(points, batch_size=50, max_retries=3):
                         'rh': data['current'].get('relative_humidity_2m'),
                         'sw': data['current'].get('shortwave_radiation'),
                         'sunrise': sunrise_str,
-                        'sunset': sunset_str
+                        'sunset': sunset_str,
+                        'hourly': data.get('hourly')
                     }]
                     break  # Success
                 else:
@@ -492,6 +502,12 @@ def generate_grid_data():
     with open(output_path, 'w') as f:
         json.dump(output, f)
 
+    # Look-ahead: one file per forecast hour, in weather_logs/grid_hours/.
+    # Written as separate files rather than one combined file so a page load
+    # still fetches ~2 MB (the hour it needs) instead of ~25 MB.
+    write_hourly_files(points, weather_data, point_districts, repo_root,
+                       output['metadata'])
+
     file_size = os.path.getsize(output_path) / (1024 * 1024)
     print(f"\n✓ Saved {valid_count} points to {output_path}")
     print(f"  File size: {file_size:.2f} MB")
@@ -580,3 +596,128 @@ def manage_historical_data(repo_root, current_file):
 
 if __name__ == '__main__':
     generate_grid_data()
+
+
+def write_hourly_files(points, weather_data, point_districts, repo_root, base_meta):
+    """Write one grid file per look-ahead hour.
+
+    Each run fetches FORECAST_HOURS of hourly data per location at no extra API
+    cost (Open-Meteo bills per location, not per hour, below two weeks). The
+    page selects the file matching the current hour, so a late or skipped
+    workflow run still serves correct data for the hour being viewed instead of
+    going stale. An index file lists which hours are available.
+    """
+    import datetime as _dt
+
+    out_dir = os.path.join(repo_root, 'weather_logs', 'grid_hours')
+    os.makedirs(out_dir, exist_ok=True)
+
+    # Clear previous run's files so stale hours cannot be served.
+    for old_file in glob_module.glob(os.path.join(out_dir, 'grid_*.json')):
+        try:
+            os.remove(old_file)
+        except OSError:
+            pass
+
+    # Times are identical across locations; take them from the first result
+    # that carries an hourly block.
+    times = None
+    for w in weather_data:
+        if w and w.get('hourly', {}) and w['hourly'].get('time'):
+            times = w['hourly']['time']
+            break
+    if not times:
+        print("  No hourly series returned; look-ahead files not written")
+        return
+
+    written = []
+    for h_idx, t_str in enumerate(times):
+        try:
+            hour_min = int(t_str.split('T')[1].split(':')[0]) * 60
+        except (IndexError, ValueError):
+            continue
+
+        # Open-Meteo returns local times without an offset because the request
+        # sets timezone=Asia/Kolkata. Stamp +05:30 on it so browsers outside IST
+        # do not parse it as their own local time.
+        valid_iso = t_str if ('+' in t_str or t_str.endswith('Z')) else f'{t_str}:00+05:30'
+        hour_out = {
+            'metadata': dict(base_meta, valid_time=valid_iso,
+                             valid_time_local=t_str, is_forecast_hour=True),
+            'points': []
+        }
+
+        for p, w in zip(points, weather_data):
+            if not w or not w.get('hourly'):
+                continue
+            hr = w['hourly']
+            try:
+                temp = hr['temperature_2m'][h_idx]
+                rh = hr['relative_humidity_2m'][h_idx]
+                sw_raw = hr['shortwave_radiation'][h_idx]
+            except (KeyError, IndexError):
+                continue
+            if temp is None or rh is None:
+                continue
+
+            district_name, state_name = point_districts.get(
+                (p['lat'], p['lon']), (None, None))
+
+            # Night is decided per point from its own sunrise/sunset, matching
+            # how the current-hour block does it.
+            night = _is_night_at(hour_min, w)
+            sw_actual = 0 if night else (sw_raw or 0)
+
+            pd = {
+                'lat': p['lat'], 'lon': p['lon'],
+                'location': f"{district_name}, {state_name}" if district_name else None,
+                'district': district_name, 'state': state_name,
+                'temp': temp, 'rh': rh, 'sw': round(sw_actual) if sw_actual else 0,
+                'data': {}
+            }
+            for met in [3, 4, 5, 6]:
+                shade_ehi, shade_zone = compute_ehi_and_zone(temp, rh, met, sw=0)
+                pd['data'][f'met{met}'] = {
+                    'shade': {'ehi': round(shade_ehi, 1) if shade_ehi is not None else None,
+                              'zone': shade_zone}
+                }
+                if night:
+                    pd['data'][f'met{met}']['sun'] = dict(pd['data'][f'met{met}']['shade'])
+                else:
+                    sun_ehi, sun_zone = compute_ehi_and_zone(temp, rh, met, sw=sw_actual)
+                    pd['data'][f'met{met}']['sun'] = {
+                        'ehi': round(sun_ehi, 1) if sun_ehi is not None else None,
+                        'zone': sun_zone}
+            hour_out['points'].append(pd)
+
+        hour_out['metadata']['is_nighttime'] = _is_night_at(hour_min, weather_data[0]) \
+            if weather_data and weather_data[0] else False
+        stamp = t_str.replace('-', '').replace('T', '').replace(':', '')[:10]
+        path = os.path.join(out_dir, f'grid_{stamp}.json')
+        with open(path, 'w') as f:
+            json.dump(hour_out, f, separators=(',', ':'))
+        written.append({'valid_time': t_str, 'file': f'grid_{stamp}.json'})
+
+    with open(os.path.join(out_dir, 'index.json'), 'w') as f:
+        json.dump({'generated_at': base_meta.get('generated_at'),
+                   'hours': written}, f, indent=2)
+
+    total_mb = sum(os.path.getsize(os.path.join(out_dir, w['file']))
+                   for w in written) / (1024 * 1024)
+    print(f"  Look-ahead: {len(written)} hourly files, {total_mb:.1f} MB total "
+          f"({written[0]['valid_time']} to {written[-1]['valid_time']})")
+
+
+def _is_night_at(minutes_of_day, weather):
+    """Night at a given minute-of-day, from this point's sunrise/sunset."""
+    sr, ss = weather.get('sunrise'), weather.get('sunset')
+    if sr and ss:
+        try:
+            sr_hm = sr.split('T')[1] if 'T' in sr else sr
+            ss_hm = ss.split('T')[1] if 'T' in ss else ss
+            sr_min = int(sr_hm.split(':')[0]) * 60 + int(sr_hm.split(':')[1])
+            ss_min = int(ss_hm.split(':')[0]) * 60 + int(ss_hm.split(':')[1])
+            return minutes_of_day < sr_min or minutes_of_day >= ss_min
+        except (IndexError, ValueError):
+            pass
+    return minutes_of_day < 360 or minutes_of_day >= 1080
