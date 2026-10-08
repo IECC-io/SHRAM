@@ -4486,15 +4486,21 @@
                 const hourlySource = all24HourData.hourly_data || all24HourData.hourly_alerts;
                 console.log('[populateStateDropdowns] hourlySource entries:', hourlySource ? hourlySource.length : 0);
                 if (hourlySource && hourlySource.length > 0) {
-                    // First entry (index 0) is most recent
-                    const mostRecentEntry = hourlySource[0];
-                    const stations = mostRecentEntry.alerts || mostRecentEntry.stations || [];
-                    console.log('[populateStateDropdowns] stations in most recent:', stations.length);
-                    stations.forEach(s => {
-                        if (s.STATE && typeof s.STATE === 'string') {
-                            statesInMostRecentPush.add(s.STATE);
-                        }
-                    });
+                    // Newest entry. grid_24h.json is appended in ascending time
+                    // order and carries per-state counts rather than rows, so
+                    // the state keys are what tell us which states are present.
+                    const mostRecentEntry = hourlySource[hourlySource.length - 1];
+                    if (mostRecentEntry.zone_counts_by_state) {
+                        Object.keys(mostRecentEntry.zone_counts_by_state)
+                            .forEach(st => statesInMostRecentPush.add(st));
+                    } else {
+                        const stations = mostRecentEntry.alerts || mostRecentEntry.stations || [];
+                        stations.forEach(s => {
+                            if (s.STATE && typeof s.STATE === 'string') {
+                                statesInMostRecentPush.add(s.STATE);
+                            }
+                        });
+                    }
                     console.log('[populateStateDropdowns] states found in most recent push:', statesInMostRecentPush.size);
                     console.log('[populateStateDropdowns] Chandigarh in set:', statesInMostRecentPush.has('Chandigarh'));
                 }
@@ -4694,11 +4700,11 @@
             console.log('[updateCurrentDistricts] hourlySource available:', !!hourlySource);
 
             if (hourlySource && hourlySource.length > 0) {
-                // Get districts from the most recent entry (index 0)
-                const mostRecentEntry = hourlySource[0];
-                const stations = mostRecentEntry.alerts || mostRecentEntry.stations || [];
+                // Districts come from the current grid rows: grid_24h.json stores
+                // per-state counts rather than rows, so it cannot supply a
+                // district list, and allAlertsData covers every district anyway.
+                const stations = (allAlertsData && allAlertsData.alerts) || [];
                 const normalizedState = normalizeLocationName(selectedState);
-                console.log('[updateCurrentDistricts] Looking for state:', normalizedState, 'in', stations.length, 'stations');
 
                 const districtsFromMostRecent = new Set();
                 stations.forEach(s => {
@@ -5207,9 +5213,9 @@
             const hourlySource = all24HourData ? (all24HourData.hourly_data || all24HourData.hourly_alerts) : null;
 
             if (hourlySource && hourlySource.length > 0) {
-                // Get districts from the most recent entry (index 0)
-                const mostRecentEntry = hourlySource[0];
-                const stations = mostRecentEntry.alerts || mostRecentEntry.stations || [];
+                // See updateCurrentDistricts: the district list comes from the
+                // current grid rows, not from the counts-only history file.
+                const stations = (allAlertsData && allAlertsData.alerts) || [];
                 const normalizedState = normalizeLocationName(selectedState);
 
                 const districtsFromMostRecent = new Set();
@@ -5325,27 +5331,21 @@
             let isHistoricalData = false;
             let dataTimestamp = allAlertsData.timestamp;
 
-            // For "All India", use the Zone 5/6 alerts from latest_alerts.json
-            if (selectedState === 'all') {
-                filteredAlerts = allAlertsData.alerts;
-            } else {
-                // For specific state/district, get ALL station data from alerts_24h.json (not just Zone 5/6)
-                // This ensures we show Zone 1-4 data too
-                const currentData = findLastAvailableData(selectedState, selectedDistrict);
-                if (currentData) {
-                    filteredAlerts = currentData.alerts;
-                    dataTimestamp = currentData.timestamp;
-
-                    // Check if this is truly historical (timestamp differs from current by > 30 min)
-                    const currentTimestamp = new Date(allAlertsData.timestamp).getTime();
-                    const dataTimestampMs = new Date(currentData.timestamp).getTime();
-                    const timeDiff = Math.abs(currentTimestamp - dataTimestampMs);
-                    isHistoricalData = timeDiff > 30 * 60 * 1000; // More than 30 min difference = historical
-                }
-
-                // Filter by district if specified
-                if (selectedDistrict !== 'all' && filteredAlerts.length > 0) {
-                    filteredAlerts = filteredAlerts.filter(a => a.DISTRICT === selectedDistrict);
+            // All views now filter the same Open-Meteo grid rows. Previously the
+            // state/district views pulled from alerts_24h.json (the IMD station
+            // history) and overwrote dataTimestamp with its time, so selecting a
+            // state silently switched both the data and the "Last Updated" line
+            // to a different source. The grid covers every district, so there is
+            // nothing the station history adds here.
+            filteredAlerts = allAlertsData.alerts;
+            if (selectedState !== 'all') {
+                const wantState = normalizeLocationName(selectedState);
+                filteredAlerts = filteredAlerts.filter(
+                    a => normalizeLocationName(a.STATE) === wantState);
+                if (selectedDistrict !== 'all') {
+                    const wantDistrict = normalizeLocationName(selectedDistrict);
+                    filteredAlerts = filteredAlerts.filter(
+                        a => normalizeLocationName(a.DISTRICT) === wantDistrict);
                 }
             }
 
@@ -6307,10 +6307,10 @@
                 // Try local file first, then fall back to GitHub Pages
                 let response;
                 try {
-                    response = await fetch('weather_logs/alerts_24h.json');
+                    response = await fetch('weather_logs/grid_24h.json');
                     if (!response.ok) throw new Error('Local file not found');
                 } catch (e) {
-                    response = await fetch('https://iecc-io.github.io/SHRAM/weather_logs/alerts_24h.json');
+                    response = await fetch('https://iecc-io.github.io/SHRAM/weather_logs/grid_24h.json');
                 }
                 const data = await response.json();
 
@@ -6366,37 +6366,32 @@
                 const normalizeForComparison = (str) => str ? str.toLowerCase().replace(/_/g, ' ') : '';
 
                 hourlySource.forEach(entry => {
-                    // Use stations (all data) instead of alerts (filtered)
-                    let stations = entry.stations || entry.alerts || [];
-
-                    // Filter by selected state and district (handle format differences)
-                    if (selectedState !== 'all') {
-                        const normalizedSelected = normalizeForComparison(selectedState);
-                        stations = stations.filter(s => normalizeForComparison(s.STATE) === normalizedSelected);
-                    }
-                    if (selectedDistrict !== 'all') {
-                        const normalizedSelected = normalizeForComparison(selectedDistrict);
-                        stations = stations.filter(s => normalizeForComparison(s.DISTRICT) === normalizedSelected);
-                    }
+                    // The grid history stores zone counts, not a row per
+                    // district: 11.8 KB per entry against ~51 KB, which is 8.6 MB
+                    // a month rather than 37 MB. District-level filtering is not
+                    // available from it, so a district selection falls back to
+                    // its state's counts.
+                    const sun = shadeStates.last24h ? 'shade' : 'sun';
+                    const prefix = `met${met}_${sun}`;
+                    const counts = (selectedState !== 'all' && entry.zone_counts_by_state)
+                        ? (entry.zone_counts_by_state[selectedState] || {})
+                        : (entry.zone_counts || {});
+                    const z = n => counts[`${prefix}_zone${n}`] || 0;
 
                     const time = new Date(entry.timestamp);
                     labels.push(time.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', timeZone: 'Asia/Calcutta' }));
 
-                    // Count zones using dynamic column based on selected MET/sun
-                    zone6Data.push(stations.filter(s => s[zoneCol] === "Zone 6").length);
-                    zone5Data.push(stations.filter(s => s[zoneCol] === "Zone 5").length);
-                    zone4Data.push(stations.filter(s => s[zoneCol] === "Zone 4").length);
-                    // Combine Zone 2 and Zone 3 into "Comfortable"
-                    zone23Data.push(stations.filter(s => s[zoneCol] === "Zone 3" || s[zoneCol] === "Zone 2").length);
-                    zone1Data.push(stations.filter(s => s[zoneCol] === "Zone 1").length);
+                    zone6Data.push(z(6));
+                    zone5Data.push(z(5));
+                    zone4Data.push(z(4));
+                    zone23Data.push(z(3) + z(2));
+                    zone1Data.push(z(1));
 
-                    if (stations.length > 0) {
-                        tempData.push((stations.reduce((sum, s) => sum + parseFloat(s.TEMP || 0), 0) / stations.length).toFixed(1));
-                        rhData.push((stations.reduce((sum, s) => sum + parseFloat(s.RH || 0), 0) / stations.length).toFixed(1));
-                    } else {
-                        tempData.push(null);
-                        rhData.push(null);
-                    }
+                    const m = (selectedState !== 'all' && entry.means_by_state)
+                        ? (entry.means_by_state[selectedState] || {})
+                        : { temp: entry.temp_mean, rh: entry.rh_mean };
+                    tempData.push(m.temp != null ? m.temp : null);
+                    rhData.push(m.rh != null ? m.rh : null);
                 });
 
                 const ctxAlert = document.getElementById('alertTrendChart').getContext('2d');
