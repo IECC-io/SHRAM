@@ -1,9 +1,14 @@
 name: Dashboard Alerts — IMD Stations (Hourly)
 
 on:
-  schedule:
+  # schedule: disabled, see note below
     # Run every hour
-    - cron: '0 * * * *'
+# DISABLED 2026-10-14. Nothing on the site reads the IMD station scrape any
+# more: Current Alerts, Historical Zones and the live map all run on the
+# Open-Meteo grid. The scrape only fed weather_logs/india_weather_*.csv (75
+# weekly files, the evidence base for the IMD-gap analysis), which stays in the
+# repo and stops growing from this date. Re-enable by uncommenting the cron.
+#    - cron: '0 * * * *'
   workflow_dispatch:  # Allow manual trigger
 
 permissions:

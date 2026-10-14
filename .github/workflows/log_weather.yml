@@ -1,8 +1,13 @@
 name: IMD Weather Logger — Dashboard & Trends (30 min)
 
 on:
-  schedule:
-    - cron: '5,35 * * * *'  # Every 30 minutes (at 5 and 35 minutes past each hour)
+  # schedule: disabled, see note below
+# DISABLED 2026-10-14. Nothing on the site reads the IMD station scrape any
+# more: Current Alerts, Historical Zones and the live map all run on the
+# Open-Meteo grid. The scrape only fed weather_logs/india_weather_*.csv (75
+# weekly files, the evidence base for the IMD-gap analysis), which stays in the
+# repo and stops growing from this date. Re-enable by uncommenting the cron.
+#    - cron: '5,35 * * * *'  # Every 30 minutes (at 5 and 35 minutes past each hour)
   workflow_dispatch:
 
 permissions:
