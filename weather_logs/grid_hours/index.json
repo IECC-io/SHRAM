@@ -1,53 +1,53 @@
 {
-  "generated_at": "2026-10-16T07:55:26.148865+05:30",
+  "generated_at": "2026-10-16T21:27:40.308437+05:30",
   "hours": [
     {
-      "valid_time": "2026-10-16T07:00",
-      "file": "grid_2026101607.json"
+      "valid_time": "2026-10-16T20:00",
+      "file": "grid_2026101620.json"
     },
     {
-      "valid_time": "2026-10-16T08:00",
-      "file": "grid_2026101608.json"
+      "valid_time": "2026-10-16T21:00",
+      "file": "grid_2026101621.json"
     },
     {
-      "valid_time": "2026-10-16T09:00",
-      "file": "grid_2026101609.json"
+      "valid_time": "2026-10-16T22:00",
+      "file": "grid_2026101622.json"
     },
     {
-      "valid_time": "2026-10-16T10:00",
-      "file": "grid_2026101610.json"
+      "valid_time": "2026-10-16T23:00",
+      "file": "grid_2026101623.json"
     },
     {
-      "valid_time": "2026-10-16T11:00",
-      "file": "grid_2026101611.json"
+      "valid_time": "2026-10-17T00:00",
+      "file": "grid_2026101700.json"
     },
     {
-      "valid_time": "2026-10-16T12:00",
-      "file": "grid_2026101612.json"
+      "valid_time": "2026-10-17T01:00",
+      "file": "grid_2026101701.json"
     },
     {
-      "valid_time": "2026-10-16T13:00",
-      "file": "grid_2026101613.json"
+      "valid_time": "2026-10-17T02:00",
+      "file": "grid_2026101702.json"
     },
     {
-      "valid_time": "2026-10-16T14:00",
-      "file": "grid_2026101614.json"
+      "valid_time": "2026-10-17T03:00",
+      "file": "grid_2026101703.json"
     },
     {
-      "valid_time": "2026-10-16T15:00",
-      "file": "grid_2026101615.json"
+      "valid_time": "2026-10-17T04:00",
+      "file": "grid_2026101704.json"
     },
     {
-      "valid_time": "2026-10-16T16:00",
-      "file": "grid_2026101616.json"
+      "valid_time": "2026-10-17T05:00",
+      "file": "grid_2026101705.json"
     },
     {
-      "valid_time": "2026-10-16T17:00",
-      "file": "grid_2026101617.json"
+      "valid_time": "2026-10-17T06:00",
+      "file": "grid_2026101706.json"
     },
     {
-      "valid_time": "2026-10-16T18:00",
-      "file": "grid_2026101618.json"
+      "valid_time": "2026-10-17T07:00",
+      "file": "grid_2026101707.json"
     }
   ]
 }
