@@ -1,30 +1,6 @@
 {
-  "generated_at": "2026-10-26T17:50:58.531680+05:30",
+  "generated_at": "2026-10-26T23:51:29.712348+05:30",
   "hours": [
-    {
-      "valid_time": "2026-10-26T16:00",
-      "file": "grid_2026102616.json"
-    },
-    {
-      "valid_time": "2026-10-26T17:00",
-      "file": "grid_2026102617.json"
-    },
-    {
-      "valid_time": "2026-10-26T18:00",
-      "file": "grid_2026102618.json"
-    },
-    {
-      "valid_time": "2026-10-26T19:00",
-      "file": "grid_2026102619.json"
-    },
-    {
-      "valid_time": "2026-10-26T20:00",
-      "file": "grid_2026102620.json"
-    },
-    {
-      "valid_time": "2026-10-26T21:00",
-      "file": "grid_2026102621.json"
-    },
     {
       "valid_time": "2026-10-26T22:00",
       "file": "grid_2026102622.json"
@@ -48,6 +24,30 @@
     {
       "valid_time": "2026-10-27T03:00",
       "file": "grid_2026102703.json"
+    },
+    {
+      "valid_time": "2026-10-27T04:00",
+      "file": "grid_2026102704.json"
+    },
+    {
+      "valid_time": "2026-10-27T05:00",
+      "file": "grid_2026102705.json"
+    },
+    {
+      "valid_time": "2026-10-27T06:00",
+      "file": "grid_2026102706.json"
+    },
+    {
+      "valid_time": "2026-10-27T07:00",
+      "file": "grid_2026102707.json"
+    },
+    {
+      "valid_time": "2026-10-27T08:00",
+      "file": "grid_2026102708.json"
+    },
+    {
+      "valid_time": "2026-10-27T09:00",
+      "file": "grid_2026102709.json"
     }
   ]
 }
